@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 5.4 ==========
+-- ========== XyqwHub - Версия 5.6 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "5.4"
+local VERSION = "5.6"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -160,7 +160,6 @@ local RED_DARK = THEMES[getgenv().XyqwTheme].DARK
 local RED_BG = THEMES[getgenv().XyqwTheme].BG
 local RED_TITLE = THEMES[getgenv().XyqwTheme].TITLE
 
--- Цвета статусов URL
 local URL_OK = Color3.fromRGB(0, 255, 100)
 local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
@@ -188,39 +187,48 @@ local LANG = {
         UrlCheckDone = "URL test complete!",
         ChangeLogText = [[XyqwHub ChangeLog
 
-Version 5.4
-- Auto Execute Scripts (starts on game join)
-- Script Blacklist (hide unwanted scripts)
+Version 5.6
+- NO rounded corners anywhere (always square!)
+- Buttons/tabs stretch when window is wide (Fav -> Favorite)
+- Fixed long script names being overlapped by buttons
+- Blacklist updates instantly after unlock
+- Default tab on launch: All
+- Theme applies to blacklist + auto-exec buttons
+
+Version 5.5
+- Auto Execute Scripts
+- Script Blacklist
 - Auto Hide GUI (custom keybind)
-- URL Tester (green/red indicators)
-- Script Sorting (A-Z / Z-A / Recent)
-- Share Favorite Scripts (Fav tab only)
-- Share Recent Scripts (Rct tab only)
+- URL Tester
+- Script Sorting
+
+Version 5.4
+- Same features, bug fixes
 
 Version 5.3
 - Custom Color smaller + resize
 - Universal workspace fix
 
 Version 5.2
-- Universal workspace support
+- Universal workspace
 
 Version 5.1
-- Share Fav Scripts, Share XyqwHub, Reset, Share Color
+- Share buttons
 
 Version 5.0
-- Custom Color instant apply
+- Custom Color instant
 
 Version 4.9
-- Welcome smaller + scroll, 13 themes
+- Welcome smaller, 13 themes
 
 Version 4.8
-- Custom Color rgb() support
+- Custom Color rgb()
 
 Version 4.7
 - Custom Color picker
 
 Version 4.6
-- Fixed Rainbow tab flicker
+- Fixed Rainbow
 
 Version 4.5
 - Files to workspace
@@ -229,7 +237,7 @@ Version 4.4
 - Remove Tags and Destroy separate
 
 Version 4.3
-- Server Info: Rejoin, ServerHop, TP small
+- Server Info
 
 Version 4.2
 - Top bar with Hide (H)
@@ -242,9 +250,6 @@ Version 4.0
 
 Version 3.9
 - Script executed notification
-
-Version 3.0
-- Tag system v3
 
 Version 2.7
 - Roblox notifications
@@ -263,13 +268,13 @@ Version 1.0
         CustomPlaceholder = "Ссылка или loadstring...", RunCustom = "Запустить",
         JobIdCopied = "JobId скопирован!", ScriptExecuted = "Скрипт выполнен!",
         OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
-        TagRemoved = "Тег убран!", HideTopBarOn = "Скрыть топ бар: включено", HideTopBarOff = "Скрыть топ бар: выключено",
+        TagRemoved = "Тег убран!", HideTopBarOn = "Скрыть топ бар: вкл", HideTopBarOff = "Скрыть топ бар: выкл",
         LangChanged = "Язык изменён на Русский",
         FavShared = "Избранное скопировано!",
         RctShared = "Недавние скопированы!",
         LoadstringCopied = "Loadstring скопирован, спасибо :3",
         ColorReset = "Custom Color сброшен на Красный",
-        ColorShared = "Цвет скопирован в буфер!",
+        ColorShared = "Цвет скопирован!",
         AutoExecOn = "Авто-запуск: ВКЛ",
         AutoExecOff = "Авто-запуск: ВЫКЛ",
         BlacklistAdded = "Добавлено в чёрный список",
@@ -279,14 +284,23 @@ Version 1.0
         UrlCheckDone = "Проверка завершена!",
         ChangeLogText = [[XyqwHub Ченджлог
 
+Версия 5.6
+- НИКАКИХ скруглённых углов (всё квадратное!)
+- Кнопки/вкладки растягиваются при широком окне (Fav -> Favorite)
+- Фикс перекрытия длинных названий скриптов
+- Blacklist обновляется мгновенно
+- Базовая вкладка при запуске: All
+- Тема применяется к blacklist + auto-exec
+
+Версия 5.5
+- Auto Execute
+- Blacklist
+- Auto Hide GUI
+- URL Tester
+- Sorting
+
 Версия 5.4
-- Авто-запуск скриптов (при заходе в игру)
-- Чёрный список (скрыть ненужные скрипты)
-- Auto Hide GUI (свой бинд)
-- URL Tester (зелёный/красный индикатор)
-- Сортировка (A-Z / Z-A / Rct)
-- Share Favorite Scripts (только Fav)
-- Share Recent Scripts (только Rct)
+- Те же фичи, фиксы
 
 Версия 5.3
 - Custom Color меньше + ресайз
@@ -296,13 +310,13 @@ Version 1.0
 - Универсальный workspace
 
 Версия 5.1
-- Share Fav, Share XyqwHub, Reset, Share Color
+- Share кнопки
 
 Версия 5.0
 - Custom Color мгновенно
 
 Версия 4.9
-- Welcome меньше + скролл, 13 тем
+- Welcome меньше, 13 тем
 
 Версия 4.8
 - Custom Color rgb()
@@ -317,25 +331,22 @@ Version 1.0
 - Файлы в workspace
 
 Версия 4.4
-- Remove Tags и Destroy отдельно
+- Remove Tags и Destroy
 
 Версия 4.3
-- Server Info: Rejoin, ServerHop, TP small
+- Server Info
 
 Версия 4.2
-- Топ-бар с Hide (H)
+- Top bar + Hide
 
 Версия 4.1
-- Все кнопки квадратные
+- Кнопки квадратные
 
 Версия 4.0
 - Первый релиз
 
 Версия 3.9
 - Уведомление о запуске
-
-Версия 3.0
-- Система тегов v3
 
 Версия 2.7
 - Roblox уведомления
@@ -371,7 +382,7 @@ local UserInputService = game:GetService("UserInputService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 
--- ========== СПИСОК СКРИПТОВ (нужен раньше авто-execute) ==========
+-- ========== СПИСОК СКРИПТОВ ==========
 local SCRIPTS = {
     {Name = "Blade Ball", Category = "BB", URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"},
     {Name = "Blade Ball 2", Category = "BB", URL = "https://wings.ac/loader"},
@@ -430,9 +441,7 @@ task.spawn(function()
         if enabled then
             for _, data in ipairs(SCRIPTS) do
                 if data.Name == name and data.URL ~= "SPECIAL_COPY_DOORS_V2" then
-                    pcall(function()
-                        loadstring(game:HttpGet(data.URL))()
-                    end)
+                    pcall(function() loadstring(game:HttpGet(data.URL))() end)
                     print("[XyqwHub] Auto-executed: " .. name)
                     break
                 end
@@ -947,7 +956,6 @@ searchBar.BorderSizePixel = 1
 searchBar.BorderColor3 = RED_MAIN
 searchBar.Parent = mainFrame
 
--- Кнопка сортировки
 local sortBtn = Instance.new("TextButton")
 sortBtn.Name = "SortBtn"
 sortBtn.Size = UDim2.new(0, 40, 0, 24)
@@ -981,6 +989,8 @@ tabBar.BackgroundTransparency = 1
 tabBar.Parent = mainFrame
 
 local TAB_LIST = {"All", "BB", "MM2", "INK", "Misc", "Fav", "Rct"}
+local TAB_LONG = {All = "All", BB = "BladeBall", MM2 = "MM2", INK = "INK", Misc = "Misc", Fav = "Favorite", Rct = "Recent"}
+local TAB_SHORT = {All = "All", BB = "BB", MM2 = "MM2", INK = "INK", Misc = "Misc", Fav = "Fav", Rct = "Rct"}
 local tabButtons = {}
 local currentTab = "All"
 
@@ -1003,15 +1013,12 @@ local function SwitchTab(name)
     if RefreshButtons then RefreshButtons() end
 end
 
-local tabW = 36
 for i, name in ipairs(TAB_LIST) do
     local btn = Instance.new("TextButton")
     btn.Name = "Tab_" .. name
-    btn.Size = UDim2.new(0, tabW, 1, 0)
-    btn.Position = UDim2.new(0, (i - 1) * (tabW + 1), 0, 0)
     btn.BackgroundColor3 = RED_DARK
     btn.TextColor3 = RED_MAIN
-    btn.Text = name
+    btn.Text = TAB_SHORT[name]
     btn.TextScaled = true
     btn.Font = Enum.Font.GothamBold
     btn.BorderSizePixel = 1
@@ -1020,6 +1027,22 @@ for i, name in ipairs(TAB_LIST) do
     btn.AutoButtonColor = false
     tabButtons[name] = btn
     btn.MouseButton1Click:Connect(function() SwitchTab(name) end)
+end
+
+-- Функция обновления размера вкладок (растягиваются при широком окне)
+local function UpdateTabLayout()
+    local w = mainFrame.AbsoluteSize.X
+    local useLong = w >= 500
+    local count = #TAB_LIST
+    local gap = 1
+    local totalGap = (count - 1) * gap
+    local eachW = (w - 10 - totalGap) / count
+    for i, name in ipairs(TAB_LIST) do
+        local btn = tabButtons[name]
+        btn.Size = UDim2.new(0, eachW, 1, 0)
+        btn.Position = UDim2.new(0, (i - 1) * (eachW + gap), 0, 0)
+        btn.Text = useLong and TAB_LONG[name] or TAB_SHORT[name]
+    end
 end
 
 -- ========== SCROLL ==========
@@ -1037,6 +1060,21 @@ scrollFrame.Parent = mainFrame
 local buttons = {}
 local buttonHeight = 34
 
+-- Функция обновления размера кнопок скриптов
+local function UpdateScriptButtonLayout()
+    local w = mainFrame.AbsoluteSize.X
+    local useLong = w >= 500
+    local arrowText = useLong and "Auto" or "▶"
+    local hideText = useLong and "Hide" or "⊘"
+    local starEmpty = useLong and "Fav" or "☆"
+    local starFilled = useLong and "Fav+" or "★"
+    for _, entry in ipairs(buttons) do
+        entry.AutoBtn.Text = getgenv().XyqwAutoExec[entry.Data.Name] and (useLong and "On" or "✓") or arrowText
+        entry.HideBtn.Text = hideText
+        entry.Star.Text = getgenv().XyqwFavorites[entry.Data.Name] and starFilled or starEmpty
+    end
+end
+
 -- ========== CREATE BUTTON ==========
 local function CreateScriptButton(data)
     local container = Instance.new("Frame")
@@ -1048,7 +1086,6 @@ local function CreateScriptButton(data)
     container.BorderColor3 = RED_MAIN
     container.Parent = scrollFrame
 
-    -- URL status indicator
     local statusDot = Instance.new("Frame")
     statusDot.Name = "StatusDot"
     statusDot.Size = UDim2.new(0, 6, 0, 6)
@@ -1058,9 +1095,10 @@ local function CreateScriptButton(data)
     statusDot.ZIndex = 2
     statusDot.Parent = container
 
+    -- Название (текст обрезается, не лезет на кнопки)
     local btn = Instance.new("TextButton")
     btn.Name = "MainBtn"
-    btn.Size = UDim2.new(1, -70, 1, 0)
+    btn.Size = UDim2.new(1, -80, 1, 0)
     btn.Position = UDim2.new(0, 12, 0, 0)
     btn.BackgroundTransparency = 1
     btn.TextColor3 = RED_MAIN
@@ -1068,14 +1106,15 @@ local function CreateScriptButton(data)
     btn.TextScaled = true
     btn.Font = Enum.Font.GothamBold
     btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.TextTruncate = Enum.TextTruncate.AtEnd
     btn.Parent = container
     btn.AutoButtonColor = false
 
-    -- Auto-Execute toggle
+    -- Auto-Execute
     local autoBtn = Instance.new("TextButton")
     autoBtn.Name = "AutoBtn"
-    autoBtn.Size = UDim2.new(0, 22, 1, 0)
-    autoBtn.Position = UDim2.new(1, -74, 0, 0)
+    autoBtn.Size = UDim2.new(0, 24, 1, 0)
+    autoBtn.Position = UDim2.new(1, -76, 0, 0)
     autoBtn.BackgroundColor3 = RED_BG
     autoBtn.TextColor3 = RED_MAIN
     autoBtn.Text = "▶"
@@ -1093,25 +1132,24 @@ local function CreateScriptButton(data)
     autoBtn.MouseButton1Click:Connect(function()
         if getgenv().XyqwAutoExec[data.Name] then
             getgenv().XyqwAutoExec[data.Name] = nil
-            autoBtn.Text = "▶"
             autoBtn.BackgroundColor3 = RED_BG
             autoBtn.TextColor3 = RED_MAIN
             ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOff"), 2)
         else
             getgenv().XyqwAutoExec[data.Name] = true
-            autoBtn.Text = "✓"
             autoBtn.BackgroundColor3 = RED_MAIN
             autoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
             ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOn"), 2)
         end
         SaveTable(AUTOEXEC_FILE, getgenv().XyqwAutoExec)
+        UpdateScriptButtonLayout()
     end)
 
-    -- Hide button (blacklist)
+    -- Hide (blacklist)
     local hideBtn = Instance.new("TextButton")
     hideBtn.Name = "HideBtn"
-    hideBtn.Size = UDim2.new(0, 22, 1, 0)
-    hideBtn.Position = UDim2.new(1, -50, 0, 0)
+    hideBtn.Size = UDim2.new(0, 24, 1, 0)
+    hideBtn.Position = UDim2.new(1, -51, 0, 0)
     hideBtn.BackgroundColor3 = RED_BG
     hideBtn.TextColor3 = RED_MAIN
     hideBtn.Text = "⊘"
@@ -1128,10 +1166,10 @@ local function CreateScriptButton(data)
         if RefreshButtons then RefreshButtons() end
     end)
 
-    -- Star (favorite)
+    -- Star
     local star = Instance.new("TextButton")
     star.Name = "Star"
-    star.Size = UDim2.new(0, 22, 1, 0)
+    star.Size = UDim2.new(0, 24, 1, 0)
     star.Position = UDim2.new(1, -26, 0, 0)
     star.BackgroundColor3 = RED_BG
     star.TextColor3 = RED_MAIN
@@ -1154,6 +1192,7 @@ local function CreateScriptButton(data)
             star.Text = "★"
         end
         SaveTable(FAV_FILE, getgenv().XyqwFavorites)
+        UpdateScriptButtonLayout()
     end)
 
     btn.MouseEnter:Connect(function() container.BackgroundColor3 = RED_DARK end)
@@ -1196,7 +1235,7 @@ local function CreateScriptButton(data)
         isRunning = false
     end)
 
-    table.insert(buttons, {Container = container, Btn = btn, Star = star, Data = data, StatusDot = statusDot})
+    table.insert(buttons, {Container = container, Btn = btn, Star = star, AutoBtn = autoBtn, HideBtn = hideBtn, Data = data, StatusDot = statusDot})
 end
 
 for _, data in ipairs(SCRIPTS) do CreateScriptButton(data) end
@@ -1230,7 +1269,6 @@ removeTagsBtn.MouseButton1Click:Connect(function()
     ShowRobloxNotification(_("TagRemoved"), 3)
 end)
 
--- Share Favorite (Fav only)
 local shareFavContainer = Instance.new("Frame")
 shareFavContainer.Name = "ShareFavContainer"
 shareFavContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -1259,9 +1297,7 @@ shareFavBtn.MouseButton1Click:Connect(function()
     for name, _ in pairs(getgenv().XyqwFavorites) do table.insert(list, name) end
     table.sort(list)
     local text = "XyqwHub - My Favorite Scripts:\n"
-    if #list == 0 then
-        text = text .. "(empty)"
-    else
+    if #list == 0 then text = text .. "(empty)" else
         for i, name in ipairs(list) do text = text .. i .. ". " .. name .. "\n" end
     end
     text = text .. "\nGenerated by XyqwHub " .. VERSION
@@ -1269,7 +1305,6 @@ shareFavBtn.MouseButton1Click:Connect(function()
     ShowRobloxNotification(_("FavShared"), 3)
 end)
 
--- Share Recent (Rct only)
 local shareRctContainer = Instance.new("Frame")
 shareRctContainer.Name = "ShareRctContainer"
 shareRctContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -1295,9 +1330,7 @@ shareRctBtn.MouseEnter:Connect(function() shareRctContainer.BackgroundColor3 = R
 shareRctBtn.MouseLeave:Connect(function() shareRctContainer.BackgroundColor3 = RED_BG end)
 shareRctBtn.MouseButton1Click:Connect(function()
     local text = "XyqwHub - My Recent Scripts:\n"
-    if #getgenv().XyqwRecent == 0 then
-        text = text .. "(empty)"
-    else
+    if #getgenv().XyqwRecent == 0 then text = text .. "(empty)" else
         for i, name in ipairs(getgenv().XyqwRecent) do text = text .. i .. ". " .. name .. "\n" end
     end
     text = text .. "\nGenerated by XyqwHub " .. VERSION
@@ -1305,7 +1338,6 @@ shareRctBtn.MouseButton1Click:Connect(function()
     ShowRobloxNotification(_("RctShared"), 3)
 end)
 
--- Blacklist manager (All tab)
 local blacklistBtnContainer = Instance.new("Frame")
 blacklistBtnContainer.Name = "BlacklistBtnContainer"
 blacklistBtnContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -1330,7 +1362,6 @@ blacklistBtn.AutoButtonColor = false
 blacklistBtn.MouseEnter:Connect(function() blacklistBtnContainer.BackgroundColor3 = RED_DARK end)
 blacklistBtn.MouseLeave:Connect(function() blacklistBtnContainer.BackgroundColor3 = RED_BG end)
 
--- URL Test (All tab)
 local urlTestContainer = Instance.new("Frame")
 urlTestContainer.Name = "UrlTestContainer"
 urlTestContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -1355,7 +1386,6 @@ urlTestBtn.AutoButtonColor = false
 urlTestBtn.MouseEnter:Connect(function() urlTestContainer.BackgroundColor3 = RED_DARK end)
 urlTestBtn.MouseLeave:Connect(function() urlTestContainer.BackgroundColor3 = RED_BG end)
 
--- Settings (All tab)
 local settingsContainer = Instance.new("Frame")
 settingsContainer.Name = "SettingsContainer"
 settingsContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -1409,7 +1439,7 @@ destroyBtnMain.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
--- ========== BLACKLIST MANAGER WINDOW ==========
+-- ========== BLACKLIST MANAGER ==========
 local function ShowBlacklistManager()
     local frame = Instance.new("Frame")
     frame.Name = "BlacklistFrame"
@@ -1497,9 +1527,10 @@ local function ShowBlacklistManager()
             getgenv().XyqwBlacklist[name] = nil
             SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
             ShowRobloxNotification(_("BlacklistRemoved"), 2)
+            -- Мгновенное обновление
+            if RefreshButtons then RefreshButtons() end
             frame:Destroy()
             ShowBlacklistManager()
-            if RefreshButtons then RefreshButtons() end
         end)
 
         yPos = yPos + 30
@@ -1520,7 +1551,10 @@ local function ShowBlacklistManager()
 
     scroll.CanvasSize = UDim2.new(0, 0, 0, yPos + 10)
 
-    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+    closeBtn.MouseButton1Click:Connect(function()
+        frame:Destroy()
+        if RefreshButtons then RefreshButtons() end
+    end)
 end
 blacklistBtn.MouseButton1Click:Connect(ShowBlacklistManager)
 
@@ -1611,7 +1645,7 @@ local function ShowSettings()
     hint.Position = UDim2.new(0, 10, 0, 100)
     hint.BackgroundTransparency = 1
     hint.TextColor3 = Color3.fromRGB(150, 150, 150)
-    hint.Text = "Press the bind to hide/show XyqwHub GUI.\nCurrent: " .. getgenv().XyqwSettings.autoHideBind
+    hint.Text = "Press bind to hide/show XyqwHub GUI.\nCurrent: " .. getgenv().XyqwSettings.autoHideBind
     hint.TextWrapped = true
     hint.TextScaled = true
     hint.Font = Enum.Font.Gotham
@@ -1672,13 +1706,10 @@ function RefreshButtons()
     local search = string.lower(searchBar.Text)
     local sortMode = getgenv().XyqwSettings.sortMode
 
-    -- Собираем видимые
     local visibleEntries = {}
     for _, entry in ipairs(buttons) do
         local show = true
-        -- Blacklist
         if getgenv().XyqwBlacklist[entry.Data.Name] then show = false end
-        -- Tab
         if show then
             if currentTab == "Fav" then
                 if not getgenv().XyqwFavorites[entry.Data.Name] then show = false end
@@ -1692,7 +1723,6 @@ function RefreshButtons()
                 if entry.Data.Category ~= currentTab then show = false end
             end
         end
-        -- Search
         if show and search ~= "" and not string.find(string.lower(entry.Data.Name), search, 1, true) then
             show = false
         end
@@ -1700,7 +1730,6 @@ function RefreshButtons()
         entry.Container.Visible = show
     end
 
-    -- Сортировка
     if sortMode == "az" then
         table.sort(visibleEntries, function(a, b) return a.Data.Name < b.Data.Name end)
     elseif sortMode == "za" then
@@ -1716,14 +1745,12 @@ function RefreshButtons()
         end)
     end
 
-    -- Позиционирование
     local visible = 0
     for _, entry in ipairs(visibleEntries) do
         entry.Container.Position = UDim2.new(0, 5, 0, visible * buttonHeight + 5)
         visible = visible + 1
     end
 
-    -- Special buttons
     local showAll = (currentTab == "All" and search == "")
     local showFav = (currentTab == "Fav")
     local showRct = (currentTab == "Rct")
@@ -2027,8 +2054,7 @@ local function ShowServerInfo()
     local smallBtn = Instance.new("TextButton")
     smallBtn.Size = UDim2.new(0.5, -13, 0, 30)
     smallBtn.Position = UDim2.new(0.5, 3, 0, 194)
-    smallBtn.BackgroundColor3 = RED_DARK
-    smallBtn.TextColor3 = RED_MAIN
+    smallBtn.BackgroundColor3 = RED_DARK    smallBtn.TextColor3 = RED_MAIN
     smallBtn.Text = "TP to small"
     smallBtn.TextScaled = true
     smallBtn.Font = Enum.Font.GothamBold
@@ -2574,6 +2600,18 @@ local function ApplyTheme(themeName)
         entry.Star.BackgroundColor3 = RED_BG
         entry.Star.TextColor3 = RED_MAIN
         entry.Star.BorderColor3 = RED_MAIN
+        entry.AutoBtn.BorderColor3 = RED_MAIN
+        entry.HideBtn.BorderColor3 = RED_MAIN
+        -- Auto-Execute цвет (если включён — красный, если выкл — фон темы)
+        if getgenv().XyqwAutoExec[entry.Data.Name] then
+            entry.AutoBtn.BackgroundColor3 = RED_MAIN
+            entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+        else
+            entry.AutoBtn.BackgroundColor3 = RED_BG
+            entry.AutoBtn.TextColor3 = RED_MAIN
+        end
+        entry.HideBtn.BackgroundColor3 = RED_BG
+        entry.HideBtn.TextColor3 = RED_MAIN
     end
 
     removeTagsContainer.BackgroundColor3 = RED_BG
@@ -2662,6 +2700,17 @@ task.spawn(function()
                 entry.Star.TextColor3 = c
                 entry.Star.BorderColor3 = c
                 entry.Star.BackgroundColor3 = darkHue
+                entry.AutoBtn.BorderColor3 = c
+                entry.HideBtn.BorderColor3 = c
+                if getgenv().XyqwAutoExec[entry.Data.Name] then
+                    entry.AutoBtn.BackgroundColor3 = c
+                    entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+                else
+                    entry.AutoBtn.BackgroundColor3 = darkHue
+                    entry.AutoBtn.TextColor3 = c
+                end
+                entry.HideBtn.BackgroundColor3 = darkHue
+                entry.HideBtn.TextColor3 = c
             end
             removeTagsContainer.BorderColor3 = c
             shareFavContainer.BorderColor3 = c
@@ -2747,6 +2796,8 @@ UserInputService.InputChanged:Connect(function(input)
         local newY = math.clamp(resizeStartSize.Y.Offset + delta.Y, 340, 1000)
         mainFrame.Size = UDim2.new(0, newX, 0, newY)
         sizeLabel.Text = math.floor(newX) .. " x " .. math.floor(newY)
+        UpdateTabLayout()
+        UpdateScriptButtonLayout()
     end
 end)
 
@@ -2795,6 +2846,11 @@ closeButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
     dockButton.Visible = true
 end)
+
+-- ========== ИНИЦИАЛИЗАЦИЯ ==========
+UpdateTabLayout()
+UpdateScriptButtonLayout()
+SwitchTab("All")  -- Всегда запускаем на All
 
 -- ========== ФИНАЛ ==========
 task.spawn(function()
