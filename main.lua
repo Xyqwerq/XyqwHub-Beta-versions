@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.1 ==========
+-- ========== XyqwHub - Версия 6.2 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.1"
+local VERSION = "6.2"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -160,6 +160,7 @@ local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
 local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
+-- ========== ЯЗЫКИ (5 штук, полный ChangeLog для всех) ==========
 local LANG = {
     EN = {
         Loaded = "loaded", Error = "error", Search = "Search...",
@@ -179,16 +180,32 @@ local LANG = {
         UrlCheckStarted = "Testing URLs...", UrlCheckDone = "URL test complete!",
         WelcomeTitle = "Welcome to XyqwHub!",
         ClickXToClose = "Click X to close",
+        -- UI элементы
+        PlayersTitle = "Players", ServerTitle = "Server Info", CustomTitle = "Custom Script",
+        CustomColorTitle = "Custom Color", ChangeLogTitle = "ChangeLog", SettingsTitle = "Settings", BlacklistTitle = "Blacklist",
+        Apply = "Apply", Reset = "Reset", ShareColor = "Share Color", CopyJobId = "Copy JobId",
+        Rejoin = "Rejoin", ServerHop = "ServerHop", TPToSmall = "TP to Small", RemoveTags = "Remove Tags",
+        ShareFav = "Share Favorite Scripts", ShareRct = "Share Recent Scripts", ManageBlacklist = "Manage Blacklist",
+        TestURLs = "Test URLs", SettingsBtn = "Settings (Auto-Hide bind)", Destroy = "Destroy XyqwHub",
+        PlaceId = "PlaceId", JobId = "JobId", Players = "Players", Creator = "Creator",
+        BlacklistEmpty = "Blacklist is empty", BlacklistHint = "Click × to unblacklist",
+        Presets = "Presets", AutoHideBind = "Auto-Hide keybind:",
+        WelcomeFiles = "Files: XyqwHub/FavScripts, RctScripts, CustomColor",
+        ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar",
         ChangeLogText = [[XyqwHub ChangeLog
 
+Version 6.2
+- Fixed blacklist × not removing item
+- Fixed Script unblacklisted notification
+- Full changelog for all languages
+- All UI translated (except social media)
+
 Version 6.1
-- Fixed blacklist not refreshing after removal
-- Added console prints for debugging
-- Better notifications (4s + script name)
-- 5 languages: EN, RU, UK, BE, KK
+- Fixed blacklist refreshing
 
 Version 6.0
-- 5 languages added
+- 5 languages: EN, RU, UK, BE, KK
+- Welcome message restored
 
 Version 5.9
 - X in right corner
@@ -205,6 +222,9 @@ Version 5.0
 
 Version 4.9
 - 13 themes
+
+Version 4.7
+- Custom Color picker
 
 Version 4.0
 - First 4.0 release
@@ -230,16 +250,31 @@ Version 1.0
         UrlCheckStarted = "Проверка URL...", UrlCheckDone = "Проверка завершена!",
         WelcomeTitle = "Добро пожаловать в XyqwHub!",
         ClickXToClose = "Нажми X чтобы закрыть",
+        PlayersTitle = "Игроки", ServerTitle = "Инфо о сервере", CustomTitle = "Свой скрипт",
+        CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог", SettingsTitle = "Настройки", BlacklistTitle = "Чёрный список",
+        Apply = "Применить", Reset = "Сбросить", ShareColor = "Поделиться цветом", CopyJobId = "Копировать JobId",
+        Rejoin = "Перезайти", ServerHop = "Сменить сервер", TPToSmall = "ТП в маленький", RemoveTags = "Убрать теги",
+        ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними", ManageBlacklist = "Управление чёрным списком",
+        TestURLs = "Проверить URL", SettingsBtn = "Настройки (Бинд Auto-Hide)", Destroy = "Удалить XyqwHub",
+        PlaceId = "PlaceId", JobId = "JobId", Players = "Игроки", Creator = "Создатель",
+        BlacklistEmpty = "Чёрный список пуст", BlacklistHint = "Нажми × чтобы убрать",
+        Presets = "Пресеты", AutoHideBind = "Бинд Auto-Hide:",
+        WelcomeFiles = "Файлы: XyqwHub/FavScripts, RctScripts, CustomColor",
+        ShareHub = "Поделиться XyqwHub", HideTopBar = "Скрыть топ бар",
         ChangeLogText = [[XyqwHub Ченджлог
 
+Версия 6.2
+- Фикс × в чёрном списке (не удалялся)
+- Фикс уведомления "Скрипт убран из чёрного списка!"
+- Полный ченджлог для всех языков
+- Весь UI переведён (кроме соцсетей)
+
 Версия 6.1
-- Фикс обновления блеклиста после удаления
-- Добавлены print в консоль для отладки
-- Лучше уведомления (4 сек + имя скрипта)
-- 5 языков: EN, RU, UK, BE, KK
+- Фикс обновления блеклиста
 
 Версия 6.0
-- Добавлено 5 языков
+- 5 языков: EN, RU, UK, BE, KK
+- Возвращено приветствие
 
 Версия 5.9
 - X в правом углу
@@ -256,6 +291,9 @@ Version 1.0
 
 Версия 4.9
 - 13 тем
+
+Версия 4.7
+- Custom Color picker
 
 Версия 4.0
 - Первый релиз
@@ -280,16 +318,31 @@ Version 1.0
         UrlCheckStarted = "Перевірка URL...", UrlCheckDone = "Перевірку завершено!",
         WelcomeTitle = "Ласкаво просимо до XyqwHub!",
         ClickXToClose = "Натисни X щоб закрити",
+        PlayersTitle = "Гравці", ServerTitle = "Інфо про сервер", CustomTitle = "Свій скрипт",
+        CustomColorTitle = "Свій колір", ChangeLogTitle = "Журнал", SettingsTitle = "Налаштування", BlacklistTitle = "Чорний список",
+        Apply = "Застосувати", Reset = "Скинути", ShareColor = "Поділитись кольором", CopyJobId = "Копіювати JobId",
+        Rejoin = "Перезайти", ServerHop = "Змінити сервер", TPToSmall = "ТП в маленький", RemoveTags = "Прибрати теги",
+        ShareFav = "Поділитись обраним", ShareRct = "Поділитись останніми", ManageBlacklist = "Керування чорним списком",
+        TestURLs = "Перевірити URL", SettingsBtn = "Налаштування (Бінд Auto-Hide)", Destroy = "Видалити XyqwHub",
+        PlaceId = "PlaceId", JobId = "JobId", Players = "Гравці", Creator = "Творець",
+        BlacklistEmpty = "Чорний список порожній", BlacklistHint = "Натисни × щоб прибрати",
+        Presets = "Пресети", AutoHideBind = "Бінд Auto-Hide:",
+        WelcomeFiles = "Файли: XyqwHub/FavScripts, RctScripts, CustomColor",
+        ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель",
         ChangeLogText = [[XyqwHub Журнал
 
+Версія 6.2
+- Фікс × у чорному списку (не видалявся)
+- Фікс сповіщення "Скрипт прибрано з чорного списку!"
+- Повний журнал для всіх мов
+- Весь UI перекладено (крім соцмереж)
+
 Версія 6.1
-- Фікс чорного списку після видалення
-- Додано print у консоль
-- Кращі сповіщення (4 сек + ім'я)
-- 5 мов: EN, RU, UK, BE, KK
+- Фікс оновлення чорного списку
 
 Версія 6.0
-- 5 мов
+- 5 мов: EN, RU, UK, BE, KK
+- Повернуто вітальне повідомлення
 
 Версія 5.9
 - X у правому куті
@@ -299,13 +352,16 @@ Version 1.0
 - Базова вкладка All
 
 Версія 5.5
-- Auto Execute, Blacklist, Auto Hide
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
 
 Версія 5.0
 - Custom Color миттєво
 
 Версія 4.9
 - 13 тем
+
+Версія 4.7
+- Custom Color picker
 
 Версія 4.0
 - Перший реліз
@@ -330,16 +386,31 @@ Version 1.0
         UrlCheckStarted = "Праверка URL...", UrlCheckDone = "Праверка завершана!",
         WelcomeTitle = "Сардэчна запрашаем у XyqwHub!",
         ClickXToClose = "Націсні X каб зачыніць",
+        PlayersTitle = "Гульцы", ServerTitle = "Інфа пра сервер", CustomTitle = "Свой скрыпт",
+        CustomColorTitle = "Свой колер", ChangeLogTitle = "Чэйнджлог", SettingsTitle = "Налады", BlacklistTitle = "Чорны спіс",
+        Apply = "Ужыць", Reset = "Скінуць", ShareColor = "Падзяліцца колерам", CopyJobId = "Капіяваць JobId",
+        Rejoin = "Перазайсці", ServerHop = "Змяніць сервер", TPToSmall = "ТП у маленькі", RemoveTags = "Прыбраць тэгі",
+        ShareFav = "Падзяліцца абраным", ShareRct = "Падзяліцца апошнімі", ManageBlacklist = "Кіраванне чорным спісам",
+        TestURLs = "Праверыць URL", SettingsBtn = "Налады (Бінд Auto-Hide)", Destroy = "Выдаліць XyqwHub",
+        PlaceId = "PlaceId", JobId = "JobId", Players = "Гульцы", Creator = "Стваральнік",
+        BlacklistEmpty = "Чорны спіс пусты", BlacklistHint = "Націсні × каб прыбраць",
+        Presets = "Прэсеты", AutoHideBind = "Бінд Auto-Hide:",
+        WelcomeFiles = "Файлы: XyqwHub/FavScripts, RctScripts, CustomColor",
+        ShareHub = "Падзяліцца XyqwHub", HideTopBar = "Схаваць верхнюю панэль",
         ChangeLogText = [[XyqwHub Чэйнджлог
 
+Версія 6.2
+- Фікс × у чорным спісе (не выдаляўся)
+- Фікс апавяшчэння "Скрыпт прыбраны з чорнага спісу!"
+- Поўны чэйнджлог для ўсіх моў
+- Увесь UI перакладзены (акрамя сацсетак)
+
 Версія 6.1
-- Фікс чорнага спісу пасля выдалення
-- Дададзены print у кансоль
-- Лепшыя апавяшчэнні (4 сек + імя)
-- 5 моў: EN, RU, UK, BE, KK
+- Фікс абнаўлення чорнага спісу
 
 Версія 6.0
-- 5 моў
+- 5 моў: EN, RU, UK, BE, KK
+- Вернута прывітальнае паведамленне
 
 Версія 5.9
 - X у правым куце
@@ -349,13 +420,16 @@ Version 1.0
 - Базавая ўкладка All
 
 Версія 5.5
-- Auto Execute, Blacklist, Auto Hide
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
 
 Версія 5.0
 - Custom Color імгненна
 
 Версія 4.9
 - 13 тэм
+
+Версія 4.7
+- Custom Color picker
 
 Версія 4.0
 - Першы рэліз
@@ -380,16 +454,31 @@ Version 1.0
         UrlCheckStarted = "URL тексерілуде...", UrlCheckDone = "Тексеру аяқталды!",
         WelcomeTitle = "XyqwHub-қа қош келдіңіз!",
         ClickXToClose = "Жабу үшін X басыңыз",
+        PlayersTitle = "Ойыншылар", ServerTitle = "Сервер туралы", CustomTitle = "Өз скрипті",
+        CustomColorTitle = "Өз түсі", ChangeLogTitle = "Өзгерістер", SettingsTitle = "Параметрлер", BlacklistTitle = "Қара тізім",
+        Apply = "Қолдану", Reset = "Қалпына келтіру", ShareColor = "Түспен бөлісу", CopyJobId = "JobId көшіру",
+        Rejoin = "Қайта кіру", ServerHop = "Серверді ауыстыру", TPToSmall = "Кішіге ТП", RemoveTags = "Тегтерді алу",
+        ShareFav = "Таңдаулылармен бөлісу", ShareRct = "Соңғылармен бөлісу", ManageBlacklist = "Қара тізімді басқару",
+        TestURLs = "URL тексеру", SettingsBtn = "Параметрлер (Auto-Hide байланысы)", Destroy = "XyqwHub жою",
+        PlaceId = "PlaceId", JobId = "JobId", Players = "Ойыншылар", Creator = "Жасаушы",
+        BlacklistEmpty = "Қара тізім бос", BlacklistHint = "Жою үшін × басыңыз",
+        Presets = "Пресеттер", AutoHideBind = "Auto-Hide байланысы:",
+        WelcomeFiles = "Файлдар: XyqwHub/FavScripts, RctScripts, CustomColor",
+        ShareHub = "XyqwHub-пен бөлісу", HideTopBar = "Жоғарғы тақтаны жасыру",
         ChangeLogText = [[XyqwHub Өзгерістер
 
+6.2 нұсқасы
+- × қара тізімде түзетілді (жойылмады)
+- "Скрипт қара тізімнен жойылды!" хабарламасы түзетілді
+- Барлық тілдер үшін толық өзгерістер
+- Барлық UI аударылды (әлеуметтік желілерден басқа)
+
 6.1 нұсқасы
-- Қара тізімді жою түзетілді
-- Консольге print қосылды
-- Жақсырақ хабарламалар (4 сек + атауы)
-- 5 тіл: EN, RU, UK, BE, KK
+- Қара тізім жаңарту түзетілді
 
 6.0 нұсқасы
-- 5 тіл
+- 5 тіл: EN, RU, UK, BE, KK
+- Қош келу хабарламасы қалпына келтірілді
 
 5.9 нұсқасы
 - X оң жақ бұрышта
@@ -399,13 +488,16 @@ Version 1.0
 - Негізгі қойынды All
 
 5.5 нұсқасы
-- Auto Execute, Blacklist, Auto Hide
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
 
 5.0 нұсқасы
 - Custom Color бірден
 
 4.9 нұсқасы
 - 13 тақырып
+
+4.7 нұсқасы
+- Custom Color picker
 
 4.0 нұсқасы
 - Алғашқы шығарылым
@@ -1230,7 +1322,7 @@ local function CreateScriptButton(data)
         getgenv().XyqwBlacklist[data.Name] = true
         SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
         print("[XyqwHub] BLACKLISTED: " .. data.Name)
-        ShowRobloxNotification(data.Name .. " — " .. _("BlacklistAdded"), 3)
+        ShowRobloxNotification(data.Name .. " — " .. _("BlacklistAdded"), 4)
         task.wait(0.05)
         if getgenv().RefreshButtons then getgenv().RefreshButtons() end
     end)
@@ -1286,7 +1378,7 @@ local function CreateScriptButton(data)
         if data.URL == "SPECIAL_COPY_DOORS_V2" then
             local scriptText = 'getgenv().SCRIPT_KEY = "KEYLESS"\nloadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/abd3cc54d2dc7de4a091fb19c8f4ea9e15e939e7ecc88b475e6956e8af94ad6f/download"))()'
             pcall(function() setclipboard(scriptText) end)
-            ShowRobloxNotification("Doors V2 cannot be run via XyqwHub. Script copied to clipboard!", 5)
+            ShowRobloxNotification("Doors V2 - copied", 5)
         else
             local success, err = pcall(function()
                 loadstring(game:HttpGet(data.URL))()
@@ -1308,6 +1400,7 @@ end
 
 for _, data in ipairs(SCRIPTS) do CreateScriptButton(data) end
 
+-- ========== SPECIAL BUTTONS ==========
 local removeTagsContainer = Instance.new("Frame")
 removeTagsContainer.Name = "RemoveTagsContainer"
 removeTagsContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -1322,7 +1415,7 @@ local removeTagsBtn = Instance.new("TextButton")
 removeTagsBtn.Name = "RemoveTagsBtn"
 removeTagsBtn.Size = UDim2.new(1, 0, 1, 0)
 removeTagsBtn.BackgroundTransparency = 1
-removeTagsBtn.Text = "Remove Tags"
+removeTagsBtn.Text = _("RemoveTags")
 removeTagsBtn.TextColor3 = RED_MAIN
 removeTagsBtn.TextScaled = true
 removeTagsBtn.Font = Enum.Font.GothamBold
@@ -1350,7 +1443,7 @@ local shareFavBtn = Instance.new("TextButton")
 shareFavBtn.Name = "ShareFavBtn"
 shareFavBtn.Size = UDim2.new(1, 0, 1, 0)
 shareFavBtn.BackgroundTransparency = 1
-shareFavBtn.Text = "Share Favorite Scripts"
+shareFavBtn.Text = _("ShareFav")
 shareFavBtn.TextColor3 = RED_MAIN
 shareFavBtn.TextScaled = true
 shareFavBtn.Font = Enum.Font.GothamBold
@@ -1386,7 +1479,7 @@ local shareRctBtn = Instance.new("TextButton")
 shareRctBtn.Name = "ShareRctBtn"
 shareRctBtn.Size = UDim2.new(1, 0, 1, 0)
 shareRctBtn.BackgroundTransparency = 1
-shareRctBtn.Text = "Share Recent Scripts"
+shareRctBtn.Text = _("ShareRct")
 shareRctBtn.TextColor3 = RED_MAIN
 shareRctBtn.TextScaled = true
 shareRctBtn.Font = Enum.Font.GothamBold
@@ -1419,7 +1512,7 @@ local blacklistBtn = Instance.new("TextButton")
 blacklistBtn.Name = "BlacklistBtn"
 blacklistBtn.Size = UDim2.new(1, 0, 1, 0)
 blacklistBtn.BackgroundTransparency = 1
-blacklistBtn.Text = "Manage Blacklist"
+blacklistBtn.Text = _("ManageBlacklist")
 blacklistBtn.TextColor3 = RED_MAIN
 blacklistBtn.TextScaled = true
 blacklistBtn.Font = Enum.Font.GothamBold
@@ -1443,7 +1536,7 @@ local urlTestBtn = Instance.new("TextButton")
 urlTestBtn.Name = "UrlTestBtn"
 urlTestBtn.Size = UDim2.new(1, 0, 1, 0)
 urlTestBtn.BackgroundTransparency = 1
-urlTestBtn.Text = "Test URLs"
+urlTestBtn.Text = _("TestURLs")
 urlTestBtn.TextColor3 = RED_MAIN
 urlTestBtn.TextScaled = true
 urlTestBtn.Font = Enum.Font.GothamBold
@@ -1467,7 +1560,7 @@ local settingsBtn = Instance.new("TextButton")
 settingsBtn.Name = "SettingsBtn"
 settingsBtn.Size = UDim2.new(1, 0, 1, 0)
 settingsBtn.BackgroundTransparency = 1
-settingsBtn.Text = "Settings (Auto-Hide bind)"
+settingsBtn.Text = _("SettingsBtn")
 settingsBtn.TextColor3 = RED_MAIN
 settingsBtn.TextScaled = true
 settingsBtn.Font = Enum.Font.GothamBold
@@ -1491,7 +1584,7 @@ local destroyBtnMain = Instance.new("TextButton")
 destroyBtnMain.Name = "DestroyBtn"
 destroyBtnMain.Size = UDim2.new(1, 0, 1, 0)
 destroyBtnMain.BackgroundTransparency = 1
-destroyBtnMain.Text = "Destroy XyqwHub"
+destroyBtnMain.Text = _("Destroy")
 destroyBtnMain.TextColor3 = RED_MAIN
 destroyBtnMain.TextScaled = true
 destroyBtnMain.Font = Enum.Font.GothamBold
@@ -1506,6 +1599,7 @@ destroyBtnMain.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
+-- ========== BLACKLIST MANAGER (фикс ×) ==========
 local function ShowBlacklistManager()
     local frame = Instance.new("Frame")
     frame.Name = "BlacklistFrame"
@@ -1523,7 +1617,7 @@ local function ShowBlacklistManager()
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
-    title.Text = "Blacklist"
+    title.Text = _("BlacklistTitle")
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
@@ -1552,70 +1646,76 @@ local function ShowBlacklistManager()
     scroll.ZIndex = 51
     scroll.Parent = frame
 
-    local yPos = 5
-    local hasAny = false
+    -- ФИКС: собираем имена В ОТДЕЛЬНЫЙ СПИСОК перед итерацией
+    local blacklistNames = {}
     for name, _ in pairs(getgenv().XyqwBlacklist) do
-        hasAny = true
-        local item = Instance.new("Frame")
-        item.Size = UDim2.new(1, -10, 0, 28)
-        item.Position = UDim2.new(0, 5, 0, yPos)
-        item.BackgroundColor3 = RED_BG
-        item.BorderSizePixel = 1
-        item.BorderColor3 = RED_MAIN
-        item.ZIndex = 51
-        item.Parent = scroll
-
-        local lbl = Instance.new("TextLabel")
-        lbl.Size = UDim2.new(1, -40, 1, 0)
-        lbl.Position = UDim2.new(0, 5, 0, 0)
-        lbl.BackgroundTransparency = 1
-        lbl.TextColor3 = RED_MAIN
-        lbl.Text = name
-        lbl.TextScaled = true
-        lbl.Font = Enum.Font.Gotham
-        lbl.TextXAlignment = Enum.TextXAlignment.Left
-        lbl.ZIndex = 52
-        lbl.Parent = item
-
-        local removeBtn = Instance.new("TextButton")
-        removeBtn.Size = UDim2.new(0, 30, 1, 0)
-        removeBtn.Position = UDim2.new(1, -30, 0, 0)
-        removeBtn.BackgroundColor3 = RED_DARK
-        removeBtn.TextColor3 = RED_MAIN
-        removeBtn.Text = "×"
-        removeBtn.TextScaled = true
-        removeBtn.Font = Enum.Font.GothamBold
-        removeBtn.BorderSizePixel = 0
-        removeBtn.ZIndex = 52
-        removeBtn.Parent = item
-        removeBtn.AutoButtonColor = false
-        removeBtn.MouseButton1Click:Connect(function()
-            getgenv().XyqwBlacklist[name] = nil
-            SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
-            print("[XyqwHub] UNBLACKLISTED: " .. name)
-            ShowRobloxNotification(name .. " — " .. _("BlacklistRemoved"), 3)
-            -- Мгновенно обновляем главный список
-            if getgenv().RefreshButtons then getgenv().RefreshButtons() end
-            -- Закрываем окно и открываем снова
-            task.wait(0.15)
-            frame:Destroy()
-            ShowBlacklistManager()
-        end)
-
-        yPos = yPos + 30
+        table.insert(blacklistNames, name)
     end
+    table.sort(blacklistNames)
 
-    if not hasAny then
+    local yPos = 5
+    if #blacklistNames == 0 then
         local emptyLbl = Instance.new("TextLabel")
         emptyLbl.Size = UDim2.new(1, -10, 0, 40)
         emptyLbl.Position = UDim2.new(0, 5, 0, 20)
         emptyLbl.BackgroundTransparency = 1
         emptyLbl.TextColor3 = Color3.fromRGB(150, 150, 150)
-        emptyLbl.Text = "Blacklist is empty"
+        emptyLbl.Text = _("BlacklistEmpty")
         emptyLbl.TextScaled = true
         emptyLbl.Font = Enum.Font.Gotham
         emptyLbl.ZIndex = 52
         emptyLbl.Parent = scroll
+    else
+        for _, name in ipairs(blacklistNames) do
+            local item = Instance.new("Frame")
+            item.Size = UDim2.new(1, -10, 0, 28)
+            item.Position = UDim2.new(0, 5, 0, yPos)
+            item.BackgroundColor3 = RED_BG
+            item.BorderSizePixel = 1
+            item.BorderColor3 = RED_MAIN
+            item.ZIndex = 51
+            item.Parent = scroll
+
+            local lbl = Instance.new("TextLabel")
+            lbl.Size = UDim2.new(1, -40, 1, 0)
+            lbl.Position = UDim2.new(0, 5, 0, 0)
+            lbl.BackgroundTransparency = 1
+            lbl.TextColor3 = RED_MAIN
+            lbl.Text = name
+            lbl.TextScaled = true
+            lbl.Font = Enum.Font.Gotham
+            lbl.TextXAlignment = Enum.TextXAlignment.Left
+            lbl.ZIndex = 52
+            lbl.Parent = item
+
+            local removeBtn = Instance.new("TextButton")
+            removeBtn.Size = UDim2.new(0, 30, 1, 0)
+            removeBtn.Position = UDim2.new(1, -30, 0, 0)
+            removeBtn.BackgroundColor3 = RED_DARK
+            removeBtn.TextColor3 = RED_MAIN
+            removeBtn.Text = "×"
+            removeBtn.TextScaled = true
+            removeBtn.Font = Enum.Font.GothamBold
+            removeBtn.BorderSizePixel = 0
+            removeBtn.ZIndex = 52
+            removeBtn.Parent = item
+            removeBtn.AutoButtonColor = false
+            removeBtn.MouseButton1Click:Connect(function()
+                -- Удаляем из blacklist
+                getgenv().XyqwBlacklist[name] = nil
+                SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
+                print("[XyqwHub] UNBLACKLISTED: " .. name)
+                ShowRobloxNotification(name .. " — " .. _("BlacklistRemoved"), 4)
+                -- Мгновенно обновляем главный список
+                if getgenv().RefreshButtons then getgenv().RefreshButtons() end
+                -- Закрываем окно, пересоздаём с обновлёнными данными
+                task.wait(0.1)
+                frame:Destroy()
+                ShowBlacklistManager()
+            end)
+
+            yPos = yPos + 30
+        end
     end
 
     scroll.CanvasSize = UDim2.new(0, 0, 0, yPos + 10)
@@ -1645,7 +1745,7 @@ local function ShowSettings()
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
-    title.Text = "Settings"
+    title.Text = _("SettingsTitle")
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
@@ -1668,7 +1768,7 @@ local function ShowSettings()
     bindLbl.Position = UDim2.new(0, 10, 0, 40)
     bindLbl.BackgroundTransparency = 1
     bindLbl.TextColor3 = RED_MAIN
-    bindLbl.Text = "Auto-Hide keybind:"
+    bindLbl.Text = _("AutoHideBind")
     bindLbl.TextScaled = true
     bindLbl.Font = Enum.Font.GothamBold
     bindLbl.TextXAlignment = Enum.TextXAlignment.Left
@@ -1708,20 +1808,6 @@ local function ShowSettings()
             end
         end)
     end)
-
-    local hint = Instance.new("TextLabel")
-    hint.Size = UDim2.new(1, -20, 0, 40)
-    hint.Position = UDim2.new(0, 10, 0, 100)
-    hint.BackgroundTransparency = 1
-    hint.TextColor3 = Color3.fromRGB(150, 150, 150)
-    hint.Text = "Press bind to hide/show XyqwHub GUI."
-    hint.TextWrapped = true
-    hint.TextScaled = true
-    hint.Font = Enum.Font.Gotham
-    hint.TextXAlignment = Enum.TextXAlignment.Left
-    hint.TextYAlignment = Enum.TextYAlignment.Top
-    hint.ZIndex = 51
-    hint.Parent = frame
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
@@ -1768,7 +1854,7 @@ sortBtn.MouseButton1Click:Connect(function()
     if getgenv().RefreshButtons then getgenv().RefreshButtons() end
 end)
 
--- ========== REFRESH (GLOBAL) ==========
+-- ========== REFRESH ==========
 getgenv().RefreshButtons = function()
     local search = string.lower(searchBar.Text)
     local sortMode = getgenv().XyqwSettings.sortMode
@@ -1873,7 +1959,7 @@ local function ShowChangeLog()
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
-    title.Text = "ChangeLog"
+    title.Text = _("ChangeLogTitle")
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
@@ -1932,6 +2018,13 @@ langButton.MouseButton1Click:Connect(function()
     getgenv().XyqwLanguage = langs[idx]
     langButton.Text = getgenv().XyqwLanguage
     searchBar.PlaceholderText = _("Search")
+    removeTagsBtn.Text = _("RemoveTags")
+    shareFavBtn.Text = _("ShareFav")
+    shareRctBtn.Text = _("ShareRct")
+    blacklistBtn.Text = _("ManageBlacklist")
+    urlTestBtn.Text = _("TestURLs")
+    settingsBtn.Text = _("SettingsBtn")
+    destroyBtnMain.Text = _("Destroy")
     ShowRobloxNotification(_("LangChanged"), 3)
     UpdateHeaderLayout()
 end)
@@ -1952,7 +2045,7 @@ local function ShowPlayerList()
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
-    title.Text = "Players (" .. #Players:GetPlayers() .. ")"
+    title.Text = _("PlayersTitle") .. " (" .. #Players:GetPlayers() .. ")"
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
@@ -2018,7 +2111,7 @@ local function ShowServerInfo()
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
-    title.Text = "Server Info"
+    title.Text = _("ServerTitle")
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
@@ -2046,7 +2139,10 @@ local function ShowServerInfo()
     info.TextYAlignment = Enum.TextYAlignment.Top
     info.TextSize = 13
     info.Font = Enum.Font.Gotham
-    info.Text = "PlaceId: " .. game.PlaceId .. "\nJobId: " .. game.JobId .. "\nPlayers: " .. #Players:GetPlayers() .. "/" .. Players.MaxPlayers .. "\nCreator: " .. game.CreatorId
+    info.Text = _("PlaceId") .. ": " .. game.PlaceId .. "\n" ..
+                 _("JobId") .. ": " .. game.JobId .. "\n" ..
+                 _("Players") .. ": " .. #Players:GetPlayers() .. "/" .. Players.MaxPlayers .. "\n" ..
+                 _("Creator") .. ": " .. game.CreatorId
     info.ZIndex = 51
     info.Parent = frame
 
@@ -2099,7 +2195,7 @@ local function ShowServerInfo()
     rejoinBtn.Position = UDim2.new(0, 10, 0, 158)
     rejoinBtn.BackgroundColor3 = RED_DARK
     rejoinBtn.TextColor3 = RED_MAIN
-    rejoinBtn.Text = "Rejoin"
+    rejoinBtn.Text = _("Rejoin")
     rejoinBtn.TextScaled = true
     rejoinBtn.Font = Enum.Font.GothamBold
     rejoinBtn.BorderSizePixel = 1
@@ -2114,7 +2210,7 @@ local function ShowServerInfo()
     hopBtn.Position = UDim2.new(0, 10, 0, 194)
     hopBtn.BackgroundColor3 = RED_DARK
     hopBtn.TextColor3 = RED_MAIN
-    hopBtn.Text = "ServerHop"
+    hopBtn.Text = _("ServerHop")
     hopBtn.TextScaled = true
     hopBtn.Font = Enum.Font.GothamBold
     hopBtn.BorderSizePixel = 1
@@ -2129,7 +2225,7 @@ local function ShowServerInfo()
     smallBtn.Position = UDim2.new(0.5, 3, 0, 194)
     smallBtn.BackgroundColor3 = RED_DARK
     smallBtn.TextColor3 = RED_MAIN
-    smallBtn.Text = "TP to small"
+    smallBtn.Text = _("TPToSmall")
     smallBtn.TextScaled = true
     smallBtn.Font = Enum.Font.GothamBold
     smallBtn.BorderSizePixel = 1
@@ -2144,7 +2240,7 @@ local function ShowServerInfo()
     copyBtn.Position = UDim2.new(0, 10, 0, 232)
     copyBtn.BackgroundColor3 = RED_MAIN
     copyBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-    copyBtn.Text = "Copy JobId"
+    copyBtn.Text = _("CopyJobId")
     copyBtn.TextScaled = true
     copyBtn.Font = Enum.Font.GothamBold
     copyBtn.BorderSizePixel = 0
@@ -2176,7 +2272,7 @@ local function ShowCustomScript()
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
-    title.Text = "Custom Script"
+    title.Text = _("CustomTitle")
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
@@ -2235,7 +2331,7 @@ local function ShowCustomScript()
 
     runBtn.MouseButton1Click:Connect(function()
         local url = ExtractURL(input.Text)
-        if not url then ShowRobloxNotification("Invalid URL or loadstring!", 3) return end
+        if not url then ShowRobloxNotification("Invalid URL!", 3) return end
         local success, err = pcall(function() loadstring(game:HttpGet(url))() end)
         if success then
             ShowRobloxNotification("Custom - " .. _("ScriptExecuted"), 3)
@@ -2265,7 +2361,7 @@ local function ShowCustomColor()
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
-    title.Text = "Custom Color"
+    title.Text = _("CustomColorTitle")
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
@@ -2452,7 +2548,7 @@ local function ShowCustomColor()
     presetLbl.Position = UDim2.new(0, 10, 0, 178)
     presetLbl.BackgroundTransparency = 1
     presetLbl.TextColor3 = RED_MAIN
-    presetLbl.Text = "Presets:"
+    presetLbl.Text = _("Presets") .. ":"
     presetLbl.TextScaled = true
     presetLbl.Font = Enum.Font.GothamBold
     presetLbl.TextXAlignment = Enum.TextXAlignment.Left
@@ -2504,7 +2600,7 @@ local function ShowCustomColor()
     resetBtn.Position = UDim2.new(0, 10, 0, 278)
     resetBtn.BackgroundColor3 = RED_DARK
     resetBtn.TextColor3 = RED_MAIN
-    resetBtn.Text = "Reset"
+    resetBtn.Text = _("Reset")
     resetBtn.TextScaled = true
     resetBtn.Font = Enum.Font.GothamBold
     resetBtn.BorderSizePixel = 1
@@ -2530,7 +2626,7 @@ local function ShowCustomColor()
     shareColorBtn.Position = UDim2.new(0.5, 3, 0, 278)
     shareColorBtn.BackgroundColor3 = RED_DARK
     shareColorBtn.TextColor3 = RED_MAIN
-    shareColorBtn.Text = "Share Color"
+    shareColorBtn.Text = _("ShareColor")
     shareColorBtn.TextScaled = true
     shareColorBtn.Font = Enum.Font.GothamBold
     shareColorBtn.BorderSizePixel = 1
@@ -2540,7 +2636,7 @@ local function ShowCustomColor()
     shareColorBtn.AutoButtonColor = false
     shareColorBtn.MouseButton1Click:Connect(function()
         local hex = string.format("#%02X%02X%02X", tempColor.r, tempColor.g, tempColor.b)
-        local text = "XyqwHub - My Custom Color: " .. hex .. "\nGenerated by XyqwHub " .. VERSION
+        local text = "XyqwHub - My Custom Color: " .. hex
         pcall(function() setclipboard(text) end)
         ShowRobloxNotification(_("ColorShared"), 3)
     end)
@@ -2550,7 +2646,7 @@ local function ShowCustomColor()
     applyBtn.Position = UDim2.new(0, 10, 0, 308)
     applyBtn.BackgroundColor3 = RED_MAIN
     applyBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-    applyBtn.Text = "Apply"
+    applyBtn.Text = _("Apply")
     applyBtn.TextScaled = true
     applyBtn.Font = Enum.Font.GothamBold
     applyBtn.BorderSizePixel = 0
@@ -2964,7 +3060,7 @@ local function ShowWelcomeMessage()
     shareBtn.Position = UDim2.new(0, 10, 0, 28)
     shareBtn.BackgroundColor3 = RED_DARK
     shareBtn.TextColor3 = RED_MAIN
-    shareBtn.Text = "Share XyqwHub"
+    shareBtn.Text = _("ShareHub")
     shareBtn.TextScaled = true
     shareBtn.Font = Enum.Font.GothamBold
     shareBtn.BorderSizePixel = 1
@@ -3042,37 +3138,32 @@ local function ShowWelcomeMessage()
         "EN/RU/UK/BE/KK — Languages\n" ..
         "X   — Close\n" ..
         "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
-        "Remove Tags      — remove OWNER/TESTER tags\n" ..
-        "Manage Blacklist — hide unwanted scripts\n" ..
-        "Test URLs       — check every script\n" ..
+        "Remove Tags      — remove tags\n" ..
+        "Manage Blacklist — hide scripts\n" ..
+        "Test URLs       — check scripts\n" ..
         "Settings        — Auto-Hide bind\n" ..
         "Destroy XyqwHub — full unload\n" ..
         "\n─── Fav TAB ───\n" ..
-        "Share Favorite Scripts — copies favorites list\n" ..
+        "Share Favorite Scripts\n" ..
         "\n─── Rct TAB ───\n" ..
-        "Share Recent Scripts — copies recent list\n" ..
+        "Share Recent Scripts\n" ..
         "\n─── SCRIPT BUTTONS ───\n" ..
-        "▶ / Auto  — Auto-Execute on game join\n" ..
-        "⊘ / Hide  — Add to Blacklist (hide)\n" ..
-        "☆ / ★     — Add to Favorites\n" ..
+        "▶ / Auto  — Auto-Execute\n" ..
+        "⊘ / Hide  — Add to Blacklist\n" ..
+        "☆ / ★     — Favorites\n" ..
         "\n─── BLACKLIST ───\n" ..
-        "Click × to unblacklist (return to list)\n" ..
+        "Click × to unblacklist\n" ..
         "\n─── TOP BAR ───\n" ..
         "Executor | Username | FPS | Ping\n" ..
         "H — Hide / Show\n" ..
         "\n─── LANGUAGES ───\n" ..
-        "EN (English), RU (Русский), UK (Українська),\n" ..
-        "BE (Беларуская), KK (Қазақша)\n" ..
+        "EN, RU, UK, BE, KK\n" ..
         "Click EN/RU to cycle\n" ..
         "\n─── RESIZE ───\n" ..
         "Drag bottom-right corner\n" ..
         "\n─── FILES ───\n" ..
-        "XyqwHub/FavScripts/favorites.json\n" ..
-        "XyqwHub/RctScripts/recent.json\n" ..
-        "XyqwHub/CustomColor/custom_color.json\n" ..
-        "XyqwHub/AutoExecute/autoexec.json\n" ..
-        "XyqwHub/Blacklist/blacklist.json\n" ..
-        "XyqwHub/Settings/settings.json"
+        "XyqwHub/FavScripts, RctScripts, CustomColor,\n" ..
+        "AutoExecute, Blacklist, Settings"
     doc.ZIndex = 101
     doc.Parent = scroll
 
