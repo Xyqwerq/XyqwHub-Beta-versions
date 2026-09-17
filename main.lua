@@ -2266,6 +2266,8 @@ Version 1.0
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
     },
+}
+
 local function _(key)
     local lang = getgenv().XyqwLanguage or "EN"
     return LANG[lang][key] or LANG.EN[key] or key
