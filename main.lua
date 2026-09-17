@@ -1600,7 +1600,8 @@ destroyBtnMain.MouseButton1Click:Connect(function()
 end)
 
 -- ========== BLACKLIST MANAGER (фикс ×) ==========
-local function ShowBlacklistManager()
+local ShowBlacklistManager
+ShowBlacklistManager = function()
     local frame = Instance.new("Frame")
     frame.Name = "BlacklistFrame"
     frame.Size = UDim2.new(0, 320, 0, 350)
