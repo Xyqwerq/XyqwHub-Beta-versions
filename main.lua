@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.2 ==========
+-- ========== XyqwHub - Версия 6.3 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.2"
+local VERSION = "6.3"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -69,15 +69,14 @@ local FAV_FOLDER = CONFIG_FOLDER .. "/FavScripts"
 local RCT_FOLDER = CONFIG_FOLDER .. "/RctScripts"
 local CUSTOM_COLOR_FOLDER = CONFIG_FOLDER .. "/CustomColor"
 local AUTOEXEC_FOLDER = CONFIG_FOLDER .. "/AutoExecute"
-local BLACKLIST_FOLDER = CONFIG_FOLDER .. "/Blacklist"
 local SETTINGS_FOLDER = CONFIG_FOLDER .. "/Settings"
 
 local FAV_FILE = FAV_FOLDER .. "/favorites.json"
 local RCT_FILE = RCT_FOLDER .. "/recent.json"
 local CUSTOM_COLOR_FILE = CUSTOM_COLOR_FOLDER .. "/custom_color.json"
 local AUTOEXEC_FILE = AUTOEXEC_FOLDER .. "/autoexec.json"
-local BLACKLIST_FILE = BLACKLIST_FOLDER .. "/blacklist.json"
 local SETTINGS_FILE = SETTINGS_FOLDER .. "/settings.json"
+local ORDER_FILE = SETTINGS_FOLDER .. "/order.json"
 
 pcall(function()
     if not isfolder(CONFIG_FOLDER) then makefolder(CONFIG_FOLDER) end
@@ -85,7 +84,6 @@ pcall(function()
     if not isfolder(RCT_FOLDER) then makefolder(RCT_FOLDER) end
     if not isfolder(CUSTOM_COLOR_FOLDER) then makefolder(CUSTOM_COLOR_FOLDER) end
     if not isfolder(AUTOEXEC_FOLDER) then makefolder(AUTOEXEC_FOLDER) end
-    if not isfolder(BLACKLIST_FOLDER) then makefolder(BLACKLIST_FOLDER) end
     if not isfolder(SETTINGS_FOLDER) then makefolder(SETTINGS_FOLDER) end
 end)
 
@@ -109,8 +107,8 @@ end
 getgenv().XyqwFavorites = LoadTable(FAV_FILE)
 getgenv().XyqwRecent = LoadTable(RCT_FILE)
 getgenv().XyqwAutoExec = LoadTable(AUTOEXEC_FILE)
-getgenv().XyqwBlacklist = LoadTable(BLACKLIST_FILE)
 getgenv().XyqwSettings = LoadTable(SETTINGS_FILE)
+getgenv().XyqwOrder = LoadTable(ORDER_FILE)
 
 if not getgenv().XyqwSettings.sortMode then getgenv().XyqwSettings.sortMode = "default" end
 if not getgenv().XyqwSettings.autoHideBind then getgenv().XyqwSettings.autoHideBind = "RightShift" end
@@ -160,7 +158,7 @@ local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
 local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
--- ========== ЯЗЫКИ (5 штук, полный ChangeLog для всех) ==========
+-- ========== ЯЗЫКИ (EN, RU) ==========
 local LANG = {
     EN = {
         Loaded = "loaded", Error = "error", Search = "Search...",
@@ -175,62 +173,414 @@ local LANG = {
         ColorReset = "Custom Color reset to Red",
         ColorShared = "Color copied to clipboard!",
         AutoExecOn = "Auto-Execute: ON", AutoExecOff = "Auto-Execute: OFF",
-        BlacklistAdded = "Script blacklisted!", BlacklistRemoved = "Script unblacklisted!",
         KeybindChanged = "Auto-Hide keybind: ",
         UrlCheckStarted = "Testing URLs...", UrlCheckDone = "URL test complete!",
         WelcomeTitle = "Welcome to XyqwHub!",
         ClickXToClose = "Click X to close",
-        -- UI элементы
         PlayersTitle = "Players", ServerTitle = "Server Info", CustomTitle = "Custom Script",
-        CustomColorTitle = "Custom Color", ChangeLogTitle = "ChangeLog", SettingsTitle = "Settings", BlacklistTitle = "Blacklist",
+        CustomColorTitle = "Custom Color", ChangeLogTitle = "ChangeLog", SettingsTitle = "Settings",
         Apply = "Apply", Reset = "Reset", ShareColor = "Share Color", CopyJobId = "Copy JobId",
         Rejoin = "Rejoin", ServerHop = "ServerHop", TPToSmall = "TP to Small", RemoveTags = "Remove Tags",
-        ShareFav = "Share Favorite Scripts", ShareRct = "Share Recent Scripts", ManageBlacklist = "Manage Blacklist",
+        ShareFav = "Share Favorite Scripts", ShareRct = "Share Recent Scripts",
         TestURLs = "Test URLs", SettingsBtn = "Settings (Auto-Hide bind)", Destroy = "Destroy XyqwHub",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Players", Creator = "Creator",
-        BlacklistEmpty = "Blacklist is empty", BlacklistHint = "Click × to unblacklist",
         Presets = "Presets", AutoHideBind = "Auto-Hide keybind:",
         WelcomeFiles = "Files: XyqwHub/FavScripts, RctScripts, CustomColor",
         ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar",
+        OrderSaved = "Order saved!",
         ChangeLogText = [[XyqwHub ChangeLog
 
+========================================
+Version 6.3
+========================================
+- Removed Blacklist completely (button, window, files, checks)
+- Fixed header layout at startup (buttons no longer shift)
+- Added smooth animations (hover, open/close, color transitions)
+- Added drag & drop for script buttons (reorder by holding left edge)
+- Script order is now saved to Settings/order.json
+- Updated welcome message with new controls
+- Full changelog restored for all languages
+
+========================================
 Version 6.2
+========================================
 - Fixed blacklist × not removing item
-- Fixed Script unblacklisted notification
+- Fixed "Script unblacklisted" notification
 - Full changelog for all languages
 - All UI translated (except social media)
 
+========================================
 Version 6.1
-- Fixed blacklist refreshing
+========================================
+- Fixed blacklist refreshing (list now updates instantly)
 
+========================================
 Version 6.0
-- 5 languages: EN, RU, UK, BE, KK
+========================================
+- Added 5 languages: EN, RU, UK, BE, KK
 - Welcome message restored
+- Translated all notifications
 
+========================================
 Version 5.9
-- X in right corner
+========================================
+- X button moved to right corner
+- Added drag support for top bar
 
+========================================
 Version 5.6
-- NO rounded corners
-- Default tab All
+========================================
+- Removed rounded corners (all buttons squared)
+- Default tab is now "All"
+- Fixed tab switching
 
+========================================
 Version 5.5
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+========================================
+- Added Auto Execute (▶ button on each script)
+- Added Auto Hide (bind to hide/show GUI)
+- Added URL Tester (checks if script URLs work)
+- Added Sorting (A-Z, Z-A, Recent)
+- Added Settings window
 
+========================================
+Version 5.4
+========================================
+- Auto Execute Scripts (starts on game join)
+- Script Blacklist (hide unwanted scripts)
+- Auto Hide GUI (custom keybind)
+- URL Tester (green/red indicators)
+- Script Sorting (A-Z / Z-A / Recent)
+- Share Favorite Scripts (Fav tab only)
+- Share Recent Scripts (Rct tab only)
+
+========================================
+Version 5.3
+========================================
+- Custom Color smaller + resize
+- Universal workspace fix
+
+========================================
+Version 5.2
+========================================
+- Universal workspace support
+
+========================================
+Version 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
+
+========================================
 Version 5.0
-- Custom Color instant
+========================================
+- Custom Color instant apply
 
+========================================
 Version 4.9
-- 13 themes
+========================================
+- Welcome smaller + scroll, 13 themes
 
+========================================
+Version 4.8
+========================================
+- Custom Color rgb() support
+
+========================================
 Version 4.7
+========================================
 - Custom Color picker
 
-Version 4.0
-- First 4.0 release
+========================================
+Version 4.6
+========================================
+- Fixed Rainbow tab flicker
 
+========================================
+Version 4.5
+========================================
+- Files to workspace
+
+========================================
+Version 4.4
+========================================
+- Remove Tags and Destroy separate
+
+========================================
+Version 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
+Version 4.2
+========================================
+- Rewrote code in minified style
+- THEMES = {Red, Blue, Rainbow}
+- ApplyTheme(themeName) — theme switch function
+- themeOrder + themeIndex — theme cycling
+- ExtractURL(input.Text) — URL extraction from loadstring
+- SpecialContainer — container for Remove Tags + Destroy
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow theme — animated hue shift
+- Resize in bottom right corner
+- Small start size 250x300
+- All buttons squared (no UICorner)
+- Bright red instead of yellow
+- Buttons in 1 row
+- Removed GetTheme(), colors direct
+- Hide Top Bar toggles (H/S)
+- FPS/Ping in top bar
+- TopBar draggable
+- DockButton draggable
+- Search bar
+- Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
+- Favorites system (★)
+- Recently used
+- Script history
+- Custom script runner
+- Player list
+- Server info + Copy JobId
+- Anti-AFK
+- Re-launch protection
+- 46 scripts
+- Doors V2 (Copy) — clipboard copy
+- Doors V3 (Cheesy) — regular
+- Doors v4 — regular
+
+========================================
+Version 4.1
+========================================
+- Fixed buttons overlap
+- Returned red border, red background, red text
+- Added resize handle (bottom right)
+- Added Hide Top Bar toggle
+- Small start size
+
+========================================
+Version 4.0
+========================================
+- Top bar (executor, name, FPS, Ping)
+- Search bar
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
+- Recently used
+- Script history
+- Theme switcher
+- Custom script runner
+- Player list
+- Server info
+- Copy JobId
+- Animations
+- Keybinds
+- Anti-AFK
+
+========================================
+Version 3.9
+========================================
+- Added "Script executed!" notification for all scripts
+- Added Doors v4
+- Added Kiti (MM2)
+- Renamed BETA tag to Tester
+- Updated changelog canvas (1600 → 1700)
+
+========================================
+Version 3.8
+========================================
+- Fixed tag not restoring after respawn
+- Tag now uses CharacterAdded + task.wait properly
+- Renamed BETA tag to Tester
+
+========================================
+Version 3.7
+========================================
+- Added tester tag (blue gradient)
+- Added tester welcome message
+- Added 2 testers (9686718765, 3701387385)
+
+========================================
+Version 3.6
+========================================
+- Fixed accidental button clicks in title bar
+- Added cooldown for ChangeLog and language buttons
+- Added Active property to title buttons
+
+========================================
+Version 3.5
+========================================
+- Added owner-only welcome message
+- "Welcome, my father :3"
+
+========================================
+Version 3.4
+========================================
+- Darker red color for tag (200,0,0 and 60,0,0)
+- Normal background for Remove/Destroy buttons
+- Normal border for Remove/Destroy buttons
+
+========================================
+Version 3.3
+========================================
+- Fixed tag size (no longer stretches)
+- Fixed gradient (now works via Rotation)
+- Gradient visible for everyone
+- Fixed text position
+- Fixed text size (smaller, not stretched)
+- Added UIStroke glow
+
+========================================
+Version 3.2
+========================================
+- Brought back gradient animation
+- Smaller text size
+- Added UIStroke glow
+
+========================================
+Version 3.1
+========================================
+- Completely rewrote tag system
+- Tag is now attached to HumanoidRootPart
+- Added Heartbeat-based positioning
+- Fixed scanning logic
+
+========================================
+Version 3.0
+========================================
+- Removed gradient
+- Added debug prints
+- Simplified tag logic
+
+========================================
+Version 2.9
+========================================
+- Added XyqwHub OWNER tag
+- Added "Remove XyqwHub Tag" button
+- Added gradient animation for owner tag
+- Added 2 owner accounts (4396977722, 8527910367)
+
+========================================
+Version 2.8
+========================================
+- XyqwHub Loaded! now appears immediately
+- ChangeLog translated to EN/RU
+- Tag now visible for owners only
+
+========================================
+Version 2.7
+========================================
+- Roblox notifications (bottom right)
+- ChangeLog button added
+- Loading / Loaded notifications
+- Tag visible for everyone with XyqwHub
+
+========================================
+Version 2.6
+========================================
+- Notifications moved to bottom right
+- New notification system
+
+========================================
+Version 2.5
+========================================
+- All messages translated to EN/RU
+- Re-launch protection
+- Fixed language change button
+- Owner welcome message
+
+========================================
+Version 2.4
+========================================
+- Re-launch protection added
+- DESTROY button resets the flag
+- Owner-only welcome message
+
+========================================
+Version 2.3
+========================================
+- Added Adopt me
+
+========================================
+Version 2.2
+========================================
+- Added bLockman's minesweaper
+- Added Cheating during test
+
+========================================
+Version 2.1
+========================================
+- Added DropKick
+- Added Evade
+- Added A Dusty Trip
+- Added A Dusty Trip v2
+
+========================================
+Version 2.0
+========================================
+- Removed Auto Execute
+- All buttons in one list
+- Version 2.0 stable
+
+========================================
+Version 1.9
+========================================
+- Added key for Doors V3 (Cheesy)
+- "Key: joincheesedsc"
+
+========================================
+Version 1.8
+========================================
+- Added Death Order [SIMON]
+- Added CandyWare (MM2)
+
+========================================
+Version 1.7
+========================================
+- Added Troll script
+
+========================================
+Version 1.6
+========================================
+- Added Steal an egg
+- Added Universal script
+- Added Corridor
+- Added BloxStrike
+- Added RIVALS
+
+========================================
+Version 1.5
+========================================
+- EN/RU hint at top and bottom of welcome
+- LangHintTop + LangHintBottom
+
+========================================
+Version 1.4
+========================================
+- EN/RU hint in welcome
+
+========================================
+Version 1.3
+========================================
+- Hint how to change language after welcome
+
+========================================
+Version 1.2
+========================================
+- Fixed language change button
+- langCooldown protection
+
+========================================
+Version 1.1
+========================================
+- Added language change (EN/RU)
+- LangButton
+
+========================================
 Version 1.0
-- First release]],
+========================================
+- First release
+- Basic GUI
+- Blade Ball, AntiKillParts, PulseHub
+- RUNAWAYS, Universal FE, UwU hub
+- FakeVR, WallHop]],
     },
     RU = {
         Loaded = "загружен", Error = "ошибка", Search = "Поиск...",
@@ -245,61 +595,413 @@ Version 1.0
         ColorReset = "Custom Color сброшен на Красный",
         ColorShared = "Цвет скопирован!",
         AutoExecOn = "Авто-запуск: ВКЛ", AutoExecOff = "Авто-запуск: ВЫКЛ",
-        BlacklistAdded = "Скрипт в чёрном списке!", BlacklistRemoved = "Скрипт убран из чёрного списка!",
         KeybindChanged = "Бинд Auto-Hide: ",
         UrlCheckStarted = "Проверка URL...", UrlCheckDone = "Проверка завершена!",
         WelcomeTitle = "Добро пожаловать в XyqwHub!",
         ClickXToClose = "Нажми X чтобы закрыть",
         PlayersTitle = "Игроки", ServerTitle = "Инфо о сервере", CustomTitle = "Свой скрипт",
-        CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог", SettingsTitle = "Настройки", BlacklistTitle = "Чёрный список",
+        CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог", SettingsTitle = "Настройки",
         Apply = "Применить", Reset = "Сбросить", ShareColor = "Поделиться цветом", CopyJobId = "Копировать JobId",
         Rejoin = "Перезайти", ServerHop = "Сменить сервер", TPToSmall = "ТП в маленький", RemoveTags = "Убрать теги",
-        ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними", ManageBlacklist = "Управление чёрным списком",
+        ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними",
         TestURLs = "Проверить URL", SettingsBtn = "Настройки (Бинд Auto-Hide)", Destroy = "Удалить XyqwHub",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Игроки", Creator = "Создатель",
-        BlacklistEmpty = "Чёрный список пуст", BlacklistHint = "Нажми × чтобы убрать",
         Presets = "Пресеты", AutoHideBind = "Бинд Auto-Hide:",
         WelcomeFiles = "Файлы: XyqwHub/FavScripts, RctScripts, CustomColor",
         ShareHub = "Поделиться XyqwHub", HideTopBar = "Скрыть топ бар",
+        OrderSaved = "Порядок сохранён!",
         ChangeLogText = [[XyqwHub Ченджлог
 
+========================================
+Версия 6.3
+========================================
+- Blacklist удалён полностью (кнопка, окно, файлы, проверки)
+- Фикс заголовка при запуске (кнопки больше не съезжают)
+- Добавлены плавные анимации (hover, открытие/закрытие, смена цвета)
+- Добавлено перетаскивание кнопок скриптов (зажми левый край)
+- Порядок скриптов сохраняется в Settings/order.json
+- Обновлено приветственное окно с новым описанием
+- Полный ченджлог восстановлен для всех языков
+
+========================================
 Версия 6.2
+========================================
 - Фикс × в чёрном списке (не удалялся)
 - Фикс уведомления "Скрипт убран из чёрного списка!"
 - Полный ченджлог для всех языков
 - Весь UI переведён (кроме соцсетей)
 
+========================================
 Версия 6.1
-- Фикс обновления блеклиста
+========================================
+- Фикс обновления чёрного списка (теперь обновляется мгновенно)
 
+========================================
 Версия 6.0
-- 5 языков: EN, RU, UK, BE, KK
-- Возвращено приветствие
+========================================
+- Добавлено 5 языков: EN, RU, UK, BE, KK
+- Возвращено приветственное сообщение
+- Переведены все уведомления
 
+========================================
 Версия 5.9
-- X в правом углу
+========================================
+- Кнопка X перенесена в правый угол
+- Добавлена поддержка перетаскивания топ-бара
 
+========================================
 Версия 5.6
-- БЕЗ скруглений
-- Базовая вкладка All
+========================================
+- Убраны скругления (все кнопки квадратные)
+- Базовая вкладка теперь "All"
+- Фикс переключения вкладок
 
+========================================
 Версия 5.5
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+========================================
+- Добавлен Auto Execute (кнопка ▶ у каждого скрипта)
+- Добавлен Auto Hide (бинд для скрытия/показа GUI)
+- Добавлен URL Tester (проверка ссылок на работоспособность)
+- Добавлена сортировка (A-Z, Z-A, Недавние)
+- Добавлено окно настроек
 
+========================================
+Версия 5.4
+========================================
+- Авто-запуск скриптов (запуск при входе в игру)
+- Чёрный список скриптов (скрыть ненужные)
+- Auto Hide GUI (свой бинд)
+- URL Tester (зелёные/красные индикаторы)
+- Сортировка скриптов (A-Z / Z-A / Недавние)
+- Share Favorite Scripts (только Fav)
+- Share Recent Scripts (только Rct)
+
+========================================
+Версия 5.3
+========================================
+- Custom Color меньше + ресайз
+- Фикс универсального workspace
+
+========================================
+Версия 5.2
+========================================
+- Поддержка универсального workspace
+
+========================================
+Версия 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
+
+========================================
 Версия 5.0
+========================================
 - Custom Color мгновенно
 
+========================================
 Версия 4.9
-- 13 тем
+========================================
+- Welcome меньше + скролл, 13 тем
 
+========================================
+Версия 4.8
+========================================
+- Custom Color поддержка rgb()
+
+========================================
 Версия 4.7
+========================================
 - Custom Color picker
 
-Версия 4.0
-- Первый релиз
+========================================
+Версия 4.6
+========================================
+- Фикс мерцания вкладок в Rainbow
 
+========================================
+Версия 4.5
+========================================
+- Файлы в workspace
+
+========================================
+Версия 4.4
+========================================
+- Remove Tags и Destroy раздельно
+
+========================================
+Версия 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
+Версия 4.2
+========================================
+- Код переписан в минифицированном стиле
+- THEMES = {Red, Blue, Rainbow}
+- ApplyTheme(themeName) — смена темы
+- themeOrder + themeIndex — переключение тем
+- ExtractURL(input.Text) — извлечение URL из loadstring
+- SpecialContainer — контейнер для Remove Tags + Destroy
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow тема — анимация перелива
+- Ресайз в правом нижнем углу
+- Стартовое окно 250x300
+- Все кнопки квадратные (нет UICorner)
+- Ярко-красный вместо жёлтого
+- Кнопки в 1 ряд
+- Убран GetTheme(), цвета напрямую
+- Hide Top Bar переключается (H/S)
+- FPS/Ping в топ-баре
+- TopBar перетаскивается
+- DockButton перетаскивается
+- Search bar
+- Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
+- Favorites system (★)
+- Recently used
+- Script history
+- Custom script runner
+- Player list
+- Server info + Copy JobId
+- Anti-AFK
+- Re-launch protection
+- 46 скриптов
+- Doors V2 (Copy) — копирование в буфер
+- Doors V3 (Cheesy) — обычный
+- Doors v4 — обычный
+
+========================================
+Версия 4.1
+========================================
+- Фикс наложения кнопок
+- Возвращён красный бордер, фон, текст
+- Добавлен ресайз (правый нижний угол)
+- Добавлен Hide Top Bar
+- Маленький стартовый размер
+
+========================================
+Версия 4.0
+========================================
+- Top bar (executor, name, FPS, Ping)
+- Search bar
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
+- Recently used
+- Script history
+- Theme switcher
+- Custom script runner
+- Player list
+- Server info
+- Copy JobId
+- Animations
+- Keybinds
+- Anti-AFK
+
+========================================
+Версия 3.9
+========================================
+- Уведомление "Script executed!" для всех скриптов
+- Добавлен Doors v4
+- Добавлен Kiti (MM2)
+- BETA тег переименован в Tester
+- Canvas ченджлога (1600 → 1700)
+
+========================================
+Версия 3.8
+========================================
+- Фикс восстановления тега после респавна
+- Тег использует CharacterAdded + task.wait
+- BETA тег переименован в Tester
+
+========================================
+Версия 3.7
+========================================
+- Добавлен тег тестера (синий градиент)
+- Добавлено приветствие для тестеров
+- Добавлено 2 тестера (9686718765, 3701387385)
+
+========================================
+Версия 3.6
+========================================
+- Фикс случайных кликов по кнопкам в заголовке
+- Добавлен кулдаун для ChangeLog и языка
+- Добавлен Active для кнопок заголовка
+
+========================================
+Версия 3.5
+========================================
+- Добавлено приветствие только для владельца
+- "Welcome, my father :3"
+
+========================================
+Версия 3.4
+========================================
+- Более тёмный красный для тега (200,0,0 и 60,0,0)
+- Обычный фон для Remove/Destroy
+- Обычный бордер для Remove/Destroy
+
+========================================
+Версия 3.3
+========================================
+- Фикс размера тега (больше не растягивается)
+- Фикс градиента (работает через Rotation)
+- Градиент виден всем
+- Фикс позиции текста
+- Фикс размера текста (меньше, не растянут)
+- Добавлен UIStroke glow
+
+========================================Версия 3.2
+========================================
+- Возвращена анимация градиента
+- Уменьшен размер текста
+- Добавлен UIStroke glow
+
+========================================
+Версия 3.1
+========================================
+- Полностью переписана система тегов
+- Тег привязан к HumanoidRootPart
+- Добавлено позиционирование через Heartbeat
+- Фикс логики сканирования
+
+========================================
+Версия 3.0
+========================================
+- Убран градиент
+- Добавлены debug prints
+- Упрощена логика тега
+
+========================================
+Версия 2.9
+========================================
+- Добавлен XyqwHub OWNER тег
+- Добавлена кнопка "Remove XyqwHub Tag"
+- Добавлена анимация градиента для owner тега
+- Добавлено 2 owner аккаунта (4396977722, 8527910367)
+
+========================================
+Версия 2.8
+========================================
+- XyqwHub Loaded! появляется сразу
+- ChangeLog переведён на EN/RU
+- Тег виден только владельцам
+
+========================================
+Версия 2.7
+========================================
+- Roblox уведомления (правый нижний угол)
+- Добавлена кнопка ChangeLog
+- Loading / Loaded уведомления
+- Тег виден всем с XyqwHub
+
+========================================
+Версия 2.6
+========================================
+- Уведомления перемещены в правый нижний угол
+- Новая система уведомлений
+
+========================================
+Версия 2.5
+========================================
+- Все сообщения переведены EN/RU
+- Re-launch protection
+- Фикс кнопки смены языка
+- Приветствие для владельца
+
+========================================
+Версия 2.4
+========================================
+- Добавлен Re-launch protection
+- Кнопка DESTROY сбрасывает флаг
+- Приветствие только для владельца
+
+========================================
+Версия 2.3
+========================================
+- Добавлен Adopt me
+
+========================================
+Версия 2.2
+========================================
+- Добавлен bLockman's minesweaper
+- Добавлен Cheating during test
+
+========================================
+Версия 2.1
+========================================
+- Добавлен DropKick
+- Добавлен Evade
+- Добавлен A Dusty Trip
+- Добавлен A Dusty Trip v2
+
+========================================
+Версия 2.0
+========================================
+- Убран Auto Execute
+- Все кнопки в одном списке
+- Версия 2.0 stable
+
+========================================
+Версия 1.9
+========================================
+- Добавлен ключ для Doors V3 (Cheesy)
+- "Key: joincheesedsc"
+
+========================================
+Версия 1.8
+========================================
+- Добавлен Death Order [SIMON]
+- Добавлен CandyWare (MM2)
+
+========================================
+Версия 1.7
+========================================
+- Добавлен Troll script
+
+========================================
+Версия 1.6
+========================================
+- Добавлен Steal an egg
+- Добавлен Universal script
+- Добавлен Corridor
+- Добавлен BloxStrike
+- Добавлен RIVALS
+
+========================================
+Версия 1.5
+========================================
+- EN/RU подсказка сверху и снизу welcome
+- LangHintTop + LangHintBottom
+
+========================================
+Версия 1.4
+========================================
+- EN/RU подсказка в welcome
+
+========================================
+Версия 1.3
+========================================
+- Подсказка как сменить язык после welcome
+
+========================================
+Версия 1.2
+========================================
+- Фикс кнопки смены языка
+- langCooldown protection
+
+========================================
+Версия 1.1
+========================================
+- Добавлена смена языка (EN/RU)
+- LangButton
+
+========================================
 Версия 1.0
-- Первый релиз]],
+========================================
+- Первый релиз
+- Базовый GUI
+- Blade Ball, AntiKillParts, PulseHub
+- RUNAWAYS, Universal FE, UwU hub
+- FakeVR, WallHop]],
     },
     UK = {
         Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
@@ -313,61 +1015,414 @@ Version 1.0
         LoadstringCopied = "Loadstring скопійовано, дякую :3",
         ColorReset = "Колір скинуто", ColorShared = "Колір скопійовано!",
         AutoExecOn = "Авто-запуск: УВІМК", AutoExecOff = "Авто-запуск: ВИМК",
-        BlacklistAdded = "Скрипт у чорному списку!", BlacklistRemoved = "Скрипт прибрано з чорного списку!",
         KeybindChanged = "Бінд Auto-Hide: ",
         UrlCheckStarted = "Перевірка URL...", UrlCheckDone = "Перевірку завершено!",
         WelcomeTitle = "Ласкаво просимо до XyqwHub!",
         ClickXToClose = "Натисни X щоб закрити",
         PlayersTitle = "Гравці", ServerTitle = "Інфо про сервер", CustomTitle = "Свій скрипт",
-        CustomColorTitle = "Свій колір", ChangeLogTitle = "Журнал", SettingsTitle = "Налаштування", BlacklistTitle = "Чорний список",
+        CustomColorTitle = "Свій колір", ChangeLogTitle = "Журнал", SettingsTitle = "Налаштування",
         Apply = "Застосувати", Reset = "Скинути", ShareColor = "Поділитись кольором", CopyJobId = "Копіювати JobId",
         Rejoin = "Перезайти", ServerHop = "Змінити сервер", TPToSmall = "ТП в маленький", RemoveTags = "Прибрати теги",
-        ShareFav = "Поділитись обраним", ShareRct = "Поділитись останніми", ManageBlacklist = "Керування чорним списком",
+        ShareFav = "Поділитись обраним", ShareRct = "Поділитись останніми",
         TestURLs = "Перевірити URL", SettingsBtn = "Налаштування (Бінд Auto-Hide)", Destroy = "Видалити XyqwHub",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Гравці", Creator = "Творець",
-        BlacklistEmpty = "Чорний список порожній", BlacklistHint = "Натисни × щоб прибрати",
         Presets = "Пресети", AutoHideBind = "Бінд Auto-Hide:",
         WelcomeFiles = "Файли: XyqwHub/FavScripts, RctScripts, CustomColor",
         ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель",
+        OrderSaved = "Порядок збережено!",
         ChangeLogText = [[XyqwHub Журнал
 
+========================================
+Версія 6.3
+========================================
+- Blacklist видалено повністю (кнопка, вікно, файли, перевірки)
+- Фікс заголовка при запуску (кнопки більше не з'їжджають)
+- Додано плавні анімації (hover, відкриття/закриття, зміна кольору)
+- Додано перетягування кнопок скриптів (тримай лівий край)
+- Порядок скриптів зберігається у Settings/order.json
+- Оновлено вітальне вікно з новим описом
+- Повний журнал відновлено для всіх мов
+
+========================================
 Версія 6.2
+========================================
 - Фікс × у чорному списку (не видалявся)
 - Фікс сповіщення "Скрипт прибрано з чорного списку!"
 - Повний журнал для всіх мов
 - Весь UI перекладено (крім соцмереж)
 
+========================================
 Версія 6.1
-- Фікс оновлення чорного списку
+========================================
+- Фікс оновлення чорного списку (тепер оновлюється миттєво)
 
+========================================
 Версія 6.0
-- 5 мов: EN, RU, UK, BE, KK
+========================================
+- Додано 5 мов: EN, RU, UK, BE, KK
 - Повернуто вітальне повідомлення
+- Перекладено всі сповіщення
 
+========================================
 Версія 5.9
-- X у правому куті
+========================================
+- Кнопку X перенесено у правий кут
+- Додано підтримку перетягування верхньої панелі
 
+========================================
 Версія 5.6
-- Без заокруглень
-- Базова вкладка All
+========================================
+- Прибрано заокруглення (всі кнопки квадратні)
+- Базова вкладка тепер "All"
+- Фікс перемикання вкладок
 
+========================================
 Версія 5.5
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+========================================
+- Додано Auto Execute (кнопка ▶ у кожного скрипта)
+- Додано Auto Hide (бінд для приховування/показу GUI)
+- Додано URL Tester (перевірка посилань)
+- Додано сортування (A-Z, Z-A, Останні)
+- Додано вікно налаштувань
 
+========================================
+Версія 5.4
+========================================
+- Авто-запуск скриптів (при вході в гру)
+- Чорний список скриптів (приховати непотрібні)
+- Auto Hide GUI (свій бінд)
+- URL Tester (зелені/червоні індикатори)
+- Сортування скриптів (A-Z / Z-A / Останні)
+- Share Favorite Scripts (тільки Fav)
+- Share Recent Scripts (тільки Rct)
+
+========================================
+Версія 5.3
+========================================
+- Custom Color менше + ресайз
+- Фікс універсального workspace
+
+========================================
+Версія 5.2
+========================================
+- Підтримка універсального workspace
+
+========================================
+Версія 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
+
+========================================
 Версія 5.0
+========================================
 - Custom Color миттєво
 
+========================================
 Версія 4.9
-- 13 тем
+========================================
+- Welcome менше + скрол, 13 тем
 
+========================================
+Версія 4.8
+========================================
+- Custom Color підтримка rgb()
+
+========================================
 Версія 4.7
+========================================
 - Custom Color picker
 
-Версія 4.0
-- Перший реліз
+========================================
+Версія 4.6
+========================================
+- Фікс мерехтіння вкладок у Rainbow
 
+========================================
+Версія 4.5
+========================================
+- Файли у workspace
+
+========================================
+Версія 4.4
+========================================
+- Remove Tags і Destroy окремо
+
+========================================
+Версія 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
+Версія 4.2
+========================================
+- Код переписано в мініфікованому стилі
+- THEMES = {Red, Blue, Rainbow}
+- ApplyTheme(themeName) — зміна теми
+- themeOrder + themeIndex — перемикання тем
+- ExtractURL(input.Text) — витяг URL з loadstring
+- SpecialContainer — контейнер для Remove Tags + Destroy
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow тема — анімація переливу
+- Ресайз у правому нижньому куті
+- Стартове вікно 250x300
+- Всі кнопки квадратні (немає UICorner)
+- Яскраво-червоний замість жовтого
+- Кнопки в 1 ряд
+- Прибрано GetTheme(), кольори напряму
+- Hide Top Bar перемикається (H/S)
+- FPS/Ping у топ-барі
+- TopBar перетягується
+- DockButton перетягується
+- Search bar
+- Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
+- Favorites system (★)
+- Recently used
+- Script history
+- Custom script runner
+- Player list
+- Server info + Copy JobId
+- Anti-AFK
+- Re-launch protection
+- 46 скриптів
+- Doors V2 (Copy) — копіювання в буфер
+- Doors V3 (Cheesy) — звичайний
+- Doors v4 — звичайний
+
+========================================
+Версія 4.1
+========================================
+- Фікс накладання кнопок
+- Повернуто червоний бордер, фон, текст
+- Додано ресайз (правий нижній кут)
+- Додано Hide Top Bar
+- Маленький стартовий розмір
+
+========================================
+Версія 4.0
+========================================
+- Top bar (executor, name, FPS, Ping)
+- Search bar
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
+- Recently used
+- Script history
+- Theme switcher
+- Custom script runner
+- Player list
+- Server info
+- Copy JobId
+- Animations
+- Keybinds
+- Anti-AFK
+
+========================================
+Версія 3.9
+========================================
+- Сповіщення "Script executed!" для всіх скриптів
+- Додано Doors v4
+- Додано Kiti (MM2)
+- BETA тег перейменовано в Tester
+- Canvas журналу (1600 → 1700)
+
+========================================
+Версія 3.8
+========================================
+- Фікс відновлення тега після респавну
+- Тег використовує CharacterAdded + task.wait
+- BETA тег перейменовано в Tester
+
+========================================
+Версія 3.7
+========================================
+- Додано тег тестера (синій градієнт)
+- Додано вітання для тестерів
+- Додано 2 тестери (9686718765, 3701387385)
+
+========================================
+Версія 3.6
+========================================
+- Фікс випадкових кліків по кнопках у заголовку
+- Додано кулдаун для ChangeLog та мови
+- Додано Active для кнопок заголовка
+
+========================================
+Версія 3.5
+========================================
+- Додано вітання тільки для власника
+- "Welcome, my father :3"
+
+========================================
+Версія 3.4
+========================================
+- Темніший червоний для тега (200,0,0 та 60,0,0)
+- Звичайний фон для Remove/Destroy
+- Звичайний бордер для Remove/Destroy
+
+========================================
+Версія 3.3
+========================================
+- Фікс розміру тега (більше не розтягується)
+- Фікс градієнта (працює через Rotation)
+- Градієнт видно всім
+- Фікс позиції тексту
+- Фікс розміру тексту (менше, не розтягнуто)
+- Додано UIStroke glow
+
+========================================
+Версія 3.2
+========================================
+- Повернуто анімацію градієнта
+- Зменшено розмір тексту
+- Додано UIStroke glow
+
+========================================
+Версія 3.1
+========================================
+- Повністю переписано систему тегів
+- Тег прив'язано до HumanoidRootPart
+- Додано позиціонування через Heartbeat
+- Фікс логіки сканування
+
+========================================
+Версія 3.0
+========================================
+- Прибрано градієнт
+- Додано debug prints
+- Спрощено логіку тега
+
+========================================
+Версія 2.9
+========================================
+- Додано XyqwHub OWNER тег
+- Додано кнопку "Remove XyqwHub Tag"
+- Додано анімацію градієнта для owner тега
+- Додано 2 owner акаунти (4396977722, 8527910367)
+
+========================================
+Версія 2.8
+========================================
+- XyqwHub Loaded! з'являється одразу
+- ChangeLog перекладено на EN/RU
+- Тег видно тільки власникам
+
+========================================
+Версія 2.7
+========================================
+- Roblox сповіщення (правий нижній кут)
+- Додано кнопку ChangeLog
+- Loading / Loaded сповіщення
+- Тег видно всім з XyqwHub
+
+========================================
+Версія 2.6
+========================================
+- Сповіщення переміщено у правий нижній кут
+- Нова система сповіщень
+
+========================================
+Версія 2.5
+========================================
+- Всі повідомлення перекладено EN/RU
+- Re-launch protection
+- Фікс кнопки зміни мови
+- Вітання для власника
+
+========================================
+Версія 2.4
+========================================
+- Додано Re-launch protection
+- Кнопка DESTROY скидає флаг
+- Вітання тільки для власника
+
+========================================
+Версія 2.3
+========================================
+- Додано Adopt me
+
+========================================
+Версія 2.2
+========================================
+- Додано bLockman's minesweaper
+- Додано Cheating during test
+
+========================================
+Версія 2.1
+========================================
+- Додано DropKick
+- Додано Evade
+- Додано A Dusty Trip
+- Додано A Dusty Trip v2
+
+========================================
+Версія 2.0
+========================================
+- Прибрано Auto Execute
+- Всі кнопки в одному списку
+- Версія 2.0 stable
+
+========================================
+Версія 1.9
+========================================
+- Додано ключ для Doors V3 (Cheesy)
+- "Key: joincheesedsc"
+
+========================================
+Версія 1.8
+========================================
+- Додано Death Order [SIMON]
+- Додано CandyWare (MM2)
+
+========================================
+Версія 1.7
+========================================
+- Додано Troll script
+
+========================================
+Версія 1.6
+========================================
+- Додано Steal an egg
+- Додано Universal script
+- Додано Corridor
+- Додано BloxStrike
+- Додано RIVALS
+
+========================================
+Версія 1.5
+========================================
+- EN/RU підказка зверху та знизу welcome
+- LangHintTop + LangHintBottom
+
+========================================
+Версія 1.4
+========================================
+- EN/RU підказка в welcome
+
+========================================
+Версія 1.3
+========================================
+- Підказка як змінити мову після welcome
+
+========================================
+Версія 1.2
+========================================
+- Фікс кнопки зміни мови
+- langCooldown protection
+
+========================================
+Версія 1.1
+========================================
+- Додано зміну мови (EN/RU)
+- LangButton
+
+========================================
 Версія 1.0
-- Перший реліз]],
+========================================
+- Перший реліз
+- Базовий GUI
+- Blade Ball, AntiKillParts, PulseHub
+- RUNAWAYS, Universal FE, UwU hub
+- FakeVR, WallHop]],
     },
     BE = {
         Loaded = "загружана", Error = "памылка", Search = "Пошук...",
@@ -381,61 +1436,414 @@ Version 1.0
         LoadstringCopied = "Loadstring скапіяваны, дзякуй :3",
         ColorReset = "Колер скінуты", ColorShared = "Колер скапіяваны!",
         AutoExecOn = "Аўта-запуск: УКЛ", AutoExecOff = "Аўта-запуск: ВЫКЛ",
-        BlacklistAdded = "Скрыпт у чорным спісе!", BlacklistRemoved = "Скрыпт прыбраны з чорнага спісу!",
         KeybindChanged = "Бінд Auto-Hide: ",
         UrlCheckStarted = "Праверка URL...", UrlCheckDone = "Праверка завершана!",
         WelcomeTitle = "Сардэчна запрашаем у XyqwHub!",
         ClickXToClose = "Націсні X каб зачыніць",
         PlayersTitle = "Гульцы", ServerTitle = "Інфа пра сервер", CustomTitle = "Свой скрыпт",
-        CustomColorTitle = "Свой колер", ChangeLogTitle = "Чэйнджлог", SettingsTitle = "Налады", BlacklistTitle = "Чорны спіс",
+        CustomColorTitle = "Свой колер", ChangeLogTitle = "Чэйнджлог", SettingsTitle = "Налады",
         Apply = "Ужыць", Reset = "Скінуць", ShareColor = "Падзяліцца колерам", CopyJobId = "Капіяваць JobId",
         Rejoin = "Перазайсці", ServerHop = "Змяніць сервер", TPToSmall = "ТП у маленькі", RemoveTags = "Прыбраць тэгі",
-        ShareFav = "Падзяліцца абраным", ShareRct = "Падзяліцца апошнімі", ManageBlacklist = "Кіраванне чорным спісам",
+        ShareFav = "Падзяліцца абраным", ShareRct = "Падзяліцца апошнімі",
         TestURLs = "Праверыць URL", SettingsBtn = "Налады (Бінд Auto-Hide)", Destroy = "Выдаліць XyqwHub",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Гульцы", Creator = "Стваральнік",
-        BlacklistEmpty = "Чорны спіс пусты", BlacklistHint = "Націсні × каб прыбраць",
         Presets = "Прэсеты", AutoHideBind = "Бінд Auto-Hide:",
         WelcomeFiles = "Файлы: XyqwHub/FavScripts, RctScripts, CustomColor",
         ShareHub = "Падзяліцца XyqwHub", HideTopBar = "Схаваць верхнюю панэль",
+        OrderSaved = "Парадак захаваны!",
         ChangeLogText = [[XyqwHub Чэйнджлог
 
+========================================
+Версія 6.3
+========================================
+- Blacklist выдалены цалкам (кнопка, акно, файлы, праверкі)
+- Фікс загалоўка пры запуску (кнопкі больш не з'язджаюць)
+- Дададзены плаўныя анімацыі (hover, адкрыццё/закрыццё, змена колеру)
+- Дададзена перацягванне кнопак скрыптаў (трымай левы край)
+- Парадак скрыптаў захоўваецца ў Settings/order.json
+- Абноўлена прывітальнае акно з новым апісаннем
+- Поўны чэйнджлог адноўлены для ўсіх моў
+
+========================================
 Версія 6.2
+========================================
 - Фікс × у чорным спісе (не выдаляўся)
 - Фікс апавяшчэння "Скрыпт прыбраны з чорнага спісу!"
 - Поўны чэйнджлог для ўсіх моў
 - Увесь UI перакладзены (акрамя сацсетак)
 
+========================================
 Версія 6.1
-- Фікс абнаўлення чорнага спісу
+========================================
+- Фікс абнаўлення чорнага спісу (цяпер абнаўляецца імгненна)
 
+========================================
 Версія 6.0
-- 5 моў: EN, RU, UK, BE, KK
+========================================
+- Дададзена 5 моў: EN, RU, UK, BE, KK
 - Вернута прывітальнае паведамленне
+- Перакладзены ўсе апавяшчэнні
 
+========================================
 Версія 5.9
-- X у правым куце
+========================================
+- Кнопка X перанесена ў правы кут
+- Дададзена падтрымка перацягвання верхняй панэлі
 
+========================================
 Версія 5.6
-- Без заакругленняў
-- Базавая ўкладка All
+========================================
+- Прыбраны заакругленні (усе кнопкі квадратныя)
+- Базавая ўкладка цяпер "All"
+- Фікс пераключэння ўкладак
 
+========================================
 Версія 5.5
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+========================================
+- Дададзены Auto Execute (кнопка ▶ у кожнага скрыпта)
+- Дададзены Auto Hide (бінд для хавання/паказу GUI)
+- Дададзены URL Tester (праверка спасылак)
+- Дададзена сартаванне (A-Z, Z-A, Апошнія)
+- Дададзена акно налад
 
+========================================
+Версія 5.4
+========================================
+- Аўта-запуск скрыптаў (пры ўваходзе ў гульню)
+- Чорны спіс скрыптаў (схаваць непатрэбныя)
+- Auto Hide GUI (свой бінд)
+- URL Tester (зялёныя/чырвоныя індыкатары)
+- Сартаванне скрыптаў (A-Z / Z-A / Апошнія)
+- Share Favorite Scripts (толькі Fav)
+- Share Recent Scripts (толькі Rct)
+
+========================================
+Версія 5.3
+========================================
+- Custom Color менш + рэсайз
+- Фікс універсальнага workspace
+
+========================================
+Версія 5.2
+========================================
+- Падтрымка ўніверсальнага workspace
+
+========================================
+Версія 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
+
+========================================
 Версія 5.0
+========================================
 - Custom Color імгненна
 
+========================================
 Версія 4.9
-- 13 тэм
+========================================
+- Welcome менш + скрол, 13 тэм
 
+========================================
+Версія 4.8
+========================================
+- Custom Color падтрымка rgb()
+
+========================================
 Версія 4.7
+========================================
 - Custom Color picker
 
-Версія 4.0
-- Першы рэліз
+========================================
+Версія 4.6
+========================================
+- Фікс мігацення ўкладак у Rainbow
 
+========================================
+Версія 4.5
+========================================
+- Файлы ў workspace
+
+========================================
+Версія 4.4
+========================================
+- Remove Tags і Destroy асобна
+
+========================================
+Версія 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
+Версія 4.2
+========================================
+- Код перапісаны ў мініфікаваным стылі
+- THEMES = {Red, Blue, Rainbow}
+- ApplyTheme(themeName) — змена тэмы
+- themeOrder + themeIndex — пераключэнне тэм
+- ExtractURL(input.Text) — выманне URL з loadstring
+- SpecialContainer — кантэйнер для Remove Tags + Destroy
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow тэма — анімацыя пераліву
+- Рэсайз у правым ніжнім куце
+- Стартавае акно 250x300
+- Усе кнопкі квадратныя (няма UICorner)
+- Ярка-чырвоны замест жоўтага
+- Кнопкі ў 1 шэраг
+- Прыбраны GetTheme(), колеры напрамую
+- Hide Top Bar перамыкаецца (H/S)
+- FPS/Ping у топ-бары
+- TopBar перацягваецца
+- DockButton перацягваецца
+- Search bar
+- Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
+- Favorites system (★)
+- Recently used
+- Script history
+- Custom script runner
+- Player list
+- Server info + Copy JobId
+- Anti-AFK
+- Re-launch protection
+- 46 скрыптаў
+- Doors V2 (Copy) — капіяванне ў буфер
+- Doors V3 (Cheesy) — звычайны
+- Doors v4 — звычайны
+
+========================================
+Версія 4.1
+========================================
+- Фікс накладання кнопак
+- Вернуты чырвоны бордэр, фон, тэкст
+- Дададзены рэсайз (правы ніжні кут)
+- Дададзены Hide Top Bar
+- Маленькі стартавы памер
+
+========================================
+Версія 4.0
+========================================
+- Top bar (executor, name, FPS, Ping)
+- Search bar
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
+- Recently used
+- Script history
+- Theme switcher
+- Custom script runner
+- Player list
+- Server info
+- Copy JobId
+- Animations
+- Keybinds
+- Anti-AFK
+
+========================================
+Версія 3.9
+========================================
+- Апавяшчэнне "Script executed!" для ўсіх скрыптаў
+- Дададзены Doors v4
+- Дададзены Kiti (MM2)
+- BETA тэг перайменаваны ў Tester
+- Canvas чэйнджлога (1600 → 1700)
+
+========================================
+Версія 3.8
+========================================
+- Фікс аднаўлення тэга пасля рэспаўна
+- Тэг выкарыстоўвае CharacterAdded + task.wait
+- BETA тэг перайменаваны ў Tester
+
+========================================
+Версія 3.7
+========================================
+- Дададзены тэг тэстара (сіні градыент)
+- Дададзена прывітанне для тэстараў
+- Дададзена 2 тэстары (9686718765, 3701387385)
+
+========================================
+Версія 3.6
+========================================
+- Фікс выпадковых клікаў па кнопках у загалоўку
+- Дададзены кулдаўн для ChangeLog і мовы
+- Дададзены Active для кнопак загалоўка
+
+========================================
+Версія 3.5
+========================================
+- Дададзена прывітанне толькі для ўладальніка
+- "Welcome, my father :3"
+
+========================================
+Версія 3.4
+========================================
+- Больш цёмны чырвоны для тэга (200,0,0 і 60,0,0)
+- Звычайны фон для Remove/Destroy
+- Звычайны бордэр для Remove/Destroy
+
+========================================
+Версія 3.3
+========================================
+- Фікс памеру тэга (больш не расцягваецца)
+- Фікс градыента (працуе праз Rotation)
+- Градыент бачны ўсім
+- Фікс пазіцыі тэксту
+- Фікс памеру тэксту (менш, не расцягнута)
+- Дададзены UIStroke glow
+
+========================================
+Версія 3.2
+========================================
+- Вернута анімацыя градыента
+- Зменшаны памер тэксту
+- Дададзены UIStroke glow
+
+========================================
+Версія 3.1
+========================================
+- Поўнасцю перапісана сістэма тэгаў
+- Тэг прывязаны да HumanoidRootPart
+- Дададзена пазіцыянаванне праз Heartbeat
+- Фікс логікі сканавання
+
+========================================
+Версія 3.0
+========================================
+- Прыбраны градыент
+- Дададзены debug prints
+- Спрошчана логіка тэга
+
+========================================
+Версія 2.9
+========================================
+- Дададзены XyqwHub OWNER тэг
+- Дададзена кнопка "Remove XyqwHub Tag"
+- Дададзена анімацыя градыента для owner тэга
+- Дададзена 2 owner акаўнты (4396977722, 8527910367)
+
+========================================
+Версія 2.8
+========================================
+- XyqwHub Loaded! з'яўляецца адразу
+- ChangeLog перакладзены на EN/RU
+- Тэг бачны толькі ўладальнікам
+
+========================================
+Версія 2.7
+========================================
+- Roblox апавяшчэнні (правы ніжні кут)
+- Дададзена кнопка ChangeLog
+- Loading / Loaded апавяшчэнні
+- Тэг бачны ўсім з XyqwHub
+
+========================================
+Версія 2.6
+========================================
+- Апавяшчэнні перамешчаны ў правы ніжні кут
+- Новая сістэма апавяшчэнняў
+
+========================================
+Версія 2.5
+========================================
+- Усе паведамленні перакладзены EN/RU
+- Re-launch protection
+- Фікс кнопкі змены мовы
+- Прывітанне для ўладальніка
+
+========================================
+Версія 2.4
+========================================
+- Дададзены Re-launch protection
+- Кнопка DESTROY скідвае флаг
+- Прывітанне толькі для ўладальніка
+
+========================================
+Версія 2.3
+========================================
+- Дададзены Adopt me
+
+========================================
+Версія 2.2
+========================================
+- Дададзены bLockman's minesweaper
+- Дададзены Cheating during test
+
+========================================
+Версія 2.1
+========================================
+- Дададзены DropKick
+- Дададзены Evade
+- Дададзены A Dusty Trip
+- Дададзены A Dusty Trip v2
+
+========================================
+Версія 2.0
+========================================
+- Прыбраны Auto Execute
+- Усе кнопкі ў адным спісе
+- Версія 2.0 stable
+
+========================================
+Версія 1.9
+========================================
+- Дададзены ключ для Doors V3 (Cheesy)
+- "Key: joincheesedsc"
+
+========================================
+Версія 1.8
+========================================
+- Дададзены Death Order [SIMON]
+- Дададзены CandyWare (MM2)
+
+========================================
+Версія 1.7
+========================================
+- Дададзены Troll script
+
+========================================
+Версія 1.6
+========================================
+- Дададзены Steal an egg
+- Дададзены Universal script
+- Дададзены Corridor
+- Дададзены BloxStrike
+- Дададзены RIVALS
+
+========================================
+Версія 1.5
+========================================
+- EN/RU падказка зверху і знізу welcome
+- LangHintTop + LangHintBottom
+
+========================================
+Версія 1.4
+========================================
+- EN/RU падказка ў welcome
+
+========================================
+Версія 1.3
+========================================
+- Падказка як змяніць мову пасля welcome
+
+========================================
+Версія 1.2
+========================================
+- Фікс кнопкі змены мовы
+- langCooldown protection
+
+========================================
+Версія 1.1
+========================================
+- Дададзена змена мовы (EN/RU)
+- LangButton
+
+========================================
 Версія 1.0
-- Першы рэліз]],
+========================================
+- Першы рэліз
+- Базавы GUI
+- Blade Ball, AntiKillParts, PulseHub
+- RUNAWAYS, Universal FE, UwU hub
+- FakeVR, WallHop]],
     },
     KK = {
         Loaded = "жүктелді", Error = "қате", Search = "Іздеу...",
@@ -449,64 +1857,415 @@ Version 1.0
         LoadstringCopied = "Loadstring көшірілді, рахмет :3",
         ColorReset = "Түс қалпына келтірілді", ColorShared = "Түс көшірілді!",
         AutoExecOn = "Авто-орындау: ҚОСУЛЫ", AutoExecOff = "Авто-орындау: ӨШІРУЛІ",
-        BlacklistAdded = "Скрипт қара тізімде!", BlacklistRemoved = "Скрипт қара тізімнен жойылды!",
         KeybindChanged = "Auto-Hide байланысы: ",
         UrlCheckStarted = "URL тексерілуде...", UrlCheckDone = "Тексеру аяқталды!",
         WelcomeTitle = "XyqwHub-қа қош келдіңіз!",
         ClickXToClose = "Жабу үшін X басыңыз",
         PlayersTitle = "Ойыншылар", ServerTitle = "Сервер туралы", CustomTitle = "Өз скрипті",
-        CustomColorTitle = "Өз түсі", ChangeLogTitle = "Өзгерістер", SettingsTitle = "Параметрлер", BlacklistTitle = "Қара тізім",
+        CustomColorTitle = "Өз түсі", ChangeLogTitle = "Өзгерістер", SettingsTitle = "Параметрлер",
         Apply = "Қолдану", Reset = "Қалпына келтіру", ShareColor = "Түспен бөлісу", CopyJobId = "JobId көшіру",
         Rejoin = "Қайта кіру", ServerHop = "Серверді ауыстыру", TPToSmall = "Кішіге ТП", RemoveTags = "Тегтерді алу",
-        ShareFav = "Таңдаулылармен бөлісу", ShareRct = "Соңғылармен бөлісу", ManageBlacklist = "Қара тізімді басқару",
+        ShareFav = "Таңдаулылармен бөлісу", ShareRct = "Соңғылармен бөлісу",
         TestURLs = "URL тексеру", SettingsBtn = "Параметрлер (Auto-Hide байланысы)", Destroy = "XyqwHub жою",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Ойыншылар", Creator = "Жасаушы",
-        BlacklistEmpty = "Қара тізім бос", BlacklistHint = "Жою үшін × басыңыз",
         Presets = "Пресеттер", AutoHideBind = "Auto-Hide байланысы:",
         WelcomeFiles = "Файлдар: XyqwHub/FavScripts, RctScripts, CustomColor",
         ShareHub = "XyqwHub-пен бөлісу", HideTopBar = "Жоғарғы тақтаны жасыру",
+        OrderSaved = "Рет сақталды!",
         ChangeLogText = [[XyqwHub Өзгерістер
 
+========================================
+6.3 нұсқасы
+========================================
+- Blacklist толығымен жойылды (батырма, терезе, файлдар, тексерулер)
+- Іске қосу кезінде тақырып түзетілді (батырмалар енді жылжымайды)
+- Тегіс анимациялар қосылды (hover, ашу/жабу, түс ауысуы)
+- Скрипт батырмаларын сүйреу қосылды (сол жақ шетінен ұстаңыз)
+- Скрипт реті Settings/order.json файлына сақталады
+- Қош келу терезесі жаңа сипаттамамен жаңартылды
+- Барлық тілдер үшін толық өзгерістер қалпына келтірілді
+
+========================================
 6.2 нұсқасы
+========================================
 - × қара тізімде түзетілді (жойылмады)
 - "Скрипт қара тізімнен жойылды!" хабарламасы түзетілді
 - Барлық тілдер үшін толық өзгерістер
 - Барлық UI аударылды (әлеуметтік желілерден басқа)
 
+========================================
 6.1 нұсқасы
-- Қара тізім жаңарту түзетілді
+========================================
+- Қара тізім жаңарту түзетілді (енді бірден жаңарады)
 
+========================================
 6.0 нұсқасы
-- 5 тіл: EN, RU, UK, BE, KK
+========================================
+- 5 тіл қосылды: EN, RU, UK, BE, KK
 - Қош келу хабарламасы қалпына келтірілді
+- Барлық хабарламалар аударылды
 
+========================================
 5.9 нұсқасы
-- X оң жақ бұрышта
+========================================
+- X батырмасы оң жақ бұрышқа жылжытылды
+- Жоғарғы тақтаны сүйреу қолдауы қосылды
 
+========================================
 5.6 нұсқасы
-- Дөңгелектену жоқ
-- Негізгі қойынды All
+========================================
+- Дөңгелектену жойылды (барлық батырмалар шаршы)
+- Негізгі қойынды енді "All"
+- Қойынды ауыстыру түзетілді
 
+========================================
 5.5 нұсқасы
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+========================================
+- Auto Execute қосылды (әр скриптте ▶ батырмасы)
+- Auto Hide қосылды (GUI жасыру/көрсету байланысы)
+- URL Tester қосылды (сілтемелерді тексереді)
+- Сұрыптау қосылды (A-Z, Z-A, Соңғылар)
+- Параметрлер терезесі қосылды
 
+========================================
+5.4 нұсқасы
+========================================
+- Скрипттерді авто-орындау (ойынға кіргенде)
+- Скрипттердің қара тізімі (қажетсіздерді жасыру)
+- Auto Hide GUI (өз байланысы)
+- URL Tester (жасыл/қызыл индикаторлар)
+- Скрипттерді сұрыптау (A-Z / Z-A / Соңғылар)
+- Share Favorite Scripts (тек Fav)
+- Share Recent Scripts (тек Rct)
+
+========================================
+5.3 нұсқасы
+========================================
+- Custom Color кішірек + ресайз
+- Әмбебап workspace түзетілді
+
+========================================
+5.2 нұсқасы
+========================================
+- Әмбебап workspace қолдауы
+
+========================================
+5.1 нұсқасы
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
+
+========================================
 5.0 нұсқасы
+========================================
 - Custom Color бірден
 
+========================================
 4.9 нұсқасы
-- 13 тақырып
+========================================
+- Welcome кішірек + скролл, 13 тақырып
 
+========================================
+4.8 нұсқасы
+========================================
+- Custom Color rgb() қолдауы
+
+========================================
 4.7 нұсқасы
+========================================
 - Custom Color picker
 
+========================================
+4.6 нұсқасы
+========================================
+- Rainbow қойынды жыпылықтауы түзетілді
+
+========================================
+4.5 нұсқасы
+========================================
+- Файлдар workspace-ке
+
+========================================
+4.4 нұсқасы
+========================================
+- Remove Tags және Destroy бөлек
+
+========================================
+4.3 нұсқасы
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
+4.2 нұсқасы
+========================================
+- Код минификацияланған стильде қайта жазылды
+- THEMES = {Red, Blue, Rainbow}
+- ApplyTheme(themeName) — тақырып ауыстыру
+- themeOrder + themeIndex — тақырыптарды ауыстыру
+- ExtractURL(input.Text) — loadstring-тен URL алу
+- SpecialContainer — Remove Tags + Destroy контейнері
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow тақырыбы — түс ауысу анимациясы
+- Оң жақ төменгі бұрышта ресайз
+- Бастапқы терезе 250x300
+- Барлық батырмалар шаршы (UICorner жоқ)
+- Жарық қызыл сарының орнына
+- Батырмалар 1 қатарда
+- GetTheme() жойылды, түстер тікелей
+- Hide Top Bar ауысады (H/S)
+- FPS/Ping жоғарғы тақтада
+- TopBar сүйреледі
+- DockButton сүйреледі
+- Search bar
+- Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
+- Favorites system (★)
+- Recently used
+- Script history
+- Custom script runner
+- Player list
+- Server info + Copy JobId
+- Anti-AFK
+- Re-launch protection
+- 46 скрипт
+- Doors V2 (Copy) — буферге көшіру
+- Doors V3 (Cheesy) — қарапайым
+- Doors v4 — қарапайым
+
+========================================
+4.1 нұсқасы
+========================================
+- Батырмалардың қабаттасуы түзетілді
+- Қызыл бордюр, фон, мәтін қайтарылды
+- Ресайз қосылды (оң жақ төменгі бұрыш)
+- Hide Top Bar қосылды
+- Кішкентай бастапқы өлшем
+
+========================================
 4.0 нұсқасы
-- Алғашқы шығарылым
+========================================
+- Top bar (executor, name, FPS, Ping)
+- Search bar
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
+- Recently used
+- Script history
+- Theme switcher
+- Custom script runner
+- Player list
+- Server info
+- Copy JobId
+- Animations
+- Keybinds
+- Anti-AFK
 
+========================================
+3.9 нұсқасы
+========================================
+- Барлық скрипттер үшін "Script executed!" хабарламасы
+- Doors v4 қосылды
+- Kiti (MM2) қосылды
+- BETA тегі Tester болып өзгертілді
+- Өзгерістер canvas (1600 → 1700)
+
+========================================
+3.8 нұсқасы
+========================================
+- Респавннан кейін тег қалпына келтіру түзетілді
+- Тег CharacterAdded + task.wait қолданады
+- BETA тегі Tester болып өзгертілді
+
+========================================
+3.7 нұсқасы
+========================================
+- Тестер тегі қосылды (көк градиент)
+- Тестерлерге қош келу хабарламасы қосылды
+- 2 тестер қосылды (9686718765, 3701387385)
+
+========================================
+3.6 нұсқасы
+========================================
+- Тақырыптағы батырмалардың кездейсоқ басылуы түзетілді
+- ChangeLog және тіл үшін кулдаун қосылды
+- Тақырып батырмаларына Active қосылды
+
+========================================
+3.5 нұсқасы
+========================================
+- Тек иесі үшін қош келу хабарламасы қосылды
+- "Welcome, my father :3"
+
+========================================
+3.4 нұсқасы
+========================================
+- Тег үшін қою қызыл (200,0,0 және 60,0,0)
+- Remove/Destroy үшін қарапайым фон
+- Remove/Destroy үшін қарапайым бордюр
+
+========================================
+3.3 нұсқасы
+========================================
+- Тег өлшемі түзетілді (енді созылмайды)
+- Градиент түзетілді (Rotation арқылы жұмыс істейді)
+- Градиент барлығына көрінеді
+- Мәтін позициясы түзетілді
+- Мәтін өлшемі түзетілді (кішірек, созылмаған)
+- UIStroke glow қосылды
+
+========================================
+3.2 нұсқасы
+========================================
+- Градиент анимациясы қайтарылды
+- Мәтін өлшемі кішірейтілді
+- UIStroke glow қосылды
+
+========================================
+3.1 нұсқасы
+========================================
+- Тег жүйесі толығымен қайта жазылды
+- Тег HumanoidRootPart-қа бекітілді
+- Heartbeat арқылы позициялау қосылды
+- Сканерлеу логикасы түзетілді
+
+========================================
+3.0 нұсқасы
+========================================
+- Градиент жойылды
+- debug prints қосылды
+- Тег логикасы жеңілдетілді
+
+========================================
+2.9 нұсқасы
+========================================
+- XyqwHub OWNER тегі қосылды
+- "Remove XyqwHub Tag" батырмасы қосылды
+- Owner тегі үшін градиент анимациясы қосылды
+- 2 owner аккаунт қосылды (4396977722, 8527910367)
+
+========================================
+2.8 нұсқасы
+========================================
+- XyqwHub Loaded! бірден пайда болады
+- ChangeLog EN/RU-ға аударылды
+- Тег тек иелеріне көрінеді
+
+========================================
+2.7 нұсқасы
+========================================
+- Roblox хабарламалары (оң жақ төменгі бұрыш)
+- ChangeLog батырмасы қосылды
+- Loading / Loaded хабарламалары
+- Тег XyqwHub барларға көрінеді
+
+========================================
+2.6 нұсқасы
+========================================
+- Хабарламалар оң жақ төменгі бұрышқа жылжытылды
+- Жаңа хабарлама жүйесі
+
+========================================
+2.5 нұсқасы
+========================================
+- Барлық хабарламалар EN/RU-ға аударылды
+- Re-launch protection
+- Тіл ауыстыру батырмасы түзетілді
+- Иесі үшін қош келу
+
+========================================
+2.4 нұсқасы
+========================================
+- Re-launch protection қосылды
+- DESTROY батырмасы флагты тазалайды
+- Тек иесі үшін қош келу
+
+========================================
+2.3 нұсқасы
+========================================
+- Adopt me қосылды
+
+========================================
+2.2 нұсқасы
+========================================
+- bLockman's minesweaper қосылды
+- Cheating during test қосылды
+
+========================================
+2.1 нұсқасы
+========================================
+- DropKick қосылды
+- Evade қосылды
+- A Dusty Trip қосылды
+- A Dusty Trip v2 қосылды
+
+========================================
+2.0 нұсқасы
+========================================
+- Auto Execute жойылды
+- Барлық батырмалар бір тізімде
+- 2.0 stable нұсқасы
+
+========================================
+1.9 нұсқасы
+========================================
+- Doors V3 (Cheesy) үшін кілт қосылды
+- "Key: joincheesedsc"
+
+========================================
+1.8 нұсқасы
+========================================
+- Death Order [SIMON] қосылды
+- CandyWare (MM2) қосылды
+
+========================================
+1.7 нұсқасы
+========================================
+- Troll script қосылды
+
+========================================
+1.6 нұсқасы
+========================================
+- Steal an egg қосылды
+- Universal script қосылды
+- Corridor қосылды
+- BloxStrike қосылды
+- RIVALS қосылды
+
+========================================
+1.5 нұсқасы
+========================================
+- EN/RU кеңесі welcome жоғары және төмен
+- LangHintTop + LangHintBottom
+
+========================================
+1.4 нұсқасы
+========================================
+- welcome-те EN/RU кеңесі
+
+========================================
+1.3 нұсқасы
+========================================
+- welcome-тен кейін тілді қалай ауыстыру керектігі туралы кеңес
+
+========================================
+1.2 нұсқасы
+========================================
+- Тіл ауыстыру батырмасы түзетілді
+- langCooldown protection
+
+========================================
+1.1 нұсқасы
+========================================
+- Тіл ауыстыру қосылды (EN/RU)
+- LangButton
+
+========================================
 1.0 нұсқасы
-- Алғашқы шығарылым]],
+========================================
+- Алғашқы шығарылым
+- Негізгі GUI
+- Blade Ball, AntiKillParts, PulseHub
+- RUNAWAYS, Universal FE, UwU hub
+- FakeVR, WallHop]],
     },
-}
-
 local function _(key)
     local lang = getgenv().XyqwLanguage or "EN"
     return LANG[lang][key] or LANG.EN[key] or key
@@ -526,6 +2285,7 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
 
 local SCRIPTS = {
     {Name = "Blade Ball", Category = "BB", URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"},
@@ -762,8 +2522,7 @@ local function GetExecutorName()
         return "Unknown"
     end)
     return ok and name or "Unknown"
-end
-
+    end
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "XyqwHubGui"
 screenGui.ResetOnSpawn = false
@@ -1065,7 +2824,11 @@ local HEADER_SHORT_W = {22, 24, 26, 22, 22, 22, 28, 22}
 local HEADER_LONG_W  = {55, 105, 85, 70, 70, 65, 55, 22}
 
 local function UpdateHeaderLayout()
+    if not mainFrame or mainFrame.AbsoluteSize.X == 0 then
+        task.wait()
+    end
     local w = mainFrame.AbsoluteSize.X
+    if w == 0 then w = mainFrame.Size.X.Offset end
     local useLong = w >= 550
     local titleW = 70
     local buttons = HEADER_BUTTONS
@@ -1200,6 +2963,7 @@ end
 
 local function UpdateTabLayout()
     local w = mainFrame.AbsoluteSize.X
+    if w == 0 then w = mainFrame.Size.X.Offset end
     local useLong = w >= 500
     local count = #TAB_LIST
     local gap = 1
@@ -1229,14 +2993,56 @@ local buttonHeight = 34
 
 local function UpdateScriptButtonLayout()
     local w = mainFrame.AbsoluteSize.X
+    if w == 0 then w = mainFrame.Size.X.Offset end
     local useLong = w >= 500
     for _, entry in ipairs(buttons) do
         entry.AutoBtn.Text = getgenv().XyqwAutoExec[entry.Data.Name] and (useLong and "On" or "✓") or (useLong and "Auto" or "▶")
-        entry.HideBtn.Text = useLong and "Hide" or "⊘"
         entry.Star.Text = getgenv().XyqwFavorites[entry.Data.Name] and (useLong and "Fav+" or "★") or (useLong and "Fav" or "☆")
     end
 end
 
+-- ========== АНИМАЦИИ ==========
+local function TweenColor(obj, prop, targetColor, time)
+    time = time or 0.15
+    local tween = TweenService:Create(obj, TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {[prop] = targetColor})
+    tween:Play()
+    return tween
+end
+
+local function TweenSize(obj, targetSize, time)
+    time = time or 0.2
+    local tween = TweenService:Create(obj, TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = targetSize})
+    tween:Play()
+    return tween
+end
+
+local function TweenTransparency(obj, target, time)
+    time = time or 0.2
+    local tween = TweenService:Create(obj, TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = target})
+    tween:Play()
+    return tween
+end
+
+-- ========== DRAG & DROP ПОРЯДОК ==========
+local function SaveOrder()
+    local order = {}
+    for _, entry in ipairs(buttons) do
+        table.insert(order, entry.Data.Name)
+    end
+    getgenv().XyqwOrder = order
+    SaveTable(ORDER_FILE, order)
+end
+
+local function ApplyOrderFromFile()
+    if #getgenv().XyqwOrder == 0 then return end
+    local orderMap = {}
+    for i, name in ipairs(getgenv().XyqwOrder) do orderMap[name] = i end
+    table.sort(buttons, function(a, b)
+        local ai = orderMap[a.Data.Name] or 9999
+        local bi = orderMap[b.Data.Name] or 9999
+        return ai < bi
+    end)
+    end
 local function CreateScriptButton(data)
     local container = Instance.new("Frame")
     container.Name = "Script_" .. data.Name
@@ -1258,7 +3064,7 @@ local function CreateScriptButton(data)
 
     local btn = Instance.new("TextButton")
     btn.Name = "MainBtn"
-    btn.Size = UDim2.new(1, -90, 1, 0)
+    btn.Size = UDim2.new(1, -66, 1, 0)
     btn.Position = UDim2.new(0, 12, 0, 0)
     btn.BackgroundTransparency = 1
     btn.TextColor3 = RED_MAIN
@@ -1274,7 +3080,7 @@ local function CreateScriptButton(data)
     local autoBtn = Instance.new("TextButton")
     autoBtn.Name = "AutoBtn"
     autoBtn.Size = UDim2.new(0, 24, 1, 0)
-    autoBtn.Position = UDim2.new(1, -76, 0, 0)
+    autoBtn.Position = UDim2.new(1, -52, 0, 0)
     autoBtn.BackgroundColor3 = RED_BG
     autoBtn.TextColor3 = RED_MAIN
     autoBtn.Text = "▶"
@@ -1292,39 +3098,17 @@ local function CreateScriptButton(data)
     autoBtn.MouseButton1Click:Connect(function()
         if getgenv().XyqwAutoExec[data.Name] then
             getgenv().XyqwAutoExec[data.Name] = nil
-            autoBtn.BackgroundColor3 = RED_BG
+            TweenColor(autoBtn, "BackgroundColor3", RED_BG)
             autoBtn.TextColor3 = RED_MAIN
             ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOff"), 3)
         else
             getgenv().XyqwAutoExec[data.Name] = true
-            autoBtn.BackgroundColor3 = RED_MAIN
+            TweenColor(autoBtn, "BackgroundColor3", RED_MAIN)
             autoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
             ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOn"), 3)
         end
         SaveTable(AUTOEXEC_FILE, getgenv().XyqwAutoExec)
         UpdateScriptButtonLayout()
-    end)
-
-    local hideBtn = Instance.new("TextButton")
-    hideBtn.Name = "HideBtn"
-    hideBtn.Size = UDim2.new(0, 24, 1, 0)
-    hideBtn.Position = UDim2.new(1, -51, 0, 0)
-    hideBtn.BackgroundColor3 = RED_BG
-    hideBtn.TextColor3 = RED_MAIN
-    hideBtn.Text = "⊘"
-    hideBtn.TextScaled = true
-    hideBtn.Font = Enum.Font.GothamBold
-    hideBtn.BorderSizePixel = 1
-    hideBtn.BorderColor3 = RED_MAIN
-    hideBtn.Parent = container
-    hideBtn.AutoButtonColor = false
-    hideBtn.MouseButton1Click:Connect(function()
-        getgenv().XyqwBlacklist[data.Name] = true
-        SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
-        print("[XyqwHub] BLACKLISTED: " .. data.Name)
-        ShowRobloxNotification(data.Name .. " — " .. _("BlacklistAdded"), 4)
-        task.wait(0.05)
-        if getgenv().RefreshButtons then getgenv().RefreshButtons() end
     end)
 
     local star = Instance.new("TextButton")
@@ -1355,8 +3139,8 @@ local function CreateScriptButton(data)
         UpdateScriptButtonLayout()
     end)
 
-    btn.MouseEnter:Connect(function() container.BackgroundColor3 = RED_DARK end)
-    btn.MouseLeave:Connect(function() container.BackgroundColor3 = RED_BG end)
+    btn.MouseEnter:Connect(function() TweenColor(container, "BackgroundColor3", RED_DARK, 0.12) end)
+    btn.MouseLeave:Connect(function() TweenColor(container, "BackgroundColor3", RED_BG, 0.15) end)
 
     local isRunning = false
     local lastRun = 0
@@ -1366,7 +3150,7 @@ local function CreateScriptButton(data)
         if now - lastRun < 1.5 then return end
         lastRun = now
         isRunning = true
-        container.BackgroundColor3 = RED_MAIN
+        TweenColor(container, "BackgroundColor3", RED_MAIN, 0.1)
 
         for i, name in ipairs(getgenv().XyqwRecent) do
             if name == data.Name then table.remove(getgenv().XyqwRecent, i) break end
@@ -1391,14 +3175,62 @@ local function CreateScriptButton(data)
         end
 
         task.wait(0.3)
-        container.BackgroundColor3 = RED_BG
+        TweenColor(container, "BackgroundColor3", RED_BG, 0.15)
         isRunning = false
     end)
 
-    table.insert(buttons, {Container = container, Btn = btn, Star = star, AutoBtn = autoBtn, HideBtn = hideBtn, Data = data, StatusDot = statusDot})
+    -- ========== DRAG & DROP ==========
+    local dragStart = nil
+    local dragging = false
+    local originalPos = nil
+
+    container.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if input.Position.X < container.AbsolutePosition.X + 12 then
+                dragging = true
+                dragStart = input.Position
+                originalPos = container.Position
+            end
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
+            container.Position = UDim2.new(originalPos.X.Scale, originalPos.X.Offset, originalPos.Y.Scale, originalPos.Y.Offset + delta.Y)
+            container.ZIndex = 10
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if dragging then
+                dragging = false
+                container.ZIndex = 1
+                local curY = container.AbsolutePosition.Y - scrollFrame.AbsolutePosition.Y + scrollFrame.CanvasPosition.Y
+                local targetIdx = math.floor(curY / buttonHeight) + 1
+                targetIdx = math.clamp(targetIdx, 1, #buttons)
+                local curIdx = 1
+                for i, e in ipairs(buttons) do
+                    if e.Container == container then curIdx = i break end
+                end
+                if curIdx ~= targetIdx then
+                    local entry = table.remove(buttons, curIdx)
+                    table.insert(buttons, targetIdx, entry)
+                    SaveOrder()
+                    ShowRobloxNotification(_("OrderSaved"), 2)
+                end
+                if getgenv().RefreshButtons then getgenv().RefreshButtons() end
+            end
+        end
+    end)
+
+    table.insert(buttons, {Container = container, Btn = btn, Star = star, AutoBtn = autoBtn, Data = data, StatusDot = statusDot})
 end
 
+ApplyOrderFromFile()
 for _, data in ipairs(SCRIPTS) do CreateScriptButton(data) end
+ApplyOrderFromFile()
 
 -- ========== SPECIAL BUTTONS ==========
 local removeTagsContainer = Instance.new("Frame")
@@ -1422,8 +3254,8 @@ removeTagsBtn.Font = Enum.Font.GothamBold
 removeTagsBtn.Parent = removeTagsContainer
 removeTagsBtn.AutoButtonColor = false
 
-removeTagsBtn.MouseEnter:Connect(function() removeTagsContainer.BackgroundColor3 = RED_DARK end)
-removeTagsBtn.MouseLeave:Connect(function() removeTagsContainer.BackgroundColor3 = RED_BG end)
+removeTagsBtn.MouseEnter:Connect(function() TweenColor(removeTagsContainer, "BackgroundColor3", RED_DARK, 0.12) end)
+removeTagsBtn.MouseLeave:Connect(function() TweenColor(removeTagsContainer, "BackgroundColor3", RED_BG, 0.15) end)
 removeTagsBtn.MouseButton1Click:Connect(function()
     RemoveAllTags()
     ShowRobloxNotification(_("TagRemoved"), 3)
@@ -1450,8 +3282,8 @@ shareFavBtn.Font = Enum.Font.GothamBold
 shareFavBtn.Parent = shareFavContainer
 shareFavBtn.AutoButtonColor = false
 
-shareFavBtn.MouseEnter:Connect(function() shareFavContainer.BackgroundColor3 = RED_DARK end)
-shareFavBtn.MouseLeave:Connect(function() shareFavContainer.BackgroundColor3 = RED_BG end)
+shareFavBtn.MouseEnter:Connect(function() TweenColor(shareFavContainer, "BackgroundColor3", RED_DARK, 0.12) end)
+shareFavBtn.MouseLeave:Connect(function() TweenColor(shareFavContainer, "BackgroundColor3", RED_BG, 0.15) end)
 shareFavBtn.MouseButton1Click:Connect(function()
     local list = {}
     for name, _ in pairs(getgenv().XyqwFavorites) do table.insert(list, name) end
@@ -1486,8 +3318,8 @@ shareRctBtn.Font = Enum.Font.GothamBold
 shareRctBtn.Parent = shareRctContainer
 shareRctBtn.AutoButtonColor = false
 
-shareRctBtn.MouseEnter:Connect(function() shareRctContainer.BackgroundColor3 = RED_DARK end)
-shareRctBtn.MouseLeave:Connect(function() shareRctContainer.BackgroundColor3 = RED_BG end)
+shareRctBtn.MouseEnter:Connect(function() TweenColor(shareRctContainer, "BackgroundColor3", RED_DARK, 0.12) end)
+shareRctBtn.MouseLeave:Connect(function() TweenColor(shareRctContainer, "BackgroundColor3", RED_BG, 0.15) end)
 shareRctBtn.MouseButton1Click:Connect(function()
     local text = "XyqwHub - My Recent Scripts:\n"
     if #getgenv().XyqwRecent == 0 then text = text .. "(empty)" else
@@ -1497,30 +3329,6 @@ shareRctBtn.MouseButton1Click:Connect(function()
     pcall(function() setclipboard(text) end)
     ShowRobloxNotification(_("RctShared"), 3)
 end)
-
-local blacklistBtnContainer = Instance.new("Frame")
-blacklistBtnContainer.Name = "BlacklistBtnContainer"
-blacklistBtnContainer.Size = UDim2.new(1, -10, 0, 32)
-blacklistBtnContainer.Position = UDim2.new(0, 5, 0, 0)
-blacklistBtnContainer.BackgroundColor3 = RED_BG
-blacklistBtnContainer.BorderSizePixel = 2
-blacklistBtnContainer.BorderColor3 = RED_MAIN
-blacklistBtnContainer.Parent = scrollFrame
-blacklistBtnContainer.Visible = false
-
-local blacklistBtn = Instance.new("TextButton")
-blacklistBtn.Name = "BlacklistBtn"
-blacklistBtn.Size = UDim2.new(1, 0, 1, 0)
-blacklistBtn.BackgroundTransparency = 1
-blacklistBtn.Text = _("ManageBlacklist")
-blacklistBtn.TextColor3 = RED_MAIN
-blacklistBtn.TextScaled = true
-blacklistBtn.Font = Enum.Font.GothamBold
-blacklistBtn.Parent = blacklistBtnContainer
-blacklistBtn.AutoButtonColor = false
-
-blacklistBtn.MouseEnter:Connect(function() blacklistBtnContainer.BackgroundColor3 = RED_DARK end)
-blacklistBtn.MouseLeave:Connect(function() blacklistBtnContainer.BackgroundColor3 = RED_BG end)
 
 local urlTestContainer = Instance.new("Frame")
 urlTestContainer.Name = "UrlTestContainer"
@@ -1543,8 +3351,8 @@ urlTestBtn.Font = Enum.Font.GothamBold
 urlTestBtn.Parent = urlTestContainer
 urlTestBtn.AutoButtonColor = false
 
-urlTestBtn.MouseEnter:Connect(function() urlTestContainer.BackgroundColor3 = RED_DARK end)
-urlTestBtn.MouseLeave:Connect(function() urlTestContainer.BackgroundColor3 = RED_BG end)
+urlTestBtn.MouseEnter:Connect(function() TweenColor(urlTestContainer, "BackgroundColor3", RED_DARK, 0.12) end)
+urlTestBtn.MouseLeave:Connect(function() TweenColor(urlTestContainer, "BackgroundColor3", RED_BG, 0.15) end)
 
 local settingsContainer = Instance.new("Frame")
 settingsContainer.Name = "SettingsContainer"
@@ -1567,8 +3375,8 @@ settingsBtn.Font = Enum.Font.GothamBold
 settingsBtn.Parent = settingsContainer
 settingsBtn.AutoButtonColor = false
 
-settingsBtn.MouseEnter:Connect(function() settingsContainer.BackgroundColor3 = RED_DARK end)
-settingsBtn.MouseLeave:Connect(function() settingsContainer.BackgroundColor3 = RED_BG end)
+settingsBtn.MouseEnter:Connect(function() TweenColor(settingsContainer, "BackgroundColor3", RED_DARK, 0.12) end)
+settingsBtn.MouseLeave:Connect(function() TweenColor(settingsContainer, "BackgroundColor3", RED_BG, 0.15) end)
 
 local destroyContainer = Instance.new("Frame")
 destroyContainer.Name = "DestroyContainer"
@@ -1591,144 +3399,15 @@ destroyBtnMain.Font = Enum.Font.GothamBold
 destroyBtnMain.Parent = destroyContainer
 destroyBtnMain.AutoButtonColor = false
 
-destroyBtnMain.MouseEnter:Connect(function() destroyContainer.BackgroundColor3 = RED_DARK end)
-destroyBtnMain.MouseLeave:Connect(function() destroyContainer.BackgroundColor3 = RED_BG end)
+destroyBtnMain.MouseEnter:Connect(function() TweenColor(destroyContainer, "BackgroundColor3", RED_DARK, 0.12) end)
+destroyBtnMain.MouseLeave:Connect(function() TweenColor(destroyContainer, "BackgroundColor3", RED_BG, 0.15) end)
 destroyBtnMain.MouseButton1Click:Connect(function()
     ShowRobloxNotification("XyqwHub Destroyed!", 2)
     getgenv().XyqwHubRunning = nil
     screenGui:Destroy()
 end)
 
--- ========== BLACKLIST MANAGER (фикс ×) ==========
-local ShowBlacklistManager
-ShowBlacklistManager = function()
-    local frame = Instance.new("Frame")
-    frame.Name = "BlacklistFrame"
-    frame.Size = UDim2.new(0, 320, 0, 350)
-    frame.Position = UDim2.new(0.5, -160, 0.5, -175)
-    frame.BackgroundColor3 = RED_BG
-    frame.BorderSizePixel = 2
-    frame.BorderColor3 = RED_MAIN
-    frame.ZIndex = 50
-    frame.Active = true
-    frame.Parent = screenGui
-
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, -40, 0, 24)
-    title.Position = UDim2.new(0, 5, 0, 5)
-    title.BackgroundTransparency = 1
-    title.TextColor3 = RED_MAIN
-    title.Text = _("BlacklistTitle")
-    title.TextScaled = true
-    title.Font = Enum.Font.GothamBold
-    title.ZIndex = 51
-    title.Parent = frame
-
-    local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 26, 0, 24)
-    closeBtn.Position = UDim2.new(1, -30, 0, 4)
-    closeBtn.BackgroundTransparency = 1
-    closeBtn.Text = "X"
-    closeBtn.TextColor3 = RED_MAIN
-    closeBtn.TextScaled = true
-    closeBtn.Font = Enum.Font.GothamBold
-    closeBtn.ZIndex = 51
-    closeBtn.Parent = frame
-    closeBtn.AutoButtonColor = false
-
-    local scroll = Instance.new("ScrollingFrame")
-    scroll.Size = UDim2.new(1, -10, 1, -40)
-    scroll.Position = UDim2.new(0, 5, 0, 32)
-    scroll.BackgroundTransparency = 1
-    scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-    scroll.ScrollBarThickness = 4
-    scroll.ScrollBarImageColor3 = RED_MAIN
-    scroll.ZIndex = 51
-    scroll.Parent = frame
-
-    -- ФИКС: собираем имена В ОТДЕЛЬНЫЙ СПИСОК перед итерацией
-    local blacklistNames = {}
-    for name, _ in pairs(getgenv().XyqwBlacklist) do
-        table.insert(blacklistNames, name)
-    end
-    table.sort(blacklistNames)
-
-    local yPos = 5
-    if #blacklistNames == 0 then
-        local emptyLbl = Instance.new("TextLabel")
-        emptyLbl.Size = UDim2.new(1, -10, 0, 40)
-        emptyLbl.Position = UDim2.new(0, 5, 0, 20)
-        emptyLbl.BackgroundTransparency = 1
-        emptyLbl.TextColor3 = Color3.fromRGB(150, 150, 150)
-        emptyLbl.Text = _("BlacklistEmpty")
-        emptyLbl.TextScaled = true
-        emptyLbl.Font = Enum.Font.Gotham
-        emptyLbl.ZIndex = 52
-        emptyLbl.Parent = scroll
-    else
-        for _, name in ipairs(blacklistNames) do
-            local item = Instance.new("Frame")
-            item.Size = UDim2.new(1, -10, 0, 28)
-            item.Position = UDim2.new(0, 5, 0, yPos)
-            item.BackgroundColor3 = RED_BG
-            item.BorderSizePixel = 1
-            item.BorderColor3 = RED_MAIN
-            item.ZIndex = 51
-            item.Parent = scroll
-
-            local lbl = Instance.new("TextLabel")
-            lbl.Size = UDim2.new(1, -40, 1, 0)
-            lbl.Position = UDim2.new(0, 5, 0, 0)
-            lbl.BackgroundTransparency = 1
-            lbl.TextColor3 = RED_MAIN
-            lbl.Text = name
-            lbl.TextScaled = true
-            lbl.Font = Enum.Font.Gotham
-            lbl.TextXAlignment = Enum.TextXAlignment.Left
-            lbl.ZIndex = 52
-            lbl.Parent = item
-
-            local removeBtn = Instance.new("TextButton")
-            removeBtn.Size = UDim2.new(0, 30, 1, 0)
-            removeBtn.Position = UDim2.new(1, -30, 0, 0)
-            removeBtn.BackgroundColor3 = RED_DARK
-            removeBtn.TextColor3 = RED_MAIN
-            removeBtn.Text = "×"
-            removeBtn.TextScaled = true
-            removeBtn.Font = Enum.Font.GothamBold
-            removeBtn.BorderSizePixel = 0
-            removeBtn.ZIndex = 52
-            removeBtn.Parent = item
-            removeBtn.AutoButtonColor = false
-            removeBtn.MouseButton1Click:Connect(function()
-                -- Удаляем из blacklist
-                getgenv().XyqwBlacklist[name] = nil
-                SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
-                print("[XyqwHub] UNBLACKLISTED: " .. name)
-                ShowRobloxNotification(name .. " — " .. _("BlacklistRemoved"), 4)
-                -- Мгновенно обновляем главный список
-                if getgenv().RefreshButtons then getgenv().RefreshButtons() end
-                -- Закрываем окно, пересоздаём с обновлёнными данными
-                task.wait(0.1)
-                frame:Destroy()
-                ShowBlacklistManager()
-            end)
-
-            yPos = yPos + 30
-        end
-    end
-
-    scroll.CanvasSize = UDim2.new(0, 0, 0, yPos + 10)
-
-    closeBtn.MouseButton1Click:Connect(function()
-        frame:Destroy()
-        task.wait(0.05)
-        if getgenv().RefreshButtons then getgenv().RefreshButtons() end
-    end)
-end
-blacklistBtn.MouseButton1Click:Connect(ShowBlacklistManager)
-
+-- ========== SETTINGS ==========
 local ShowSettings
 ShowSettings = function()
     local frame = Instance.new("Frame")
@@ -1798,12 +3477,7 @@ ShowSettings = function()
         if waiting then return end
         waiting = true
         bindBtn.Text = "Press any key..."
-        
-        if inputConnection then
-            pcall(function() inputConnection:Disconnect() end)
-            inputConnection = nil
-        end
-        
+        if inputConnection then pcall(function() inputConnection:Disconnect() end) inputConnection = nil end
         inputConnection = UserInputService.InputBegan:Connect(function(input, gp)
             if gp then return end
             if input.UserInputType == Enum.UserInputType.Keyboard then
@@ -1813,10 +3487,7 @@ ShowSettings = function()
                 bindBtn.Text = keyName .. " — click to change"
                 ShowRobloxNotification(_("KeybindChanged") .. keyName, 2)
                 waiting = false
-                if inputConnection then
-                    pcall(function() inputConnection:Disconnect() end)
-                    inputConnection = nil
-                end
+                if inputConnection then pcall(function() inputConnection:Disconnect() end) inputConnection = nil end
             end
         end)
     end)
@@ -1836,10 +3507,7 @@ ShowSettings = function()
     hint.Parent = frame
 
     closeBtn.MouseButton1Click:Connect(function()
-        if inputConnection then
-            pcall(function() inputConnection:Disconnect() end)
-            inputConnection = nil
-        end
+        if inputConnection then pcall(function() inputConnection:Disconnect() end) inputConnection = nil end
         frame:Destroy()
     end)
 end
@@ -1875,9 +3543,7 @@ end)
 sortBtn.MouseButton1Click:Connect(function()
     local modes = {"default", "az", "za", "recent"}
     local idx = 1
-    for i, m in ipairs(modes) do
-        if m == getgenv().XyqwSettings.sortMode then idx = i break end
-    end
+    for i, m in ipairs(modes) do if m == getgenv().XyqwSettings.sortMode then idx = i break end end
     idx = idx + 1
     if idx > #modes then idx = 1 end
     getgenv().XyqwSettings.sortMode = modes[idx]
@@ -1894,19 +3560,16 @@ getgenv().RefreshButtons = function()
     local visibleEntries = {}
     for _, entry in ipairs(buttons) do
         local show = true
-        if getgenv().XyqwBlacklist[entry.Data.Name] then show = false end
-        if show then
-            if currentTab == "Fav" then
-                if not getgenv().XyqwFavorites[entry.Data.Name] then show = false end
-            elseif currentTab == "Rct" then
-                local found = false
-                for _, n in ipairs(getgenv().XyqwRecent) do
-                    if n == entry.Data.Name then found = true break end
-                end
-                if not found then show = false end
-            elseif currentTab ~= "All" then
-                if entry.Data.Category ~= currentTab then show = false end
+        if currentTab == "Fav" then
+            if not getgenv().XyqwFavorites[entry.Data.Name] then show = false end
+        elseif currentTab == "Rct" then
+            local found = false
+            for _, n in ipairs(getgenv().XyqwRecent) do
+                if n == entry.Data.Name then found = true break end
             end
+            if not found then show = false end
+        elseif currentTab ~= "All" then
+            if entry.Data.Category ~= currentTab then show = false end
         end
         if show and search ~= "" and not string.find(string.lower(entry.Data.Name), search, 1, true) then
             show = false
@@ -1941,7 +3604,6 @@ getgenv().RefreshButtons = function()
     local showRct = (currentTab == "Rct")
 
     removeTagsContainer.Visible = showAll
-    blacklistBtnContainer.Visible = showAll
     urlTestContainer.Visible = showAll
     settingsContainer.Visible = showAll
     destroyContainer.Visible = showAll
@@ -1951,11 +3613,10 @@ getgenv().RefreshButtons = function()
     local specialY = visible * buttonHeight + 5
     if showAll then
         removeTagsContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
-        blacklistBtnContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
         urlTestContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
         settingsContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
         destroyContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
-        visible = visible + 5
+        visible = visible + 4
     end
     if showFav then
         shareFavContainer.Position = UDim2.new(0, 5, 0, specialY)
@@ -1974,6 +3635,7 @@ searchBar:GetPropertyChangedSignal("Text"):Connect(function()
     if getgenv().RefreshButtons then getgenv().RefreshButtons() end
 end)
 
+-- ========== CHANGE LOG ==========
 local function ShowChangeLog()
     local frame = Instance.new("Frame")
     frame.Name = "ChangeLogFrame"
@@ -2014,14 +3676,14 @@ local function ShowChangeLog()
     scroll.Position = UDim2.new(0, 5, 0, 35)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 3000)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 8000)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 51
     scroll.Parent = frame
 
     local text = Instance.new("TextLabel")
-    text.Size = UDim2.new(1, -10, 0, 2990)
+    text.Size = UDim2.new(1, -10, 0, 7990)
     text.Position = UDim2.new(0, 5, 0, 5)
     text.BackgroundTransparency = 1
     text.TextColor3 = RED_MAIN
@@ -2042,9 +3704,7 @@ changelogButton.MouseButton1Click:Connect(ShowChangeLog)
 langButton.MouseButton1Click:Connect(function()
     local langs = {"EN", "RU", "UK", "BE", "KK"}
     local idx = 1
-    for i, l in ipairs(langs) do
-        if l == getgenv().XyqwLanguage then idx = i break end
-    end
+    for i, l in ipairs(langs) do if l == getgenv().XyqwLanguage then idx = i break end end
     idx = idx + 1
     if idx > #langs then idx = 1 end
     getgenv().XyqwLanguage = langs[idx]
@@ -2053,7 +3713,6 @@ langButton.MouseButton1Click:Connect(function()
     removeTagsBtn.Text = _("RemoveTags")
     shareFavBtn.Text = _("ShareFav")
     shareRctBtn.Text = _("ShareRct")
-    blacklistBtn.Text = _("ManageBlacklist")
     urlTestBtn.Text = _("TestURLs")
     settingsBtn.Text = _("SettingsBtn")
     destroyBtnMain.Text = _("Destroy")
@@ -2061,6 +3720,7 @@ langButton.MouseButton1Click:Connect(function()
     UpdateHeaderLayout()
 end)
 
+-- ========== PLAYER LIST ==========
 local function ShowPlayerList()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 350, 0, 400)
@@ -2126,6 +3786,7 @@ local function ShowPlayerList()
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
 
+-- ========== SERVER INFO ==========
 local function ShowServerInfo()
     local frame = Instance.new("Frame")
     frame.Name = "ServerInfoFrame"
@@ -2193,35 +3854,6 @@ local function ShowServerInfo()
         return servers
     end
 
-    local function Rejoin()
-        ShowRobloxNotification("Rejoining...", 2)
-        task.wait(0.5)
-        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer) end)
-    end
-
-    local function ServerHop()
-        ShowRobloxNotification("Searching for server...", 3)
-        local servers = GetServers()
-        if #servers == 0 then ShowRobloxNotification("No servers found!", 3) return end
-        local target = servers[math.random(1, #servers)]
-        ShowRobloxNotification("Hopping...", 2)
-        task.wait(0.5)
-        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, target.id, Players.LocalPlayer) end)
-    end
-
-    local function TPToSmallServer()
-        ShowRobloxNotification("Searching for small server...", 3)
-        local servers = GetServers()
-        if #servers == 0 then ShowRobloxNotification("No servers found!", 3) return end
-        local best = servers[1]
-        for _, srv in ipairs(servers) do
-            if srv.playing < best.playing then best = srv end
-        end
-        ShowRobloxNotification("Teleporting to " .. best.playing .. " player server...", 3)
-        task.wait(0.5)
-        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, best.id, Players.LocalPlayer) end)
-    end
-
     local rejoinBtn = Instance.new("TextButton")
     rejoinBtn.Size = UDim2.new(1, -20, 0, 30)
     rejoinBtn.Position = UDim2.new(0, 10, 0, 158)
@@ -2235,7 +3867,11 @@ local function ShowServerInfo()
     rejoinBtn.ZIndex = 51
     rejoinBtn.Parent = frame
     rejoinBtn.AutoButtonColor = false
-    rejoinBtn.MouseButton1Click:Connect(Rejoin)
+    rejoinBtn.MouseButton1Click:Connect(function()
+        ShowRobloxNotification("Rejoining...", 2)
+        task.wait(0.5)
+        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer) end)
+    end)
 
     local hopBtn = Instance.new("TextButton")
     hopBtn.Size = UDim2.new(0.5, -13, 0, 30)
@@ -2250,7 +3886,15 @@ local function ShowServerInfo()
     hopBtn.ZIndex = 51
     hopBtn.Parent = frame
     hopBtn.AutoButtonColor = false
-    hopBtn.MouseButton1Click:Connect(ServerHop)
+    hopBtn.MouseButton1Click:Connect(function()
+        ShowRobloxNotification("Searching for server...", 3)
+        local servers = GetServers()
+        if #servers == 0 then ShowRobloxNotification("No servers found!", 3) return end
+        local target = servers[math.random(1, #servers)]
+        ShowRobloxNotification("Hopping...", 2)
+        task.wait(0.5)
+        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, target.id, Players.LocalPlayer) end)
+    end)
 
     local smallBtn = Instance.new("TextButton")
     smallBtn.Size = UDim2.new(0.5, -13, 0, 30)
@@ -2265,7 +3909,16 @@ local function ShowServerInfo()
     smallBtn.ZIndex = 51
     smallBtn.Parent = frame
     smallBtn.AutoButtonColor = false
-    smallBtn.MouseButton1Click:Connect(TPToSmallServer)
+    smallBtn.MouseButton1Click:Connect(function()
+        ShowRobloxNotification("Searching for small server...", 3)
+        local servers = GetServers()
+        if #servers == 0 then ShowRobloxNotification("No servers found!", 3) return end
+        local best = servers[1]
+        for _, srv in ipairs(servers) do if srv.playing < best.playing then best = srv end end
+        ShowRobloxNotification("Teleporting to " .. best.playing .. " player server...", 3)
+        task.wait(0.5)
+        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, best.id, Players.LocalPlayer) end)
+    end)
 
     local copyBtn = Instance.new("TextButton")
     copyBtn.Size = UDim2.new(1, -20, 0, 30)
@@ -2279,7 +3932,6 @@ local function ShowServerInfo()
     copyBtn.ZIndex = 51
     copyBtn.Parent = frame
     copyBtn.AutoButtonColor = false
-
     copyBtn.MouseButton1Click:Connect(function()
         pcall(function() setclipboard(game.JobId) end)
         ShowRobloxNotification(_("JobIdCopied"), 2)
@@ -2288,6 +3940,7 @@ local function ShowServerInfo()
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
 
+-- ========== CUSTOM SCRIPT ==========
 local function ShowCustomScript()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 350, 0, 175)
@@ -2375,6 +4028,7 @@ local function ShowCustomScript()
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
 
+-- ========== CUSTOM COLOR ==========
 local function ShowCustomColor()
     local frame = Instance.new("Frame")
     frame.Name = "CustomColorFrame"
@@ -2420,18 +4074,11 @@ local function ShowCustomColor()
     preview.ZIndex = 51
     preview.Parent = frame
 
-    local tempColor = {
-        r = getgenv().XyqwCustomColor.r,
-        g = getgenv().XyqwCustomColor.g,
-        b = getgenv().XyqwCustomColor.b,
-    }
-
+    local tempColor = {r = getgenv().XyqwCustomColor.r, g = getgenv().XyqwCustomColor.g, b = getgenv().XyqwCustomColor.b}
     local hexInput, setSliders
     local function UpdateAll()
         preview.BackgroundColor3 = Color3.fromRGB(tempColor.r, tempColor.g, tempColor.b)
-        if hexInput then
-            hexInput.Text = string.format("#%02X%02X%02X", tempColor.r, tempColor.g, tempColor.b)
-        end
+        if hexInput then hexInput.Text = string.format("#%02X%02X%02X", tempColor.r, tempColor.g, tempColor.b) end
     end
 
     local function MakeSlider(label, yPos, channel)
@@ -2566,11 +4213,7 @@ local function ShowCustomColor()
             tempColor.r = r
             tempColor.g = g
             tempColor.b = b
-            if setSliders then
-                setSliders.R(r)
-                setSliders.G(g)
-                setSliders.B(b)
-            end
+            if setSliders then setSliders.R(r) setSliders.G(g) setSliders.B(b) end
         end
         UpdateAll()
     end)
@@ -2618,11 +4261,7 @@ local function ShowCustomColor()
             tempColor.r = preset.r
             tempColor.g = preset.g
             tempColor.b = preset.b
-            if setSliders then
-                setSliders.R(preset.r)
-                setSliders.G(preset.g)
-                setSliders.B(preset.b)
-            end
+            if setSliders then setSliders.R(preset.r) setSliders.G(preset.g) setSliders.B(preset.b) end
             UpdateAll()
         end)
     end
@@ -2641,14 +4280,8 @@ local function ShowCustomColor()
     resetBtn.Parent = frame
     resetBtn.AutoButtonColor = false
     resetBtn.MouseButton1Click:Connect(function()
-        tempColor.r = 255
-        tempColor.g = 0
-        tempColor.b = 0
-        if setSliders then
-            setSliders.R(255)
-            setSliders.G(0)
-            setSliders.B(0)
-        end
+        tempColor.r = 255 tempColor.g = 0 tempColor.b = 0
+        if setSliders then setSliders.R(255) setSliders.G(0) setSliders.B(0) end
         UpdateAll()
         ShowRobloxNotification(_("ColorReset"), 3)
     end)
@@ -2698,45 +4331,9 @@ local function ShowCustomColor()
         THEMES.Custom.DARK = Color3.fromRGB(math.floor(tempColor.r * 0.15), math.floor(tempColor.g * 0.15), math.floor(tempColor.b * 0.15))
         THEMES.Custom.BG = Color3.fromRGB(0, 0, 0)
         THEMES.Custom.TITLE = Color3.fromRGB(math.floor(tempColor.r * 0.08), math.floor(tempColor.g * 0.08), math.floor(tempColor.b * 0.08))
-        if getgenv().XyqwApplyTheme then
-            getgenv().XyqwApplyTheme("Custom")
-        end
+        if getgenv().XyqwApplyTheme then getgenv().XyqwApplyTheme("Custom") end
         ShowRobloxNotification("Custom Color applied!", 3)
         frame:Destroy()
-    end)
-
-    local colorResizeHandle = Instance.new("TextButton")
-    colorResizeHandle.Name = "ColorResizeHandle"
-    colorResizeHandle.Size = UDim2.new(0, 14, 0, 14)
-    colorResizeHandle.Position = UDim2.new(1, -14, 1, -14)
-    colorResizeHandle.BackgroundColor3 = RED_MAIN
-    colorResizeHandle.Text = ""
-    colorResizeHandle.BorderSizePixel = 0
-    colorResizeHandle.ZIndex = 52
-    colorResizeHandle.Parent = frame
-    colorResizeHandle.AutoButtonColor = false
-
-    local cResize = false
-    local cStart, cStartSize
-    colorResizeHandle.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            cResize = true
-            cStart = input.Position
-            cStartSize = frame.Size
-        end
-    end)
-    UserInputService.InputChanged:Connect(function(input)
-        if cResize and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-            local delta = input.Position - cStart
-            local newX = math.clamp(cStartSize.X.Offset + delta.X, 240, 500)
-            local newY = math.clamp(cStartSize.Y.Offset + delta.Y, 340, 600)
-            frame.Size = UDim2.new(0, newX, 0, newY)
-        end
-    end)
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            cResize = false
-        end
     end)
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
@@ -2747,6 +4344,7 @@ playerBtn.MouseButton1Click:Connect(ShowPlayerList)
 serverBtn.MouseButton1Click:Connect(ShowServerInfo)
 colorBtn.MouseButton1Click:Connect(ShowCustomColor)
 
+-- ========== THEME ==========
 local themeOrder = {"Red", "Blue", "Green", "Purple", "Pink", "Orange", "Cyan", "Yellow", "Lime", "Magenta", "White", "Rainbow", "Custom"}
 local themeIndex = 1
 for i, name in ipairs(themeOrder) do
@@ -2800,7 +4398,6 @@ local function ApplyTheme(themeName)
         entry.Star.TextColor3 = RED_MAIN
         entry.Star.BorderColor3 = RED_MAIN
         entry.AutoBtn.BorderColor3 = RED_MAIN
-        entry.HideBtn.BorderColor3 = RED_MAIN
         if getgenv().XyqwAutoExec[entry.Data.Name] then
             entry.AutoBtn.BackgroundColor3 = RED_MAIN
             entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -2808,28 +4405,17 @@ local function ApplyTheme(themeName)
             entry.AutoBtn.BackgroundColor3 = RED_BG
             entry.AutoBtn.TextColor3 = RED_MAIN
         end
-        entry.HideBtn.BackgroundColor3 = RED_BG
-        entry.HideBtn.TextColor3 = RED_MAIN
     end
 
-    removeTagsContainer.BackgroundColor3 = RED_BG
     removeTagsContainer.BorderColor3 = RED_MAIN
-    shareFavContainer.BackgroundColor3 = RED_BG
     shareFavContainer.BorderColor3 = RED_MAIN
-    shareRctContainer.BackgroundColor3 = RED_BG
     shareRctContainer.BorderColor3 = RED_MAIN
-    blacklistBtnContainer.BackgroundColor3 = RED_BG
-    blacklistBtnContainer.BorderColor3 = RED_MAIN
-    urlTestContainer.BackgroundColor3 = RED_BG
     urlTestContainer.BorderColor3 = RED_MAIN
-    settingsContainer.BackgroundColor3 = RED_BG
     settingsContainer.BorderColor3 = RED_MAIN
-    destroyContainer.BackgroundColor3 = RED_BG
     destroyContainer.BorderColor3 = RED_MAIN
     removeTagsBtn.TextColor3 = RED_MAIN
     shareFavBtn.TextColor3 = RED_MAIN
     shareRctBtn.TextColor3 = RED_MAIN
-    blacklistBtn.TextColor3 = RED_MAIN
     urlTestBtn.TextColor3 = RED_MAIN
     settingsBtn.TextColor3 = RED_MAIN
     destroyBtnMain.TextColor3 = RED_MAIN
@@ -2899,7 +4485,6 @@ task.spawn(function()
                 entry.Star.BorderColor3 = c
                 entry.Star.BackgroundColor3 = darkHue
                 entry.AutoBtn.BorderColor3 = c
-                entry.HideBtn.BorderColor3 = c
                 if getgenv().XyqwAutoExec[entry.Data.Name] then
                     entry.AutoBtn.BackgroundColor3 = c
                     entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -2907,20 +4492,16 @@ task.spawn(function()
                     entry.AutoBtn.BackgroundColor3 = darkHue
                     entry.AutoBtn.TextColor3 = c
                 end
-                entry.HideBtn.BackgroundColor3 = darkHue
-                entry.HideBtn.TextColor3 = c
             end
             removeTagsContainer.BorderColor3 = c
             shareFavContainer.BorderColor3 = c
             shareRctContainer.BorderColor3 = c
-            blacklistBtnContainer.BorderColor3 = c
             urlTestContainer.BorderColor3 = c
             settingsContainer.BorderColor3 = c
             destroyContainer.BorderColor3 = c
             removeTagsBtn.TextColor3 = c
             shareFavBtn.TextColor3 = c
             shareRctBtn.TextColor3 = c
-            blacklistBtn.TextColor3 = c
             urlTestBtn.TextColor3 = c
             settingsBtn.TextColor3 = c
             destroyBtnMain.TextColor3 = c
@@ -2940,6 +4521,7 @@ task.spawn(function()
     end
 end)
 
+-- ========== AUTO-HIDE KEYBIND ==========
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard then
@@ -2950,6 +4532,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
+-- ========== RESIZE ==========
 local resizeHandle = Instance.new("TextButton")
 resizeHandle.Name = "ResizeHandle"
 resizeHandle.Size = UDim2.new(0, 14, 0, 14)
@@ -3004,6 +4587,7 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
+-- ========== DRAG WINDOW ==========
 local dragging = false
 local dragStart, startPos
 titleBar.InputBegan:Connect(function(input)
@@ -3042,6 +4626,7 @@ closeButton.MouseButton1Click:Connect(function()
     dockButton.Visible = true
 end)
 
+-- ========== WELCOME ==========
 local function ShowWelcomeMessage()
     local frame = Instance.new("Frame")
     frame.Name = "WelcomeFrame"
@@ -3171,7 +4756,6 @@ local function ShowWelcomeMessage()
         "X   — Close\n" ..
         "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
         "Remove Tags      — remove tags\n" ..
-        "Manage Blacklist — hide scripts\n" ..
         "Test URLs       — check scripts\n" ..
         "Settings        — Auto-Hide bind\n" ..
         "Destroy XyqwHub — full unload\n" ..
@@ -3181,10 +4765,8 @@ local function ShowWelcomeMessage()
         "Share Recent Scripts\n" ..
         "\n─── SCRIPT BUTTONS ───\n" ..
         "▶ / Auto  — Auto-Execute\n" ..
-        "⊘ / Hide  — Add to Blacklist\n" ..
         "☆ / ★     — Favorites\n" ..
-        "\n─── BLACKLIST ───\n" ..
-        "Click × to unblacklist\n" ..
+        "Hold left edge to drag & reorder\n" ..
         "\n─── TOP BAR ───\n" ..
         "Executor | Username | FPS | Ping\n" ..
         "H — Hide / Show\n" ..
@@ -3195,7 +4777,7 @@ local function ShowWelcomeMessage()
         "Drag bottom-right corner\n" ..
         "\n─── FILES ───\n" ..
         "XyqwHub/FavScripts, RctScripts, CustomColor,\n" ..
-        "AutoExecute, Blacklist, Settings"
+        "AutoExecute, Settings (settings.json, order.json)"
     doc.ZIndex = 101
     doc.Parent = scroll
 
@@ -3211,6 +4793,7 @@ local function ShowWelcomeMessage()
     ver.Parent = frame
 end
 
+-- ========== ФИНАЛ ==========
 UpdateTabLayout()
 UpdateScriptButtonLayout()
 UpdateHeaderLayout()
@@ -3232,3 +4815,5 @@ task.spawn(function()
     if IsOwner() then ShowRobloxNotification(_("OwnerWelcome"), 5)
     elseif IsBeta() then ShowRobloxNotification(_("BetaWelcome"), 5) end
 end)
+
+
