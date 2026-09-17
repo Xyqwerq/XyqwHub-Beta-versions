@@ -3094,7 +3094,6 @@ local function ApplyOrderFromFile()
         local bi = orderMap[b.Data.Name] or 9999
         return ai < bi
     end)
-end
 local function CreateScriptButton(data)
     local container = Instance.new("Frame")
     container.Name = "Script_" .. data.Name
@@ -3805,4 +3804,1122 @@ end
 changelogButton.MouseButton1Click:Connect(ShowChangeLog)
 
 langButton.MouseButton1Click:Connect(function()
-    local langs = {"EN", "RU", "UK", "
+    local langs = {"EN", "RU", "UK", "BE", "KK"}
+    local idx = 1
+    for i, l in ipairs(langs) do if l == getgenv().XyqwLanguage then idx = i break end end
+    idx = idx + 1
+    if idx > #langs then idx = 1 end
+    getgenv().XyqwLanguage = langs[idx]
+    langButton.Text = getgenv().XyqwLanguage
+    searchBar.PlaceholderText = _("Search")
+    removeTagsBtn.Text = _("RemoveTags")
+    shareFavBtn.Text = _("ShareFav")
+    shareRctBtn.Text = _("ShareRct")
+    urlTestBtn.Text = _("TestURLs")
+    settingsBtn.Text = _("SettingsBtn")
+    resetOrderBtn.Text = _("ResetOrder")
+    destroyBtnMain.Text = _("Destroy")
+    ShowRobloxNotification(_("LangChanged"), 3)
+    UpdateHeaderLayout()
+end)
+
+-- ========== PLAYER LIST ==========
+local function ShowPlayerList()
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 350, 0, 400)
+    frame.Position = UDim2.new(0.5, -175, 0.5, -200)
+    frame.BackgroundColor3 = RED_BG
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = RED_MAIN
+    frame.ZIndex = 50
+    frame.Active = true
+    frame.Parent = screenGui
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 28)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.BackgroundTransparency = 1
+    title.TextColor3 = RED_MAIN
+    title.Text = _("PlayersTitle") .. " (" .. #Players:GetPlayers() .. ")"
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.ZIndex = 51
+    title.Parent = frame
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 30, 0, 28)
+    closeBtn.Position = UDim2.new(1, -35, 0, 2)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = RED_MAIN
+    closeBtn.TextScaled = true
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.ZIndex = 51
+    closeBtn.Parent = frame
+    closeBtn.AutoButtonColor = false
+
+    local scroll = Instance.new("ScrollingFrame")
+    scroll.Size = UDim2.new(1, -10, 1, -45)
+    scroll.Position = UDim2.new(0, 5, 0, 35)
+    scroll.BackgroundTransparency = 1
+    scroll.BorderSizePixel = 0
+    scroll.CanvasSize = UDim2.new(0, 0, 0, #Players:GetPlayers() * 25 + 10)
+    scroll.ScrollBarThickness = 4
+    scroll.ScrollBarImageColor3 = RED_MAIN
+    scroll.ZIndex = 51
+    scroll.Parent = frame
+
+    local yPos = 5
+    for _, plr in ipairs(Players:GetPlayers()) do
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, -10, 0, 22)
+        label.Position = UDim2.new(0, 5, 0, yPos)
+        label.BackgroundColor3 = RED_DARK
+        label.TextColor3 = RED_MAIN
+        label.Text = plr.Name .. " | ID: " .. plr.UserId
+        label.TextScaled = true
+        label.Font = Enum.Font.Gotham
+        label.BorderSizePixel = 1
+        label.BorderColor3 = RED_MAIN
+        label.ZIndex = 51
+        label.Parent = scroll
+        yPos = yPos + 25
+    end
+
+    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+end
+
+-- ========== SERVER INFO ==========
+local function ShowServerInfo()
+    local frame = Instance.new("Frame")
+    frame.Name = "ServerInfoFrame"
+    frame.Size = UDim2.new(0, 350, 0, 320)
+    frame.Position = UDim2.new(0.5, -175, 0.5, -160)
+    frame.BackgroundColor3 = RED_BG
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = RED_MAIN
+    frame.ZIndex = 50
+    frame.Active = true
+    frame.Parent = screenGui
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 28)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.BackgroundTransparency = 1
+    title.TextColor3 = RED_MAIN
+    title.Text = _("ServerTitle")
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.ZIndex = 51
+    title.Parent = frame
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 30, 0, 28)
+    closeBtn.Position = UDim2.new(1, -35, 0, 2)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = RED_MAIN
+    closeBtn.TextScaled = true
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.ZIndex = 51
+    closeBtn.Parent = frame
+    closeBtn.AutoButtonColor = false
+
+    local info = Instance.new("TextLabel")
+    info.Size = UDim2.new(1, -20, 0, 110)
+    info.Position = UDim2.new(0, 10, 0, 40)
+    info.BackgroundTransparency = 1
+    info.TextColor3 = RED_MAIN
+    info.TextWrapped = true
+    info.TextXAlignment = Enum.TextXAlignment.Left
+    info.TextYAlignment = Enum.TextYAlignment.Top
+    info.TextSize = 13
+    info.Font = Enum.Font.Gotham
+    info.Text = _("PlaceId") .. ": " .. game.PlaceId .. "\n" ..
+                 _("JobId") .. ": " .. game.JobId .. "\n" ..
+                 _("Players") .. ": " .. #Players:GetPlayers() .. "/" .. Players.MaxPlayers .. "\n" ..
+                 _("Creator") .. ": " .. game.CreatorId
+    info.ZIndex = 51
+    info.Parent = frame
+
+    local function GetServers()
+        local servers = {}
+        local ok, result = pcall(function()
+            return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"))
+        end)
+        if ok and result and result.data then
+            for _, srv in ipairs(result.data) do
+                if srv.playing and srv.playing < srv.maxPlayers and srv.id ~= game.JobId then
+                    table.insert(servers, srv)
+                end
+            end
+        end
+        return servers
+    end
+
+    local rejoinBtn = Instance.new("TextButton")
+    rejoinBtn.Size = UDim2.new(1, -20, 0, 30)
+    rejoinBtn.Position = UDim2.new(0, 10, 0, 158)
+    rejoinBtn.BackgroundColor3 = RED_DARK
+    rejoinBtn.TextColor3 = RED_MAIN
+    rejoinBtn.Text = _("Rejoin")
+    rejoinBtn.TextScaled = true
+    rejoinBtn.Font = Enum.Font.GothamBold
+    rejoinBtn.BorderSizePixel = 1
+    rejoinBtn.BorderColor3 = RED_MAIN
+    rejoinBtn.ZIndex = 51
+    rejoinBtn.Parent = frame
+    rejoinBtn.AutoButtonColor = false
+    rejoinBtn.MouseButton1Click:Connect(function()
+        ShowRobloxNotification("Rejoining...", 2)
+        task.wait(0.5)
+        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer) end)
+    end)
+
+    local hopBtn = Instance.new("TextButton")
+    hopBtn.Size = UDim2.new(0.5, -13, 0, 30)
+    hopBtn.Position = UDim2.new(0, 10, 0, 194)
+    hopBtn.BackgroundColor3 = RED_DARK
+    hopBtn.TextColor3 = RED_MAIN
+    hopBtn.Text = _("ServerHop")
+    hopBtn.TextScaled = true
+    hopBtn.Font = Enum.Font.GothamBold
+    hopBtn.BorderSizePixel = 1
+    hopBtn.BorderColor3 = RED_MAIN
+    hopBtn.ZIndex = 51
+    hopBtn.Parent = frame
+    hopBtn.AutoButtonColor = false
+    hopBtn.MouseButton1Click:Connect(function()
+        ShowRobloxNotification("Searching for server...", 3)
+        local servers = GetServers()
+        if #servers == 0 then ShowRobloxNotification("No servers found!", 3) return end
+        local target = servers[math.random(1, #servers)]
+        ShowRobloxNotification("Hopping...", 2)
+        task.wait(0.5)
+        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, target.id, Players.LocalPlayer) end)
+    end)
+
+    local smallBtn = Instance.new("TextButton")
+    smallBtn.Size = UDim2.new(0.5, -13, 0, 30)
+    smallBtn.Position = UDim2.new(0.5, 3, 0, 194)
+    smallBtn.BackgroundColor3 = RED_DARK
+    smallBtn.TextColor3 = RED_MAIN
+    smallBtn.Text = _("TPToSmall")
+    smallBtn.TextScaled = true
+    smallBtn.Font = Enum.Font.GothamBold
+    smallBtn.BorderSizePixel = 1
+    smallBtn.BorderColor3 = RED_MAIN
+    smallBtn.ZIndex = 51
+    smallBtn.Parent = frame
+    smallBtn.AutoButtonColor = false
+    smallBtn.MouseButton1Click:Connect(function()
+        ShowRobloxNotification("Searching for small server...", 3)
+        local servers = GetServers()
+        if #servers == 0 then ShowRobloxNotification("No servers found!", 3) return end
+        local best = servers[1]
+        for _, srv in ipairs(servers) do if srv.playing < best.playing then best = srv end end
+        ShowRobloxNotification("Teleporting to " .. best.playing .. " player server...", 3)
+        task.wait(0.5)
+        pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, best.id, Players.LocalPlayer) end)
+    end)
+
+    local copyBtn = Instance.new("TextButton")
+    copyBtn.Size = UDim2.new(1, -20, 0, 30)
+    copyBtn.Position = UDim2.new(0, 10, 0, 232)
+    copyBtn.BackgroundColor3 = RED_MAIN
+    copyBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    copyBtn.Text = _("CopyJobId")
+    copyBtn.TextScaled = true
+    copyBtn.Font = Enum.Font.GothamBold
+    copyBtn.BorderSizePixel = 0
+    copyBtn.ZIndex = 51
+    copyBtn.Parent = frame
+    copyBtn.AutoButtonColor = false
+    copyBtn.MouseButton1Click:Connect(function()
+        pcall(function() setclipboard(game.JobId) end)
+        ShowRobloxNotification(_("JobIdCopied"), 2)
+    end)
+
+    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+end
+
+-- ========== CUSTOM SCRIPT ==========
+local function ShowCustomScript()
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 350, 0, 175)
+    frame.Position = UDim2.new(0.5, -175, 0.5, -87)
+    frame.BackgroundColor3 = RED_BG
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = RED_MAIN
+    frame.ZIndex = 50
+    frame.Active = true
+    frame.Parent = screenGui
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 28)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.BackgroundTransparency = 1
+    title.TextColor3 = RED_MAIN
+    title.Text = _("CustomTitle")
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.ZIndex = 51
+    title.Parent = frame
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 30, 0, 28)
+    closeBtn.Position = UDim2.new(1, -35, 0, 2)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = RED_MAIN
+    closeBtn.TextScaled = true
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.ZIndex = 51
+    closeBtn.Parent = frame
+    closeBtn.AutoButtonColor = false
+
+    local input = Instance.new("TextBox")
+    input.Size = UDim2.new(1, -20, 0, 36)
+    input.Position = UDim2.new(0, 10, 0, 40)
+    input.BackgroundColor3 = RED_DARK
+    input.TextColor3 = RED_MAIN
+    input.PlaceholderText = _("CustomPlaceholder")
+    input.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+    input.Text = ""
+    input.TextSize = 12
+    input.Font = Enum.Font.Gotham
+    input.BorderSizePixel = 1
+    input.BorderColor3 = RED_MAIN
+    input.ZIndex = 51
+    input.Parent = frame
+
+    local runBtn = Instance.new("TextButton")
+    runBtn.Size = UDim2.new(1, -20, 0, 36)
+    runBtn.Position = UDim2.new(0, 10, 0, 100)
+    runBtn.BackgroundColor3 = RED_MAIN
+    runBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    runBtn.Text = _("RunCustom")
+    runBtn.TextScaled = true
+    runBtn.Font = Enum.Font.GothamBold
+    runBtn.BorderSizePixel = 0
+    runBtn.ZIndex = 51
+    runBtn.Parent = frame
+    runBtn.AutoButtonColor = false
+
+    local function ExtractURL(text)
+        if not text or text == "" then return nil end
+        text = text:gsub("^%s+", ""):gsub("%s+$", "")
+        local url = text:match('game:HttpGet%s*%(%s*["\']([^"\']+)["\']')
+        if url then return url end
+        if text:match("^https?://") then return text end
+        local quoted = text:match('^["\'](https?://[^"\']+)["\']$')
+        if quoted then return quoted end
+        return nil
+    end
+
+    runBtn.MouseButton1Click:Connect(function()
+        local url = ExtractURL(input.Text)
+        if not url then ShowRobloxNotification("Invalid URL!", 3) return end
+        local success, err = pcall(function() loadstring(game:HttpGet(url))() end)
+        if success then
+            ShowRobloxNotification("Custom - " .. _("ScriptExecuted"), 3)
+        else
+            ShowRobloxNotification("Custom - " .. _("Error"), 5)
+        end
+    end)
+
+    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+end
+
+-- ========== CUSTOM COLOR ==========
+local function ShowCustomColor()
+    local frame = Instance.new("Frame")
+    frame.Name = "CustomColorFrame"
+    frame.Size = UDim2.new(0, 280, 0, 380)
+    frame.Position = UDim2.new(0.5, -140, 0.5, -190)
+    frame.BackgroundColor3 = RED_BG
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = RED_MAIN
+    frame.ZIndex = 50
+    frame.Active = true
+    frame.ClipsDescendants = true
+    frame.Parent = screenGui
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -60, 0, 22)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.BackgroundTransparency = 1
+    title.TextColor3 = RED_MAIN
+    title.Text = _("CustomColorTitle")
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.ZIndex = 51
+    title.Parent = frame
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 24, 0, 22)
+    closeBtn.Position = UDim2.new(1, -28, 0, 4)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = RED_MAIN
+    closeBtn.TextScaled = true
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.ZIndex = 51
+    closeBtn.Parent = frame
+    closeBtn.AutoButtonColor = false
+
+    local preview = Instance.new("Frame")
+    preview.Size = UDim2.new(1, -20, 0, 36)
+    preview.Position = UDim2.new(0, 10, 0, 32)
+    preview.BackgroundColor3 = Color3.fromRGB(getgenv().XyqwCustomColor.r, getgenv().XyqwCustomColor.g, getgenv().XyqwCustomColor.b)
+    preview.BorderSizePixel = 2
+    preview.BorderColor3 = RED_MAIN
+    preview.ZIndex = 51
+    preview.Parent = frame
+
+    local tempColor = {r = getgenv().XyqwCustomColor.r, g = getgenv().XyqwCustomColor.g, b = getgenv().XyqwCustomColor.b}
+    local hexInput, setSliders
+    local function UpdateAll()
+        preview.BackgroundColor3 = Color3.fromRGB(tempColor.r, tempColor.g, tempColor.b)
+        if hexInput then hexInput.Text = string.format("#%02X%02X%02X", tempColor.r, tempColor.g, tempColor.b) end
+    end
+
+    local function MakeSlider(label, yPos, channel)
+        local lbl = Instance.new("TextLabel")
+        lbl.Size = UDim2.new(0, 20, 0, 18)
+        lbl.Position = UDim2.new(0, 10, 0, yPos)
+        lbl.BackgroundTransparency = 1
+        lbl.TextColor3 = RED_MAIN
+        lbl.Text = label
+        lbl.TextScaled = true
+        lbl.Font = Enum.Font.GothamBold
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+        lbl.ZIndex = 51
+        lbl.Parent = frame
+
+        local valLbl = Instance.new("TextLabel")
+        valLbl.Size = UDim2.new(0, 40, 0, 18)
+        valLbl.Position = UDim2.new(1, -50, 0, yPos)
+        valLbl.BackgroundTransparency = 1
+        valLbl.TextColor3 = RED_MAIN
+        valLbl.Text = tostring(tempColor[channel])
+        valLbl.TextScaled = true
+        valLbl.Font = Enum.Font.Gotham
+        valLbl.TextXAlignment = Enum.TextXAlignment.Right
+        valLbl.ZIndex = 51
+        valLbl.Parent = frame
+
+        local slider = Instance.new("Frame")
+        slider.Size = UDim2.new(1, -100, 0, 12)
+        slider.Position = UDim2.new(0, 35, 0, yPos + 3)
+        slider.BackgroundColor3 = RED_DARK
+        slider.BorderSizePixel = 1
+        slider.BorderColor3 = RED_MAIN
+        slider.ZIndex = 51
+        slider.Parent = frame
+
+        local fill = Instance.new("Frame")
+        fill.Size = UDim2.new(tempColor[channel] / 255, 0, 1, 0)
+        fill.BackgroundColor3 = RED_MAIN
+        fill.BorderSizePixel = 0
+        fill.ZIndex = 52
+        fill.Parent = slider
+
+        local drag = false
+        local function UpdateFromX(mouseX)
+            local rel = math.clamp((mouseX - slider.AbsolutePosition.X) / slider.AbsoluteSize.X, 0, 1)
+            local v = math.floor(rel * 255)
+            tempColor[channel] = v
+            fill.Size = UDim2.new(rel, 0, 1, 0)
+            valLbl.Text = tostring(v)
+            UpdateAll()
+        end
+
+        slider.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                drag = true
+                UpdateFromX(input.Position.X)
+            end
+        end)
+        UserInputService.InputChanged:Connect(function(input)
+            if drag and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                UpdateFromX(input.Position.X)
+            end
+        end)
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                drag = false
+            end
+        end)
+
+        return function(v)
+            tempColor[channel] = v
+            fill.Size = UDim2.new(v / 255, 0, 1, 0)
+            valLbl.Text = tostring(v)
+        end
+    end
+
+    setSliders = {
+        R = MakeSlider("R", 76, "r"),
+        G = MakeSlider("G", 100, "g"),
+        B = MakeSlider("B", 124, "b"),
+    }
+
+    local hexLbl = Instance.new("TextLabel")
+    hexLbl.Size = UDim2.new(0, 40, 0, 18)
+    hexLbl.Position = UDim2.new(0, 10, 0, 150)
+    hexLbl.BackgroundTransparency = 1
+    hexLbl.TextColor3 = RED_MAIN
+    hexLbl.Text = "HEX:"
+    hexLbl.TextScaled = true
+    hexLbl.Font = Enum.Font.GothamBold
+    hexLbl.TextXAlignment = Enum.TextXAlignment.Left
+    hexLbl.ZIndex = 51
+    hexLbl.Parent = frame
+
+    hexInput = Instance.new("TextBox")
+    hexInput.Size = UDim2.new(1, -60, 0, 22)
+    hexInput.Position = UDim2.new(0, 50, 0, 148)
+    hexInput.BackgroundColor3 = RED_DARK
+    hexInput.TextColor3 = RED_MAIN
+    hexInput.PlaceholderText = "#FF0000"
+    hexInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+    hexInput.Text = string.format("#%02X%02X%02X", tempColor.r, tempColor.g, tempColor.b)
+    hexInput.TextSize = 12
+    hexInput.Font = Enum.Font.Gotham
+    hexInput.ClearTextOnFocus = false
+    hexInput.BorderSizePixel = 1
+    hexInput.BorderColor3 = RED_MAIN
+    hexInput.ZIndex = 51
+    hexInput.Parent = frame
+
+    local function ParseColor(text)
+        if not text then return nil end
+        text = text:gsub("^%s+", ""):gsub("%s+$", "")
+        local r, g, b = text:match("^[Rr][Gg][Bb]%s*%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)$")
+        if r and g and b then
+            return math.clamp(tonumber(r), 0, 255), math.clamp(tonumber(g), 0, 255), math.clamp(tonumber(b), 0, 255)
+        end
+        local hex = text:gsub("#", ""):gsub("%s", "")
+        if #hex == 6 then
+            local hr = tonumber(hex:sub(1, 2), 16)
+            local hg = tonumber(hex:sub(3, 4), 16)
+            local hb = tonumber(hex:sub(5, 6), 16)
+            if hr and hg and hb then return hr, hg, hb end
+        end
+        return nil
+    end
+
+    hexInput.FocusLost:Connect(function()
+        local r, g, b = ParseColor(hexInput.Text)
+        if r and g and b then
+            tempColor.r = r
+            tempColor.g = g
+            tempColor.b = b
+            if setSliders then setSliders.R(r) setSliders.G(g) setSliders.B(b) end
+        end
+        UpdateAll()
+    end)
+
+    local presetLbl = Instance.new("TextLabel")
+    presetLbl.Size = UDim2.new(1, -20, 0, 14)
+    presetLbl.Position = UDim2.new(0, 10, 0, 178)
+    presetLbl.BackgroundTransparency = 1
+    presetLbl.TextColor3 = RED_MAIN
+    presetLbl.Text = _("Presets") .. ":"
+    presetLbl.TextScaled = true
+    presetLbl.Font = Enum.Font.GothamBold
+    presetLbl.TextXAlignment = Enum.TextXAlignment.Left
+    presetLbl.ZIndex = 51
+    presetLbl.Parent = frame
+
+    local presets = {
+        {name = "Cyan", r = 0, g = 255, b = 255},
+        {name = "Pink", r = 255, g = 20, b = 147},
+        {name = "Orange", r = 255, g = 140, b = 0},
+        {name = "Lime", r = 50, g = 255, b = 50},
+        {name = "Gold", r = 255, g = 215, b = 0},
+        {name = "White", r = 255, g = 255, b = 255},
+    }
+
+    local presetY = 196
+    local presetW = 80
+    for i, preset in ipairs(presets) do
+        local col = (i - 1) % 2
+        local row = math.floor((i - 1) / 2)
+        local pBtn = Instance.new("TextButton")
+        pBtn.Size = UDim2.new(0, presetW, 0, 22)
+        pBtn.Position = UDim2.new(0, 10 + col * (presetW + 5), 0, presetY + row * 26)
+        pBtn.BackgroundColor3 = Color3.fromRGB(preset.r, preset.g, preset.b)
+        pBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+        pBtn.Text = preset.name
+        pBtn.TextScaled = true
+        pBtn.Font = Enum.Font.GothamBold
+        pBtn.BorderSizePixel = 1
+        pBtn.BorderColor3 = RED_MAIN
+        pBtn.ZIndex = 51
+        pBtn.Parent = frame
+        pBtn.AutoButtonColor = false
+        pBtn.MouseButton1Click:Connect(function()
+            tempColor.r = preset.r
+            tempColor.g = preset.g
+            tempColor.b = preset.b
+            if setSliders then setSliders.R(preset.r) setSliders.G(preset.g) setSliders.B(preset.b) end
+            UpdateAll()
+        end)
+    end
+
+    local resetBtn = Instance.new("TextButton")
+    resetBtn.Size = UDim2.new(0.5, -13, 0, 24)
+    resetBtn.Position = UDim2.new(0, 10, 0, 278)
+    resetBtn.BackgroundColor3 = RED_DARK
+    resetBtn.TextColor3 = RED_MAIN
+    resetBtn.Text = _("Reset")
+    resetBtn.TextScaled = true
+    resetBtn.Font = Enum.Font.GothamBold
+    resetBtn.BorderSizePixel = 1
+    resetBtn.BorderColor3 = RED_MAIN
+    resetBtn.ZIndex = 51
+    resetBtn.Parent = frame
+    resetBtn.AutoButtonColor = false
+    resetBtn.MouseButton1Click:Connect(function()
+        tempColor.r = 255 tempColor.g = 0 tempColor.b = 0
+        if setSliders then setSliders.R(255) setSliders.G(0) setSliders.B(0) end
+        UpdateAll()
+        ShowRobloxNotification(_("ColorReset"), 3)
+    end)
+
+    local shareColorBtn = Instance.new("TextButton")
+    shareColorBtn.Size = UDim2.new(0.5, -13, 0, 24)
+    shareColorBtn.Position = UDim2.new(0.5, 3, 0, 278)
+    shareColorBtn.BackgroundColor3 = RED_DARK
+    shareColorBtn.TextColor3 = RED_MAIN
+    shareColorBtn.Text = _("ShareColor")
+    shareColorBtn.TextScaled = true
+    shareColorBtn.Font = Enum.Font.GothamBold
+    shareColorBtn.BorderSizePixel = 1
+    shareColorBtn.BorderColor3 = RED_MAIN
+    shareColorBtn.ZIndex = 51
+    shareColorBtn.Parent = frame
+    shareColorBtn.AutoButtonColor = false
+    shareColorBtn.MouseButton1Click:Connect(function()
+        local hex = string.format("#%02X%02X%02X", tempColor.r, tempColor.g, tempColor.b)
+        local text = "XyqwHub - My Custom Color: " .. hex
+        pcall(function() setclipboard(text) end)
+        ShowRobloxNotification(_("ColorShared"), 3)
+    end)
+
+    local applyBtn = Instance.new("TextButton")
+    applyBtn.Size = UDim2.new(1, -20, 0, 28)
+    applyBtn.Position = UDim2.new(0, 10, 0, 308)
+    applyBtn.BackgroundColor3 = RED_MAIN
+    applyBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    applyBtn.Text = _("Apply")
+    applyBtn.TextScaled = true
+    applyBtn.Font = Enum.Font.GothamBold
+    applyBtn.BorderSizePixel = 0
+    applyBtn.ZIndex = 51
+    applyBtn.Parent = frame
+    applyBtn.AutoButtonColor = false
+
+    applyBtn.MouseButton1Click:Connect(function()
+        getgenv().XyqwCustomColor = {
+            r = tempColor.r, g = tempColor.g, b = tempColor.b,
+            dr = math.floor(tempColor.r * 0.15),
+            dg = math.floor(tempColor.g * 0.15),
+            db = math.floor(tempColor.b * 0.15),
+        }
+        SaveTable(CUSTOM_COLOR_FILE, getgenv().XyqwCustomColor)
+        THEMES.Custom.MAIN = Color3.fromRGB(tempColor.r, tempColor.g, tempColor.b)
+        THEMES.Custom.DARK = Color3.fromRGB(math.floor(tempColor.r * 0.15), math.floor(tempColor.g * 0.15), math.floor(tempColor.b * 0.15))
+        THEMES.Custom.BG = Color3.fromRGB(0, 0, 0)
+        THEMES.Custom.TITLE = Color3.fromRGB(math.floor(tempColor.r * 0.08), math.floor(tempColor.g * 0.08), math.floor(tempColor.b * 0.08))
+        if getgenv().XyqwApplyTheme then getgenv().XyqwApplyTheme("Custom") end
+        ShowRobloxNotification("Custom Color applied!", 3)
+        frame:Destroy()
+    end)
+
+    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+end
+
+customBtn.MouseButton1Click:Connect(ShowCustomScript)
+playerBtn.MouseButton1Click:Connect(ShowPlayerList)
+serverBtn.MouseButton1Click:Connect(ShowServerInfo)
+colorBtn.MouseButton1Click:Connect(ShowCustomColor)
+
+-- ========== THEME ==========
+local themeOrder = {"Red", "Blue", "Green", "Purple", "Pink", "Orange", "Cyan", "Yellow", "Lime", "Magenta", "White", "Rainbow", "Custom"}
+local themeIndex = 1
+for i, name in ipairs(themeOrder) do
+    if name == getgenv().XyqwTheme then themeIndex = i break end
+end
+
+local function ApplyTheme(themeName)
+    getgenv().XyqwTheme = themeName
+    if themeName == "Custom" then
+        local cc = getgenv().XyqwCustomColor
+        THEMES.Custom.MAIN = Color3.fromRGB(cc.r, cc.g, cc.b)
+        THEMES.Custom.DARK = Color3.fromRGB(cc.dr, cc.dg, cc.db)
+        THEMES.Custom.BG = Color3.fromRGB(0, 0, 0)
+        THEMES.Custom.TITLE = Color3.fromRGB(math.floor(cc.r * 0.08), math.floor(cc.g * 0.08), math.floor(cc.b * 0.08))
+    end
+    local t = THEMES[themeName]
+    RED_MAIN = t.MAIN RED_DARK = t.DARK RED_BG = t.BG RED_TITLE = t.TITLE
+
+    mainFrame.BackgroundColor3 = RED_BG
+    mainFrame.BorderColor3 = RED_MAIN
+    titleBar.BackgroundColor3 = RED_TITLE
+    titleLabel.TextColor3 = RED_MAIN
+
+    for _, btn in ipairs({closeButton, langButton, playerBtn, serverBtn, customBtn, changelogButton, themeBtn, colorBtn, sortBtn}) do
+        btn.BackgroundColor3 = RED_DARK
+        btn.TextColor3 = RED_MAIN
+        btn.BorderColor3 = RED_MAIN
+    end
+
+    searchBar.BackgroundColor3 = RED_DARK
+    searchBar.TextColor3 = RED_MAIN
+    searchBar.BorderColor3 = RED_MAIN
+    scrollFrame.ScrollBarImageColor3 = RED_MAIN
+
+    for n, btn in pairs(tabButtons) do
+        if n == currentTab then
+            btn.BackgroundColor3 = RED_MAIN
+            btn.TextColor3 = Color3.fromRGB(0, 0, 0)
+        else
+            btn.BackgroundColor3 = RED_DARK
+            btn.TextColor3 = RED_MAIN
+        end
+        btn.BorderColor3 = RED_MAIN
+    end
+
+    for _, entry in ipairs(buttons) do
+        entry.Container.BackgroundColor3 = RED_BG
+        entry.Container.BorderColor3 = RED_MAIN
+        entry.Btn.TextColor3 = RED_MAIN
+        entry.Star.BackgroundColor3 = RED_BG
+        entry.Star.TextColor3 = RED_MAIN
+        entry.Star.BorderColor3 = RED_MAIN
+        entry.AutoBtn.BorderColor3 = RED_MAIN
+        if getgenv().XyqwAutoExec[entry.Data.Name] then
+            entry.AutoBtn.BackgroundColor3 = RED_MAIN
+            entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+        else
+            entry.AutoBtn.BackgroundColor3 = RED_BG
+            entry.AutoBtn.TextColor3 = RED_MAIN
+        end
+    end
+
+    removeTagsContainer.BorderColor3 = RED_MAIN
+    shareFavContainer.BorderColor3 = RED_MAIN
+    shareRctContainer.BorderColor3 = RED_MAIN
+    urlTestContainer.BorderColor3 = RED_MAIN
+    settingsContainer.BorderColor3 = RED_MAIN
+    resetOrderContainer.BorderColor3 = RED_MAIN
+    destroyContainer.BorderColor3 = RED_MAIN
+    removeTagsBtn.TextColor3 = RED_MAIN
+    shareFavBtn.TextColor3 = RED_MAIN
+    shareRctBtn.TextColor3 = RED_MAIN
+    urlTestBtn.TextColor3 = RED_MAIN
+    settingsBtn.TextColor3 = RED_MAIN
+    resetOrderBtn.TextColor3 = RED_MAIN
+    destroyBtnMain.TextColor3 = RED_MAIN
+
+    topBar.BackgroundColor3 = RED_BG
+    topBar.BorderColor3 = RED_MAIN
+    topBarText.TextColor3 = RED_MAIN
+    hideTopBtn.BackgroundColor3 = RED_DARK
+    hideTopBtn.TextColor3 = RED_MAIN
+    hideTopBtn.BorderColor3 = RED_MAIN
+
+    dockButton.BackgroundColor3 = RED_BG
+    dockButton.TextColor3 = RED_MAIN
+    dockButton.BorderColor3 = RED_MAIN
+
+    local sl = mainFrame:FindFirstChild("SizeLabel")
+    if sl then sl.TextColor3 = RED_MAIN end
+    local rh = mainFrame:FindFirstChild("ResizeHandle")
+    if rh then rh.BackgroundColor3 = RED_MAIN end
+
+    if themeName ~= "Rainbow" then ShowRobloxNotification("Theme: " .. themeName, 2) end
+end
+
+getgenv().XyqwApplyTheme = ApplyTheme
+
+themeBtn.MouseButton1Click:Connect(function()
+    themeIndex = themeIndex + 1
+    if themeIndex > #themeOrder then themeIndex = 1 end
+    ApplyTheme(themeOrder[themeIndex])
+    if getgenv().XyqwTheme == "Rainbow" then ShowRobloxNotification("Theme: Rainbow", 2) end
+end)
+
+task.spawn(function()
+    local hue = 0
+    while screenGui.Parent do
+        if getgenv().XyqwTheme == "Rainbow" then
+            hue = (hue + 0.008) % 1
+            local c = Color3.fromHSV(hue, 1, 1)
+            local darkHue = Color3.fromHSV(hue, 1, 0.18)
+            mainFrame.BorderColor3 = c
+            titleBar.BackgroundColor3 = Color3.fromHSV(hue, 0.8, 0.08)
+            titleLabel.TextColor3 = c
+            for _, btn in ipairs({closeButton, langButton, playerBtn, serverBtn, customBtn, changelogButton, themeBtn, colorBtn, sortBtn}) do
+                btn.BackgroundColor3 = darkHue
+                btn.TextColor3 = c
+                btn.BorderColor3 = c
+            end
+            searchBar.TextColor3 = c
+            searchBar.BorderColor3 = c
+            searchBar.BackgroundColor3 = darkHue
+            scrollFrame.ScrollBarImageColor3 = c
+            for n, btn in pairs(tabButtons) do
+                if n == currentTab then
+                    btn.BackgroundColor3 = c
+                    btn.TextColor3 = Color3.fromRGB(0, 0, 0)
+                    btn.BorderColor3 = c
+                else
+                    btn.BackgroundColor3 = darkHue
+                    btn.TextColor3 = c
+                    btn.BorderColor3 = c
+                end
+            end
+            for _, entry in ipairs(buttons) do
+                entry.Container.BorderColor3 = c
+                entry.Btn.TextColor3 = c
+                entry.Star.TextColor3 = c
+                entry.Star.BorderColor3 = c
+                entry.Star.BackgroundColor3 = darkHue
+                entry.AutoBtn.BorderColor3 = c
+                if getgenv().XyqwAutoExec[entry.Data.Name] then
+                    entry.AutoBtn.BackgroundColor3 = c
+                    entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+                else
+                    entry.AutoBtn.BackgroundColor3 = darkHue
+                    entry.AutoBtn.TextColor3 = c
+                end
+            end
+            removeTagsContainer.BorderColor3 = c
+            shareFavContainer.BorderColor3 = c
+            shareRctContainer.BorderColor3 = c
+            urlTestContainer.BorderColor3 = c
+            settingsContainer.BorderColor3 = c
+            resetOrderContainer.BorderColor3 = c
+            destroyContainer.BorderColor3 = c
+            removeTagsBtn.TextColor3 = c
+            shareFavBtn.TextColor3 = c
+            shareRctBtn.TextColor3 = c
+            urlTestBtn.TextColor3 = c
+            settingsBtn.TextColor3 = c
+            resetOrderBtn.TextColor3 = c
+            destroyBtnMain.TextColor3 = c
+            topBar.BorderColor3 = c
+            topBarText.TextColor3 = c
+            hideTopBtn.BackgroundColor3 = darkHue
+            hideTopBtn.TextColor3 = c
+            hideTopBtn.BorderColor3 = c
+            dockButton.TextColor3 = c
+            dockButton.BorderColor3 = c
+            local sl = mainFrame:FindFirstChild("SizeLabel")
+            if sl then sl.TextColor3 = c end
+            local rh = mainFrame:FindFirstChild("ResizeHandle")
+            if rh then rh.BackgroundColor3 = c end
+        end
+        task.wait(0.05)
+    end
+end)
+
+-- ========== AUTO-HIDE KEYBIND ==========
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.UserInputType == Enum.UserInputType.Keyboard then
+        if input.KeyCode.Name == getgenv().XyqwSettings.autoHideBind then
+            mainFrame.Visible = not mainFrame.Visible
+            if mainFrame.Visible then dockButton.Visible = false end
+        end
+    end
+end)
+
+-- ========== RESIZE ==========
+local resizeHandle = Instance.new("TextButton")
+resizeHandle.Name = "ResizeHandle"
+resizeHandle.Size = UDim2.new(0, 14, 0, 14)
+resizeHandle.Position = UDim2.new(1, -14, 1, -14)
+resizeHandle.BackgroundColor3 = RED_MAIN
+resizeHandle.Text = ""
+resizeHandle.BorderSizePixel = 0
+resizeHandle.ZIndex = 10
+resizeHandle.Parent = mainFrame
+resizeHandle.AutoButtonColor = false
+
+local sizeLabel = Instance.new("TextLabel")
+sizeLabel.Name = "SizeLabel"
+sizeLabel.Size = UDim2.new(0, 70, 0, 14)
+sizeLabel.Position = UDim2.new(1, -88, 1, -16)
+sizeLabel.BackgroundTransparency = 1
+sizeLabel.TextColor3 = RED_MAIN
+sizeLabel.Text = "280 x 340"
+sizeLabel.TextSize = 10
+sizeLabel.Font = Enum.Font.Gotham
+sizeLabel.TextXAlignment = Enum.TextXAlignment.Right
+sizeLabel.ZIndex = 10
+sizeLabel.Parent = mainFrame
+
+local resizing = false
+local resizeStart, resizeStartSize
+
+resizeHandle.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        resizing = true
+        resizeStart = input.Position
+        resizeStartSize = mainFrame.Size
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if resizing and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - resizeStart
+        local newX = math.clamp(resizeStartSize.X.Offset + delta.X, 280, 900)
+        local newY = math.clamp(resizeStartSize.Y.Offset + delta.Y, 340, 1000)
+        mainFrame.Size = UDim2.new(0, newX, 0, newY)
+        sizeLabel.Text = math.floor(newX) .. " x " .. math.floor(newY)
+        UpdateTabLayout()
+        UpdateScriptButtonLayout()
+        UpdateHeaderLayout()
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        resizing = false
+    end
+end)
+
+-- ========== DRAG WINDOW ==========
+local dragging = false
+local dragStart, startPos
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        local mousePos = input.Position
+        local function IsOverButton(btn)
+            if not btn then return false end
+            local p = btn.AbsolutePosition
+            local s = btn.AbsoluteSize
+            return mousePos.X >= p.X and mousePos.X <= p.X + s.X and mousePos.Y >= p.Y and mousePos.Y <= p.Y + s.Y
+        end
+        if IsOverButton(changelogButton) or IsOverButton(langButton) or IsOverButton(closeButton)
+           or IsOverButton(themeBtn) or IsOverButton(customBtn) or IsOverButton(playerBtn) or IsOverButton(serverBtn)
+           or IsOverButton(colorBtn) then
+            return
+        end
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+    end
+end)
+titleBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    mainFrame.Visible = false
+    dockButton.Visible = true
+end)
+
+-- ========== WELCOME ==========
+local function ShowWelcomeMessage()
+    local frame = Instance.new("Frame")
+    frame.Name = "WelcomeFrame"
+    frame.Size = UDim2.new(0, 340, 0, 340)
+    frame.Position = UDim2.new(0.5, -170, 0.5, -170)
+    frame.BackgroundColor3 = RED_BG
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = RED_MAIN
+    frame.ZIndex = 100
+    frame.Active = true
+    frame.Parent = screenGui
+
+    local blocker = Instance.new("TextButton")
+    blocker.Size = UDim2.new(1, 0, 1, 0)
+    blocker.BackgroundTransparency = 1
+    blocker.Text = ""
+    blocker.Active = true
+    blocker.AutoButtonColor = false
+    blocker.ZIndex = 100
+    blocker.Parent = frame
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 22)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.BackgroundTransparency = 1
+    title.TextColor3 = RED_MAIN
+    title.Text = _("WelcomeTitle")
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.ZIndex = 101
+    title.Parent = frame
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 26, 0, 22)
+    closeBtn.Position = UDim2.new(1, -31, 0, 4)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = RED_MAIN
+    closeBtn.TextScaled = true
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.ZIndex = 102
+    closeBtn.Parent = frame
+    closeBtn.AutoButtonColor = false
+    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+
+    local shareBtn = Instance.new("TextButton")
+    shareBtn.Size = UDim2.new(1, -20, 0, 24)
+    shareBtn.Position = UDim2.new(0, 10, 0, 28)
+    shareBtn.BackgroundColor3 = RED_DARK
+    shareBtn.TextColor3 = RED_MAIN
+    shareBtn.Text = _("ShareHub")
+    shareBtn.TextScaled = true
+    shareBtn.Font = Enum.Font.GothamBold
+    shareBtn.BorderSizePixel = 1
+    shareBtn.BorderColor3 = RED_MAIN
+    shareBtn.ZIndex = 101
+    shareBtn.Parent = frame
+    shareBtn.AutoButtonColor = false
+    shareBtn.MouseButton1Click:Connect(function()
+        local ls = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Xyqwerq/XyqwHub-Beta-versions/main/main.lua"))()'
+        pcall(function() setclipboard(ls) end)
+        ShowRobloxNotification(_("LoadstringCopied"), 4)
+    end)
+
+    local tiktok = Instance.new("TextLabel")
+    tiktok.Size = UDim2.new(1, -10, 0, 16)
+    tiktok.Position = UDim2.new(0, 5, 0, 58)
+    tiktok.BackgroundTransparency = 1
+    tiktok.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tiktok.Text = "TikTok: xyqwerq.tvink"
+    tiktok.TextScaled = true
+    tiktok.Font = Enum.Font.Gotham
+    tiktok.ZIndex = 101
+    tiktok.Parent = frame
+
+    local tg = Instance.new("TextLabel")
+    tg.Size = UDim2.new(1, -10, 0, 16)
+    tg.Position = UDim2.new(0, 5, 0, 76)
+    tg.BackgroundTransparency = 1
+    tg.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tg.Text = "Telegram: t.me/xyqwsquad"
+    tg.TextScaled = true
+    tg.Font = Enum.Font.Gotham
+    tg.ZIndex = 101
+    tg.Parent = frame
+
+    local dc = Instance.new("TextLabel")
+    dc.Size = UDim2.new(1, -10, 0, 16)
+    dc.Position = UDim2.new(0, 5, 0, 94)
+    dc.BackgroundTransparency = 1
+    dc.TextColor3 = Color3.fromRGB(255, 255, 255)
+    dc.Text = "Discord: xyqwerqyt"
+    dc.TextScaled = true
+    dc.Font = Enum.Font.Gotham
+    dc.ZIndex = 101
+    dc.Parent = frame
+
+    local scroll = Instance.new("ScrollingFrame")
+    scroll.Size = UDim2.new(1, -10, 1, -150)
+    scroll.Position = UDim2.new(0, 5, 0, 116)
+    scroll.BackgroundTransparency = 1
+    scroll.BorderSizePixel = 0
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 620)
+    scroll.ScrollBarThickness = 4
+    scroll.ScrollBarImageColor3 = RED_MAIN
+    scroll.ZIndex = 101
+    scroll.Parent = frame
+
+    local doc = Instance.new("TextLabel")
+    doc.Size = UDim2.new(1, -10, 0, 610)
+    doc.Position = UDim2.new(0, 5, 0, 0)
+    doc.BackgroundTransparency = 1
+    doc.TextColor3 = RED_MAIN
+    doc.TextWrapped = true
+    doc.TextXAlignment = Enum.TextXAlignment.Left
+    doc.TextYAlignment = Enum.TextYAlignment.Top
+    doc.TextSize = 10
+    doc.Font = Enum.Font.Gotham
+    doc.Text = "─── TITLE BAR ───\n" ..
+        "Th  — Theme\n" ..
+        "CC  — Custom Color\n" ..
+        "CL  — ChangeLog\n" ..
+        "C   — Custom Script\n" ..
+        "P   — Players List\n" ..
+        "S   — Server Info\n" ..
+        "EN/RU/UK/BE/KK — Languages\n" ..
+        "X   — Close\n" ..
+        "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
+        "Remove Tags      — remove tags\n" ..
+        "Test URLs       — check scripts\n" ..
+        "Settings        — Auto-Hide bind\n" ..
+        "Reset Order     — restore default order\n" ..
+        "Destroy XyqwHub — full unload\n" ..
+        "\n─── Fav TAB ───\n" ..
+        "Share Favorite Scripts\n" ..
+        "\n─── Rct TAB ───\n" ..
+        "Share Recent Scripts\n" ..
+        "\n─── SCRIPT BUTTONS ───\n" ..
+        "▶ / Auto  — Auto-Execute\n" ..
+        "☆ / ★     — Favorites\n" ..
+        "Hold 0.35s to drag & reorder\n" ..
+        "\n─── TOP BAR ───\n" ..
+        "Executor | Username | FPS | Ping\n" ..
+        "H — Hide / Show\n" ..
+        "\n─── LANGUAGES ───\n" ..
+        "EN, RU, UK, BE, KK\n" ..
+        "Click EN/RU to cycle\n" ..
+        "\n─── RESIZE ───\n" ..
+        "Drag bottom-right corner\n" ..
+        "\n─── FILES ───\n" ..
+        "XyqwHub/FavScripts, RctScripts, CustomColor,\n" ..
+        "AutoExecute, Settings (settings.json, order.json)"
+    doc.ZIndex = 101
+    doc.Parent = scroll
+
+    local ver = Instance.new("TextLabel")
+    ver.Size = UDim2.new(1, -10, 0, 16)
+    ver.Position = UDim2.new(0, 5, 1, -20)
+    ver.BackgroundTransparency = 1
+    ver.TextColor3 = Color3.fromRGB(150, 150, 150)
+    ver.Text = "Version: " .. VERSION .. "  |  " .. _("ClickXToClose")
+    ver.TextScaled = true
+    ver.Font = Enum.Font.Gotham
+    ver.ZIndex = 101
+    ver.Parent = frame
+end
+
+-- ========== ФИНАЛ ==========
+UpdateTabLayout()
+UpdateScriptButtonLayout()
+UpdateHeaderLayout()
+SwitchTab("All")
+
+task.spawn(function()
+    task.wait(0.5)
+    ShowRobloxNotification("XyqwHub Loaded!", 4)
+    print("[XyqwHub] XyqwHub Loaded! Version: " .. VERSION)
+end)
+
+task.spawn(function()
+    task.wait(1.2)
+    ShowWelcomeMessage()
+end)
+
+task.spawn(function()
+    task.wait(2.5)
+    if IsOwner() then ShowRobloxNotification(_("OwnerWelcome"), 5)
+    elseif IsBeta() then ShowRobloxNotification(_("BetaWelcome"), 5) end
+end)
