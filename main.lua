@@ -196,7 +196,7 @@ Version 6.3
 - Removed Blacklist completely (button, window, files, checks)
 - Fixed header layout at startup (buttons no longer shift)
 - Added smooth animations (hover, open/close, color transitions)
-- Added drag & drop for script buttons (reorder by holding left edge)
+- Added drag & drop for script buttons (hold 0.35s to reorder)
 - Script order is now saved to Settings/order.json
 - Updated welcome message with new controls
 - Full changelog restored for all languages
@@ -618,7 +618,7 @@ Version 1.0
 - Blacklist удалён полностью (кнопка, окно, файлы, проверки)
 - Фикс заголовка при запуске (кнопки больше не съезжают)
 - Добавлены плавные анимации (hover, открытие/закрытие, смена цвета)
-- Добавлено перетаскивание кнопок скриптов (зажми левый край)
+- Добавлено перетаскивание кнопок скриптов (зажми 0.35 сек)
 - Порядок скриптов сохраняется в Settings/order.json
 - Обновлено приветственное окно с новым описанием
 - Полный ченджлог восстановлен для всех языков
@@ -849,7 +849,8 @@ Version 1.0
 - Фикс размера текста (меньше, не растянут)
 - Добавлен UIStroke glow
 
-========================================Версия 3.2
+========================================
+Версия 3.2
 ========================================
 - Возвращена анимация градиента
 - Уменьшен размер текста
@@ -1038,7 +1039,7 @@ Version 1.0
 - Blacklist видалено повністю (кнопка, вікно, файли, перевірки)
 - Фікс заголовка при запуску (кнопки більше не з'їжджають)
 - Додано плавні анімації (hover, відкриття/закриття, зміна кольору)
-- Додано перетягування кнопок скриптів (тримай лівий край)
+- Додано перетягування кнопок скриптів (тримай 0.35 сек)
 - Порядок скриптів зберігається у Settings/order.json
 - Оновлено вітальне вікно з новим описом
 - Повний журнал відновлено для всіх мов
@@ -1459,7 +1460,7 @@ Version 1.0
 - Blacklist выдалены цалкам (кнопка, акно, файлы, праверкі)
 - Фікс загалоўка пры запуску (кнопкі больш не з'язджаюць)
 - Дададзены плаўныя анімацыі (hover, адкрыццё/закрыццё, змена колеру)
-- Дададзена перацягванне кнопак скрыптаў (трымай левы край)
+- Дададзена перацягванне кнопак скрыптаў (трымай 0.35 сек)
 - Парадак скрыптаў захоўваецца ў Settings/order.json
 - Абноўлена прывітальнае акно з новым апісаннем
 - Поўны чэйнджлог адноўлены для ўсіх моў
@@ -1880,7 +1881,7 @@ Version 1.0
 - Blacklist толығымен жойылды (батырма, терезе, файлдар, тексерулер)
 - Іске қосу кезінде тақырып түзетілді (батырмалар енді жылжымайды)
 - Тегіс анимациялар қосылды (hover, ашу/жабу, түс ауысуы)
-- Скрипт батырмаларын сүйреу қосылды (сол жақ шетінен ұстаңыз)
+- Скрипт батырмаларын сүйреу қосылды (0.35 сек ұстаңыз)
 - Скрипт реті Settings/order.json файлына сақталады
 - Қош келу терезесі жаңа сипаттамамен жаңартылды
 - Барлық тілдер үшін толық өзгерістер қалпына келтірілді
@@ -2267,7 +2268,6 @@ Version 1.0
 - FakeVR, WallHop]],
     },
 }
-
 local function _(key)
     local lang = getgenv().XyqwLanguage or "EN"
     return LANG[lang][key] or LANG.EN[key] or key
@@ -2524,7 +2524,7 @@ local function GetExecutorName()
         return "Unknown"
     end)
     return ok and name or "Unknown"
-    end
+end
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "XyqwHubGui"
 screenGui.ResetOnSpawn = false
@@ -3044,7 +3044,7 @@ local function ApplyOrderFromFile()
         local bi = orderMap[b.Data.Name] or 9999
         return ai < bi
     end)
-    end
+end
 local function CreateScriptButton(data)
     local container = Instance.new("Frame")
     container.Name = "Script_" .. data.Name
@@ -3072,7 +3072,7 @@ local function CreateScriptButton(data)
     btn.TextColor3 = RED_MAIN
     btn.Text = data.Name
     btn.TextScaled = false
-    btn.TextSize = 12
+    btn.TextSize = 17
     btn.Font = Enum.Font.GothamBold
     btn.TextXAlignment = Enum.TextXAlignment.Left
     btn.TextTruncate = Enum.TextTruncate.AtEnd
@@ -3185,14 +3185,20 @@ local function CreateScriptButton(data)
     local dragStart = nil
     local dragging = false
     local originalPos = nil
+    local holdTask = nil
+    local holdThreshold = 0.35
 
     container.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            if input.Position.X < container.AbsolutePosition.X + 12 then
-                dragging = true
-                dragStart = input.Position
-                originalPos = container.Position
-            end
+            holdTask = task.delay(holdThreshold, function()
+                if not dragging then
+                    dragging = true
+                    dragStart = input.Position
+                    originalPos = container.Position
+                    scrollFrame.ScrollingEnabled = false
+                    TweenColor(container, "BackgroundColor3", RED_MAIN, 0.1)
+                end
+            end)
         end
     end)
 
@@ -3206,9 +3212,14 @@ local function CreateScriptButton(data)
 
     UserInputService.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if holdTask then
+                pcall(function() task.cancel(holdTask) end)
+                holdTask = nil
+            end
             if dragging then
                 dragging = false
                 container.ZIndex = 1
+                scrollFrame.ScrollingEnabled = true
                 local curY = container.AbsolutePosition.Y - scrollFrame.AbsolutePosition.Y + scrollFrame.CanvasPosition.Y
                 local targetIdx = math.floor(curY / buttonHeight) + 1
                 targetIdx = math.clamp(targetIdx, 1, #buttons)
@@ -4688,7 +4699,7 @@ local function ShowWelcomeMessage()
     shareBtn.Parent = frame
     shareBtn.AutoButtonColor = false
     shareBtn.MouseButton1Click:Connect(function()
-        local ls = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Xyqwerq/XyqwHub/main/main.lua"))()'
+        local ls = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Xyqwerq/XyqwHub-Beta-versions/main/main.lua"))()'
         pcall(function() setclipboard(ls) end)
         ShowRobloxNotification(_("LoadstringCopied"), 4)
     end)
@@ -4768,7 +4779,7 @@ local function ShowWelcomeMessage()
         "\n─── SCRIPT BUTTONS ───\n" ..
         "▶ / Auto  — Auto-Execute\n" ..
         "☆ / ★     — Favorites\n" ..
-        "Hold left edge to drag & reorder\n" ..
+        "Hold 0.35s to drag & reorder\n" ..
         "\n─── TOP BAR ───\n" ..
         "Executor | Username | FPS | Ping\n" ..
         "H — Hide / Show\n" ..
@@ -4817,5 +4828,3 @@ task.spawn(function()
     if IsOwner() then ShowRobloxNotification(_("OwnerWelcome"), 5)
     elseif IsBeta() then ShowRobloxNotification(_("BetaWelcome"), 5) end
 end)
-
-
