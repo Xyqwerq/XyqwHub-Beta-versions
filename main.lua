@@ -3094,6 +3094,7 @@ local function ApplyOrderFromFile()
         local bi = orderMap[b.Data.Name] or 9999
         return ai < bi
     end)
+end
 local function CreateScriptButton(data)
     local container = Instance.new("Frame")
     container.Name = "Script_" .. data.Name
