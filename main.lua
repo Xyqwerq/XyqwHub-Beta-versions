@@ -1733,8 +1733,8 @@ local ShowSettings
 ShowSettings = function()
     local frame = Instance.new("Frame")
     frame.Name = "SettingsFrame"
-    frame.Size = UDim2.new(0, 300, 0, 180)
-    frame.Position = UDim2.new(0.5, -150, 0.5, -90)
+    frame.Size = UDim2.new(0, 300, 0, 200)
+    frame.Position = UDim2.new(0.5, -150, 0.5, -100)
     frame.BackgroundColor3 = RED_BG
     frame.BorderSizePixel = 2
     frame.BorderColor3 = RED_MAIN
@@ -1782,7 +1782,7 @@ ShowSettings = function()
     bindBtn.Position = UDim2.new(0, 10, 0, 64)
     bindBtn.BackgroundColor3 = RED_DARK
     bindBtn.TextColor3 = RED_MAIN
-    bindBtn.Text = getgenv().XyqwSettings.autoHideBind .. " — click to change"
+    bindBtn.Text = tostring(getgenv().XyqwSettings.autoHideBind) .. " — click to change"
     bindBtn.TextScaled = true
     bindBtn.Font = Enum.Font.GothamBold
     bindBtn.BorderSizePixel = 1
@@ -1792,12 +1792,19 @@ ShowSettings = function()
     bindBtn.AutoButtonColor = false
 
     local waiting = false
+    local inputConnection = nil
+
     bindBtn.MouseButton1Click:Connect(function()
         if waiting then return end
         waiting = true
         bindBtn.Text = "Press any key..."
-        local conn
-        conn = UserInputService.InputBegan:Connect(function(input, gp)
+        
+        if inputConnection then
+            pcall(function() inputConnection:Disconnect() end)
+            inputConnection = nil
+        end
+        
+        inputConnection = UserInputService.InputBegan:Connect(function(input, gp)
             if gp then return end
             if input.UserInputType == Enum.UserInputType.Keyboard then
                 local keyName = input.KeyCode.Name
@@ -1806,12 +1813,35 @@ ShowSettings = function()
                 bindBtn.Text = keyName .. " — click to change"
                 ShowRobloxNotification(_("KeybindChanged") .. keyName, 2)
                 waiting = false
-                conn:Disconnect()
+                if inputConnection then
+                    pcall(function() inputConnection:Disconnect() end)
+                    inputConnection = nil
+                end
             end
         end)
     end)
 
-    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+    local hint = Instance.new("TextLabel")
+    hint.Size = UDim2.new(1, -20, 0, 60)
+    hint.Position = UDim2.new(0, 10, 0, 105)
+    hint.BackgroundTransparency = 1
+    hint.TextColor3 = Color3.fromRGB(150, 150, 150)
+    hint.Text = "Press bind to hide/show XyqwHub GUI.\nCurrent: " .. tostring(getgenv().XyqwSettings.autoHideBind)
+    hint.TextWrapped = true
+    hint.TextScaled = true
+    hint.Font = Enum.Font.Gotham
+    hint.TextXAlignment = Enum.TextXAlignment.Left
+    hint.TextYAlignment = Enum.TextYAlignment.Top
+    hint.ZIndex = 51
+    hint.Parent = frame
+
+    closeBtn.MouseButton1Click:Connect(function()
+        if inputConnection then
+            pcall(function() inputConnection:Disconnect() end)
+            inputConnection = nil
+        end
+        frame:Destroy()
+    end)
 end
 settingsBtn.MouseButton1Click:Connect(ShowSettings)
 
