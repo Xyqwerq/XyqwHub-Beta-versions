@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 5.7 ==========
+-- ========== XyqwHub - Версия 5.9 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,11 +13,10 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "5.7"
+local VERSION = "5.9"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
--- ========== УНИВЕРСАЛЬНЫЙ ПОИСК WORKSPACE ==========
 local POSSIBLE_WORKSPACES = {
     "/sdcard/Delta/Workspace", "/sdcard/Delta",
     "/storage/emulated/0/Delta/Workspace", "/storage/emulated/0/Delta",
@@ -187,25 +186,29 @@ local LANG = {
         UrlCheckDone = "URL test complete!",
         ChangeLogText = [[XyqwHub ChangeLog
 
+Version 5.9
+- X button fixed in the very right corner
+- Script name text size 11 (slightly bigger)
+- Title button names stretch (C -> Custom, CC -> Custom Color)
+- Buttons themselves stay compact
+- Tabs stretch when window wide
+
+Version 5.8
+- X in right corner, bigger script text
+
 Version 5.7
-- Fixed blacklist not removing items
-- All title buttons now stretch (C, CC, CL, P, S, Th, EN, X)
-- Smaller text for script names (no more overlap)
-- Special buttons stretch too
+- Fixed blacklist removing
+- Title buttons widen
 
 Version 5.6
 - NO rounded corners
-- Tabs stretch (Fav -> Favorite)
-- Fixed long names overlapping
-- Blacklist updates instantly
 - Default tab: All
-- Theme for blacklist + auto-exec
 
 Version 5.5
 - Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
 
 Version 5.4
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting (initial)
+- Same features
 
 Version 5.3
 - Custom Color smaller + resize
@@ -274,25 +277,29 @@ Version 1.0
         UrlCheckDone = "Проверка завершена!",
         ChangeLogText = [[XyqwHub Ченджлог
 
+Версия 5.9
+- X в самом правом углу
+- Текст скриптов побольше (TextSize = 11)
+- Названия кнопок заголовка растягиваются (C -> Custom, CC -> Custom Color)
+- Сами кнопки остаются компактными
+- Вкладки растягиваются при широком окне
+
+Версия 5.8
+- X в правом углу, больше текста
+
 Версия 5.7
-- Фикс блеклиста (не удалял элементы)
-- Все кнопки заголовка растягиваются
-- Меньше текст для названий скриптов
-- Special кнопки растягиваются
+- Фикс блеклиста
+- Кнопки заголовка растягиваются
 
 Версия 5.6
 - БЕЗ скруглений
-- Вкладки растягиваются (Fav -> Favorite)
-- Фикс перекрытия названий
-- Blacklist мгновенно
 - Базовая вкладка: All
-- Тема для blacklist + auto-exec
 
 Версия 5.5
 - Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
 
 Версия 5.4
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting (initial)
+- Те же фичи
 
 Версия 5.3
 - Custom Color меньше + ресайз
@@ -572,14 +579,12 @@ for _, plr in ipairs(Players:GetPlayers()) do
     plr.CharacterAdded:Connect(function() SetupCharacterTag(plr) end)
 end
 
--- ========== АНТИ-АФК ==========
 local VirtualUser = game:GetService("VirtualUser")
 Players.LocalPlayer.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
 end)
 
--- ========== FPS / PING ==========
 local fpsValue = 60
 local fpsCounter = 0
 local fpsTime = 0
@@ -602,7 +607,6 @@ local function GetExecutorName()
     return ok and name or "Unknown"
 end
 
--- ========== GUI ==========
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "XyqwHubGui"
 screenGui.ResetOnSpawn = false
@@ -801,7 +805,7 @@ titleLabel.Font = Enum.Font.GothamBold
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = titleBar
 
--- Header buttons (все будут растягиваться)
+-- Все кнопки заголовка (без позиции — она ставится в UpdateHeaderLayout)
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseBtn"
 closeButton.BackgroundColor3 = RED_DARK
@@ -899,48 +903,64 @@ colorBtn.Parent = titleBar
 colorBtn.AutoButtonColor = false
 
 -- ========== ФУНКЦИЯ РАСТЯГИВАНИЯ КНОПОК ЗАГОЛОВКА ==========
-local HEADER_SHORT = {
-    close = "X", lang = "EN", server = "S", player = "P",
-    custom = "C", changelog = "CL", theme = "Th", color = "CC"
-}
-local HEADER_LONG = {
-    close = "Close", lang = "EN/RU", server = "Server", player = "Players",
-    custom = "Custom", changelog = "ChangeLog", theme = "Theme", color = "CustomColor"
-}
+-- Порядок слева направо: [Th] [CC] [CL] [C] [P] [S] [EN] [X]
+-- X ВСЕГДА последний и прижат к правому краю
+local HEADER_BUTTONS = {themeBtn, colorBtn, changelogButton, customBtn, playerBtn, serverBtn, langButton, closeButton}
+local HEADER_SHORT_TEXT = {"Th", "CC", "CL", "C", "P", "S", "EN", "X"}
+local HEADER_LONG_TEXT  = {"Theme", "Custom Color", "ChangeLog", "Custom", "Players", "Server", "EN/RU", "X"}
+local HEADER_SHORT_W = {22, 24, 26, 22, 22, 22, 28, 22}
+local HEADER_LONG_W  = {55, 105, 85, 70, 70, 65, 55, 22}
 
 local function UpdateHeaderLayout()
     local w = mainFrame.AbsoluteSize.X
-    local useLong = w >= 500
-    local buttons = {closeButton, langButton, serverBtn, playerBtn, customBtn, changelogButton, themeBtn, colorBtn}
-    local shortWidths = {22, 28, 22, 22, 22, 26, 24, 24}
-    local longWidths =  {50, 50, 55, 55, 55, 75, 50, 95}
-    local titleW = useLong and 70 or 70
-    titleLabel.Size = UDim2.new(0, titleW, 1, 0)
+    local useLong = w >= 550  -- порог, при котором влезают длинные названия
+    local titleW = 70
+    local buttons = HEADER_BUTTONS
+    local count = #buttons
+    local gap = 1
 
-    local totalW = titleW + 5
-    for i, btn in ipairs(buttons) do
-        local bw = useLong and longWidths[i] or shortWidths[i]
-        totalW = totalW + bw + 1
+    -- Считаем общую ширину
+    local widths = {}
+    local totalW = titleW + 6
+    for i = 1, count do
+        local bw = useLong and HEADER_LONG_W[i] or HEADER_SHORT_W[i]
+        widths[i] = bw
+        totalW = totalW + bw + gap
     end
-    -- Если не влезает — уменьшаем
-    local availW = w - 2
-    if totalW > availW then
+
+    -- Если не влезает — переключаемся на короткие
+    if totalW > w then
         useLong = false
-        totalW = titleW + 5
-        for i, btn in ipairs(buttons) do
-            totalW = totalW + shortWidths[i] + 1
+        totalW = titleW + 6
+        for i = 1, count do
+            widths[i] = HEADER_SHORT_W[i]
+            totalW = totalW + widths[i] + gap
         end
     end
 
-    -- Позиционирование справа налево
+    -- Сначала ставим X в самый правый угол
     local xRight = w - 1
-    for i = #buttons, 1, -1 do
-        local bw = useLong and longWidths[i] or shortWidths[i]
-        local btn = buttons[i]
-        btn.Size = UDim2.new(0, bw, 0.8, 0)
-        btn.Position = UDim2.new(1, -(w - xRight) - bw, 0.1, 0)
-        xRight = xRight - bw - 1
+    -- X — последний в списке
+    local xIdx = count
+    local xW = widths[xIdx]
+    buttons[xIdx].Size = UDim2.new(0, xW, 0.8, 0)
+    buttons[xIdx].Position = UDim2.new(1, -xW - 1, 0.1, 0)
+    xRight = xRight - xW - gap
+
+    -- Остальные — справа налево перед X
+    for i = count - 1, 1, -1 do
+        local bw = widths[i]
+        buttons[i].Size = UDim2.new(0, bw, 0.8, 0)
+        buttons[i].Position = UDim2.new(1, -(w - xRight) - bw, 0.1, 0)
+        xRight = xRight - bw - gap
     end
+
+    -- Обновляем тексты
+    for i = 1, count do
+        buttons[i].Text = useLong and HEADER_LONG_TEXT[i] or HEADER_SHORT_TEXT[i]
+    end
+    -- Язык всегда показываем фактический
+    langButton.Text = getgenv().XyqwLanguage
 end
 
 -- ========== SEARCH ==========
@@ -985,7 +1005,6 @@ local function UpdateSortBtnText()
 end
 UpdateSortBtnText()
 
--- ========== TABS ==========
 local tabBar = Instance.new("Frame")
 tabBar.Name = "TabBar"
 tabBar.Size = UDim2.new(1, -10, 0, 24)
@@ -1049,7 +1068,6 @@ local function UpdateTabLayout()
     end
 end
 
--- ========== SCROLL ==========
 local scrollFrame = Instance.new("ScrollingFrame")
 scrollFrame.Name = "ScriptScroll"
 scrollFrame.Size = UDim2.new(1, -10, 1, -98)
@@ -1093,7 +1111,7 @@ local function CreateScriptButton(data)
     statusDot.ZIndex = 2
     statusDot.Parent = container
 
-    -- УМЕНЬШЕННЫЙ текст (TextSize = 10), TextScaled = false
+    -- Текст скриптов (TextSize 11 — чуть больше прошлого)
     local btn = Instance.new("TextButton")
     btn.Name = "MainBtn"
     btn.Size = UDim2.new(1, -90, 1, 0)
@@ -1102,7 +1120,7 @@ local function CreateScriptButton(data)
     btn.TextColor3 = RED_MAIN
     btn.Text = data.Name
     btn.TextScaled = false
-    btn.TextSize = 10
+    btn.TextSize = 11
     btn.Font = Enum.Font.GothamBold
     btn.TextXAlignment = Enum.TextXAlignment.Left
     btn.TextTruncate = Enum.TextTruncate.AtEnd
@@ -1236,7 +1254,6 @@ end
 
 for _, data in ipairs(SCRIPTS) do CreateScriptButton(data) end
 
--- ========== SPECIAL ==========
 local removeTagsContainer = Instance.new("Frame")
 removeTagsContainer.Name = "RemoveTagsContainer"
 removeTagsContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -1435,7 +1452,6 @@ destroyBtnMain.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
--- ========== BLACKLIST MANAGER ==========
 local function ShowBlacklistManager()
     local frame = Instance.new("Frame")
     frame.Name = "BlacklistFrame"
@@ -1523,7 +1539,6 @@ local function ShowBlacklistManager()
             getgenv().XyqwBlacklist[name] = nil
             SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
             ShowRobloxNotification(_("BlacklistRemoved"), 2)
-            -- Мгновенное обновление главного списка
             if getgenv().RefreshButtons then getgenv().RefreshButtons() end
             frame:Destroy()
             ShowBlacklistManager()
@@ -1554,7 +1569,6 @@ local function ShowBlacklistManager()
 end
 blacklistBtn.MouseButton1Click:Connect(ShowBlacklistManager)
 
--- ========== SETTINGS ==========
 local function ShowSettings()
     local frame = Instance.new("Frame")
     frame.Name = "SettingsFrame"
@@ -1695,7 +1709,6 @@ sortBtn.MouseButton1Click:Connect(function()
     if getgenv().RefreshButtons then getgenv().RefreshButtons() end
 end)
 
--- ========== REFRESH ==========
 local function RefreshButtonsInternal()
     local search = string.lower(searchBar.Text)
     local sortMode = getgenv().XyqwSettings.sortMode
@@ -1783,7 +1796,6 @@ getgenv().RefreshButtons = RefreshButtonsInternal
 RefreshButtonsInternal()
 searchBar:GetPropertyChangedSignal("Text"):Connect(RefreshButtonsInternal)
 
--- ========== CHANGE LOG ==========
 local function ShowChangeLog()
     local frame = Instance.new("Frame")
     frame.Name = "ChangeLogFrame"
@@ -2540,7 +2552,6 @@ playerBtn.MouseButton1Click:Connect(ShowPlayerList)
 serverBtn.MouseButton1Click:Connect(ShowServerInfo)
 colorBtn.MouseButton1Click:Connect(ShowCustomColor)
 
--- ========== ТЕМЫ ==========
 local themeOrder = {"Red", "Blue", "Green", "Purple", "Pink", "Orange", "Cyan", "Yellow", "Lime", "Magenta", "White", "Rainbow", "Custom"}
 local themeIndex = 1
 for i, name in ipairs(themeOrder) do
@@ -2744,7 +2755,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- ========== RESIZE ==========
 local resizeHandle = Instance.new("TextButton")
 resizeHandle.Name = "ResizeHandle"
 resizeHandle.Size = UDim2.new(0, 14, 0, 14)
