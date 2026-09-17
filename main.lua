@@ -1729,7 +1729,8 @@ ShowBlacklistManager = function()
 end
 blacklistBtn.MouseButton1Click:Connect(ShowBlacklistManager)
 
-local function ShowSettings()
+local ShowSettings
+ShowSettings = function()
     local frame = Instance.new("Frame")
     frame.Name = "SettingsFrame"
     frame.Size = UDim2.new(0, 300, 0, 180)
