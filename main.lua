@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.0 ==========
+-- ========== XyqwHub - Версия 6.1 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.0"
+local VERSION = "6.1"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -160,7 +160,6 @@ local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
 local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
--- ========== ЯЗЫКИ (5 штук, не обрезаны) ==========
 local LANG = {
     EN = {
         Loaded = "loaded", Error = "error", Search = "Search...",
@@ -182,12 +181,14 @@ local LANG = {
         ClickXToClose = "Click X to close",
         ChangeLogText = [[XyqwHub ChangeLog
 
-Version 6.0
+Version 6.1
+- Fixed blacklist not refreshing after removal
+- Added console prints for debugging
+- Better notifications (4s + script name)
 - 5 languages: EN, RU, UK, BE, KK
-- Welcome message restored
-- Script text size 12 (slightly reduced)
-- Fixed blacklist not refreshing
-- Notifications: "Script blacklisted!", "Script unblacklisted!"
+
+Version 6.0
+- 5 languages added
 
 Version 5.9
 - X in right corner
@@ -231,12 +232,14 @@ Version 1.0
         ClickXToClose = "Нажми X чтобы закрыть",
         ChangeLogText = [[XyqwHub Ченджлог
 
-Версия 6.0
+Версия 6.1
+- Фикс обновления блеклиста после удаления
+- Добавлены print в консоль для отладки
+- Лучше уведомления (4 сек + имя скрипта)
 - 5 языков: EN, RU, UK, BE, KK
-- Возвращено Welcome сообщение
-- Размер текста скриптов 12 (чуть уменьшен)
-- Фикс блеклиста
-- Уведомления: "Скрипт в чёрном списке!", "Скрипт убран из чёрного списка!"
+
+Версия 6.0
+- Добавлено 5 языков
 
 Версия 5.9
 - X в правом углу
@@ -279,12 +282,14 @@ Version 1.0
         ClickXToClose = "Натисни X щоб закрити",
         ChangeLogText = [[XyqwHub Журнал
 
-Версія 6.0
+Версія 6.1
+- Фікс чорного списку після видалення
+- Додано print у консоль
+- Кращі сповіщення (4 сек + ім'я)
 - 5 мов: EN, RU, UK, BE, KK
-- Повернуто вітальне повідомлення
-- Розмір тексту 12 (трохи зменшено)
-- Фікс чорного списку
-- Сповіщення: "Скрипт у чорному списку!", "Скрипт прибрано з чорного списку!"
+
+Версія 6.0
+- 5 мов
 
 Версія 5.9
 - X у правому куті
@@ -294,7 +299,7 @@ Version 1.0
 - Базова вкладка All
 
 Версія 5.5
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+- Auto Execute, Blacklist, Auto Hide
 
 Версія 5.0
 - Custom Color миттєво
@@ -327,12 +332,14 @@ Version 1.0
         ClickXToClose = "Націсні X каб зачыніць",
         ChangeLogText = [[XyqwHub Чэйнджлог
 
-Версія 6.0
+Версія 6.1
+- Фікс чорнага спісу пасля выдалення
+- Дададзены print у кансоль
+- Лепшыя апавяшчэнні (4 сек + імя)
 - 5 моў: EN, RU, UK, BE, KK
-- Вернута прывітальнае паведамленне
-- Памер тэксту 12 (трохі паменшаны)
-- Фікс чорнага спісу
-- Апавяшчэнні: "Скрыпт у чорным спісе!", "Скрыпт прыбраны з чорнага спісу!"
+
+Версія 6.0
+- 5 моў
 
 Версія 5.9
 - X у правым куце
@@ -342,7 +349,7 @@ Version 1.0
 - Базавая ўкладка All
 
 Версія 5.5
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+- Auto Execute, Blacklist, Auto Hide
 
 Версія 5.0
 - Custom Color імгненна
@@ -375,12 +382,14 @@ Version 1.0
         ClickXToClose = "Жабу үшін X басыңыз",
         ChangeLogText = [[XyqwHub Өзгерістер
 
-6.0 нұсқасы
+6.1 нұсқасы
+- Қара тізімді жою түзетілді
+- Консольге print қосылды
+- Жақсырақ хабарламалар (4 сек + атауы)
 - 5 тіл: EN, RU, UK, BE, KK
-- Қош келу хабарламасы қалпына келтірілді
-- Мәтін өлшемі 12 (сәл азайтылды)
-- Қара тізім түзетілді
-- Хабарламалар: "Скрипт қара тізімде!", "Скрипт қара тізімнен жойылды!"
+
+6.0 нұсқасы
+- 5 тіл
 
 5.9 нұсқасы
 - X оң жақ бұрышта
@@ -390,7 +399,7 @@ Version 1.0
 - Негізгі қойынды All
 
 5.5 нұсқасы
-- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+- Auto Execute, Blacklist, Auto Hide
 
 5.0 нұсқасы
 - Custom Color бірден
@@ -412,7 +421,7 @@ local function _(key)
 end
 
 local function ShowRobloxNotification(text, duration)
-    duration = duration or 3.5
+    duration = duration or 4
     pcall(function()
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "XyqwHub", Text = text, Duration = duration
@@ -1155,7 +1164,6 @@ local function CreateScriptButton(data)
     statusDot.ZIndex = 2
     statusDot.Parent = container
 
-    -- Текст 12 (с 5.6 = 13, чуть уменьшен)
     local btn = Instance.new("TextButton")
     btn.Name = "MainBtn"
     btn.Size = UDim2.new(1, -90, 1, 0)
@@ -1194,12 +1202,12 @@ local function CreateScriptButton(data)
             getgenv().XyqwAutoExec[data.Name] = nil
             autoBtn.BackgroundColor3 = RED_BG
             autoBtn.TextColor3 = RED_MAIN
-            ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOff"), 2)
+            ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOff"), 3)
         else
             getgenv().XyqwAutoExec[data.Name] = true
             autoBtn.BackgroundColor3 = RED_MAIN
             autoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-            ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOn"), 2)
+            ShowRobloxNotification(data.Name .. " — " .. _("AutoExecOn"), 3)
         end
         SaveTable(AUTOEXEC_FILE, getgenv().XyqwAutoExec)
         UpdateScriptButtonLayout()
@@ -1221,7 +1229,9 @@ local function CreateScriptButton(data)
     hideBtn.MouseButton1Click:Connect(function()
         getgenv().XyqwBlacklist[data.Name] = true
         SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
-        ShowRobloxNotification(_("BlacklistAdded"), 2)
+        print("[XyqwHub] BLACKLISTED: " .. data.Name)
+        ShowRobloxNotification(data.Name .. " — " .. _("BlacklistAdded"), 3)
+        task.wait(0.05)
         if getgenv().RefreshButtons then getgenv().RefreshButtons() end
     end)
 
@@ -1582,9 +1592,12 @@ local function ShowBlacklistManager()
         removeBtn.MouseButton1Click:Connect(function()
             getgenv().XyqwBlacklist[name] = nil
             SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
-            ShowRobloxNotification(_("BlacklistRemoved"), 2)
-            -- ФИКС: refresh обновляется всегда
+            print("[XyqwHub] UNBLACKLISTED: " .. name)
+            ShowRobloxNotification(name .. " — " .. _("BlacklistRemoved"), 3)
+            -- Мгновенно обновляем главный список
             if getgenv().RefreshButtons then getgenv().RefreshButtons() end
+            -- Закрываем окно и открываем снова
+            task.wait(0.15)
             frame:Destroy()
             ShowBlacklistManager()
         end)
@@ -1609,6 +1622,7 @@ local function ShowBlacklistManager()
 
     closeBtn.MouseButton1Click:Connect(function()
         frame:Destroy()
+        task.wait(0.05)
         if getgenv().RefreshButtons then getgenv().RefreshButtons() end
     end)
 end
@@ -1754,7 +1768,8 @@ sortBtn.MouseButton1Click:Connect(function()
     if getgenv().RefreshButtons then getgenv().RefreshButtons() end
 end)
 
-local function RefreshButtonsInternal()
+-- ========== REFRESH (GLOBAL) ==========
+getgenv().RefreshButtons = function()
     local search = string.lower(searchBar.Text)
     local sortMode = getgenv().XyqwSettings.sortMode
 
@@ -1836,10 +1851,10 @@ local function RefreshButtonsInternal()
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, visible * buttonHeight + 20)
 end
 
-getgenv().RefreshButtons = RefreshButtonsInternal
-
-RefreshButtonsInternal()
-searchBar:GetPropertyChangedSignal("Text"):Connect(RefreshButtonsInternal)
+getgenv().RefreshButtons()
+searchBar:GetPropertyChangedSignal("Text"):Connect(function()
+    if getgenv().RefreshButtons then getgenv().RefreshButtons() end
+end)
 
 local function ShowChangeLog()
     local frame = Instance.new("Frame")
@@ -1917,7 +1932,7 @@ langButton.MouseButton1Click:Connect(function()
     getgenv().XyqwLanguage = langs[idx]
     langButton.Text = getgenv().XyqwLanguage
     searchBar.PlaceholderText = _("Search")
-    ShowRobloxNotification(_("LangChanged"), 2)
+    ShowRobloxNotification(_("LangChanged"), 3)
     UpdateHeaderLayout()
 end)
 
@@ -2899,7 +2914,6 @@ closeButton.MouseButton1Click:Connect(function()
     dockButton.Visible = true
 end)
 
--- ========== WELCOME MESSAGE ==========
 local function ShowWelcomeMessage()
     local frame = Instance.new("Frame")
     frame.Name = "WelcomeFrame"
@@ -3019,22 +3033,30 @@ local function ShowWelcomeMessage()
     doc.TextSize = 10
     doc.Font = Enum.Font.Gotham
     doc.Text = "─── TITLE BAR ───\n" ..
-        "Th  — Theme / Тема\n" ..
-        "CC  — Custom Color / Свой цвет\n" ..
-        "CL  — ChangeLog / Ченджлог\n" ..
-        "C   — Custom Script / Свой скрипт\n" ..
-        "P   — Players List / Игроки\n" ..
-        "S   — Server Info / Сервер\n" ..
+        "Th  — Theme\n" ..
+        "CC  — Custom Color\n" ..
+        "CL  — ChangeLog\n" ..
+        "C   — Custom Script\n" ..
+        "P   — Players List\n" ..
+        "S   — Server Info\n" ..
         "EN/RU/UK/BE/KK — Languages\n" ..
-        "X   — Close / Закрыть\n" ..
-        "\n─── BOTTOM BUTTONS ───\n" ..
+        "X   — Close\n" ..
+        "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
         "Remove Tags      — remove OWNER/TESTER tags\n" ..
-        "Share Fav Scripts — copies favorites list\n" ..
-        "Share Recent Scripts — copies recent list\n" ..
         "Manage Blacklist — hide unwanted scripts\n" ..
         "Test URLs       — check every script\n" ..
         "Settings        — Auto-Hide bind\n" ..
         "Destroy XyqwHub — full unload\n" ..
+        "\n─── Fav TAB ───\n" ..
+        "Share Favorite Scripts — copies favorites list\n" ..
+        "\n─── Rct TAB ───\n" ..
+        "Share Recent Scripts — copies recent list\n" ..
+        "\n─── SCRIPT BUTTONS ───\n" ..
+        "▶ / Auto  — Auto-Execute on game join\n" ..
+        "⊘ / Hide  — Add to Blacklist (hide)\n" ..
+        "☆ / ★     — Add to Favorites\n" ..
+        "\n─── BLACKLIST ───\n" ..
+        "Click × to unblacklist (return to list)\n" ..
         "\n─── TOP BAR ───\n" ..
         "Executor | Username | FPS | Ping\n" ..
         "H — Hide / Show\n" ..
@@ -3066,7 +3088,6 @@ local function ShowWelcomeMessage()
     ver.Parent = frame
 end
 
--- ========== ИНИЦИАЛИЗАЦИЯ ==========
 UpdateTabLayout()
 UpdateScriptButtonLayout()
 UpdateHeaderLayout()
@@ -3078,7 +3099,6 @@ task.spawn(function()
     print("[XyqwHub] XyqwHub Loaded! Version: " .. VERSION)
 end)
 
--- WELCOME (вернул!)
 task.spawn(function()
     task.wait(1.2)
     ShowWelcomeMessage()
