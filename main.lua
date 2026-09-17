@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 5.6 ==========
+-- ========== XyqwHub - Версия 5.7 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "5.6"
+local VERSION = "5.7"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -187,27 +187,29 @@ local LANG = {
         UrlCheckDone = "URL test complete!",
         ChangeLogText = [[XyqwHub ChangeLog
 
+Version 5.7
+- Fixed blacklist not removing items
+- All title buttons now stretch (C, CC, CL, P, S, Th, EN, X)
+- Smaller text for script names (no more overlap)
+- Special buttons stretch too
+
 Version 5.6
-- NO rounded corners anywhere (always square!)
-- Buttons/tabs stretch when window is wide (Fav -> Favorite)
-- Fixed long script names being overlapped by buttons
-- Blacklist updates instantly after unlock
-- Default tab on launch: All
-- Theme applies to blacklist + auto-exec buttons
+- NO rounded corners
+- Tabs stretch (Fav -> Favorite)
+- Fixed long names overlapping
+- Blacklist updates instantly
+- Default tab: All
+- Theme for blacklist + auto-exec
 
 Version 5.5
-- Auto Execute Scripts
-- Script Blacklist
-- Auto Hide GUI (custom keybind)
-- URL Tester
-- Script Sorting
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
 
 Version 5.4
-- Same features, bug fixes
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting (initial)
 
 Version 5.3
 - Custom Color smaller + resize
-- Universal workspace fix
+- Universal workspace
 
 Version 5.2
 - Universal workspace
@@ -234,31 +236,19 @@ Version 4.5
 - Files to workspace
 
 Version 4.4
-- Remove Tags and Destroy separate
+- Remove Tags and Destroy
 
 Version 4.3
 - Server Info
 
 Version 4.2
-- Top bar with Hide (H)
+- Top bar + Hide
 
 Version 4.1
-- All buttons squared
+- Buttons squared
 
 Version 4.0
 - First 4.0 release
-
-Version 3.9
-- Script executed notification
-
-Version 2.7
-- Roblox notifications
-
-Version 2.4
-- Re-launch protection
-
-Version 2.0
-- All buttons in one list
 
 Version 1.0
 - First release]],
@@ -284,27 +274,29 @@ Version 1.0
         UrlCheckDone = "Проверка завершена!",
         ChangeLogText = [[XyqwHub Ченджлог
 
+Версия 5.7
+- Фикс блеклиста (не удалял элементы)
+- Все кнопки заголовка растягиваются
+- Меньше текст для названий скриптов
+- Special кнопки растягиваются
+
 Версия 5.6
-- НИКАКИХ скруглённых углов (всё квадратное!)
-- Кнопки/вкладки растягиваются при широком окне (Fav -> Favorite)
-- Фикс перекрытия длинных названий скриптов
-- Blacklist обновляется мгновенно
-- Базовая вкладка при запуске: All
-- Тема применяется к blacklist + auto-exec
+- БЕЗ скруглений
+- Вкладки растягиваются (Fav -> Favorite)
+- Фикс перекрытия названий
+- Blacklist мгновенно
+- Базовая вкладка: All
+- Тема для blacklist + auto-exec
 
 Версия 5.5
-- Auto Execute
-- Blacklist
-- Auto Hide GUI
-- URL Tester
-- Sorting
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
 
 Версия 5.4
-- Те же фичи, фиксы
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting (initial)
 
 Версия 5.3
 - Custom Color меньше + ресайз
-- Фикс workspace
+- Универсальный workspace
 
 Версия 5.2
 - Универсальный workspace
@@ -345,18 +337,6 @@ Version 1.0
 Версия 4.0
 - Первый релиз
 
-Версия 3.9
-- Уведомление о запуске
-
-Версия 2.7
-- Roblox уведомления
-
-Версия 2.4
-- Защита от повторного запуска
-
-Версия 2.0
-- Все кнопки в одном списке
-
 Версия 1.0
 - Первый релиз]],
     }
@@ -382,7 +362,6 @@ local UserInputService = game:GetService("UserInputService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 
--- ========== СПИСОК СКРИПТОВ ==========
 local SCRIPTS = {
     {Name = "Blade Ball", Category = "BB", URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"},
     {Name = "Blade Ball 2", Category = "BB", URL = "https://wings.ac/loader"},
@@ -434,7 +413,6 @@ local SCRIPTS = {
     {Name = "Adopt me", Category = "Misc", URL = "https://raw.githubusercontent.com/JaxRol/ZeroPoint/refs/heads/main/KeySystem"},
 }
 
--- ========== AUTO EXECUTE ==========
 task.spawn(function()
     task.wait(2)
     for name, enabled in pairs(getgenv().XyqwAutoExec) do
@@ -634,7 +612,6 @@ screenGui.DisplayOrder = 999
 pcall(function() screenGui.Parent = game:GetService("CoreGui") end)
 if not screenGui.Parent then screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui") end
 
--- ========== ТОП-БАР ==========
 local topBar = Instance.new("TextButton")
 topBar.Name = "TopBar"
 topBar.Size = UDim2.new(0, 420, 0, 24)
@@ -727,7 +704,6 @@ hideTopBtn.MouseButton1Click:Connect(function()
     UpdateHideTopBtn()
 end)
 
--- ========== DOCK ==========
 local mainFrame = nil
 
 local dockButton = Instance.new("TextButton")
@@ -785,7 +761,6 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
--- ========== ГЛАВНОЕ ОКНО ==========
 mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 280, 0, 340)
@@ -826,10 +801,9 @@ titleLabel.Font = Enum.Font.GothamBold
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = titleBar
 
+-- Header buttons (все будут растягиваться)
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseBtn"
-closeButton.Size = UDim2.new(0, 22, 0.8, 0)
-closeButton.Position = UDim2.new(1, -22, 0.1, 0)
 closeButton.BackgroundColor3 = RED_DARK
 closeButton.TextColor3 = RED_MAIN
 closeButton.Text = "X"
@@ -842,8 +816,6 @@ closeButton.AutoButtonColor = false
 
 local langButton = Instance.new("TextButton")
 langButton.Name = "LangBtn"
-langButton.Size = UDim2.new(0, 28, 0.8, 0)
-langButton.Position = UDim2.new(1, -52, 0.1, 0)
 langButton.BackgroundColor3 = RED_DARK
 langButton.TextColor3 = RED_MAIN
 langButton.Text = getgenv().XyqwLanguage
@@ -856,8 +828,6 @@ langButton.AutoButtonColor = false
 
 local serverBtn = Instance.new("TextButton")
 serverBtn.Name = "ServerBtn"
-serverBtn.Size = UDim2.new(0, 22, 0.8, 0)
-serverBtn.Position = UDim2.new(1, -76, 0.1, 0)
 serverBtn.BackgroundColor3 = RED_DARK
 serverBtn.TextColor3 = RED_MAIN
 serverBtn.Text = "S"
@@ -870,8 +840,6 @@ serverBtn.AutoButtonColor = false
 
 local playerBtn = Instance.new("TextButton")
 playerBtn.Name = "PlayerBtn"
-playerBtn.Size = UDim2.new(0, 22, 0.8, 0)
-playerBtn.Position = UDim2.new(1, -100, 0.1, 0)
 playerBtn.BackgroundColor3 = RED_DARK
 playerBtn.TextColor3 = RED_MAIN
 playerBtn.Text = "P"
@@ -884,8 +852,6 @@ playerBtn.AutoButtonColor = false
 
 local customBtn = Instance.new("TextButton")
 customBtn.Name = "CustomBtn"
-customBtn.Size = UDim2.new(0, 22, 0.8, 0)
-customBtn.Position = UDim2.new(1, -124, 0.1, 0)
 customBtn.BackgroundColor3 = RED_DARK
 customBtn.TextColor3 = RED_MAIN
 customBtn.Text = "C"
@@ -898,8 +864,6 @@ customBtn.AutoButtonColor = false
 
 local changelogButton = Instance.new("TextButton")
 changelogButton.Name = "ChLogBtn"
-changelogButton.Size = UDim2.new(0, 26, 0.8, 0)
-changelogButton.Position = UDim2.new(1, -152, 0.1, 0)
 changelogButton.BackgroundColor3 = RED_DARK
 changelogButton.TextColor3 = RED_MAIN
 changelogButton.Text = "CL"
@@ -912,8 +876,6 @@ changelogButton.AutoButtonColor = false
 
 local themeBtn = Instance.new("TextButton")
 themeBtn.Name = "ThemeBtn"
-themeBtn.Size = UDim2.new(0, 24, 0.8, 0)
-themeBtn.Position = UDim2.new(1, -178, 0.1, 0)
 themeBtn.BackgroundColor3 = RED_DARK
 themeBtn.TextColor3 = RED_MAIN
 themeBtn.Text = "Th"
@@ -926,8 +888,6 @@ themeBtn.AutoButtonColor = false
 
 local colorBtn = Instance.new("TextButton")
 colorBtn.Name = "ColorBtn"
-colorBtn.Size = UDim2.new(0, 24, 0.8, 0)
-colorBtn.Position = UDim2.new(1, -204, 0.1, 0)
 colorBtn.BackgroundColor3 = RED_DARK
 colorBtn.TextColor3 = RED_MAIN
 colorBtn.Text = "CC"
@@ -937,6 +897,51 @@ colorBtn.BorderSizePixel = 1
 colorBtn.BorderColor3 = RED_MAIN
 colorBtn.Parent = titleBar
 colorBtn.AutoButtonColor = false
+
+-- ========== ФУНКЦИЯ РАСТЯГИВАНИЯ КНОПОК ЗАГОЛОВКА ==========
+local HEADER_SHORT = {
+    close = "X", lang = "EN", server = "S", player = "P",
+    custom = "C", changelog = "CL", theme = "Th", color = "CC"
+}
+local HEADER_LONG = {
+    close = "Close", lang = "EN/RU", server = "Server", player = "Players",
+    custom = "Custom", changelog = "ChangeLog", theme = "Theme", color = "CustomColor"
+}
+
+local function UpdateHeaderLayout()
+    local w = mainFrame.AbsoluteSize.X
+    local useLong = w >= 500
+    local buttons = {closeButton, langButton, serverBtn, playerBtn, customBtn, changelogButton, themeBtn, colorBtn}
+    local shortWidths = {22, 28, 22, 22, 22, 26, 24, 24}
+    local longWidths =  {50, 50, 55, 55, 55, 75, 50, 95}
+    local titleW = useLong and 70 or 70
+    titleLabel.Size = UDim2.new(0, titleW, 1, 0)
+
+    local totalW = titleW + 5
+    for i, btn in ipairs(buttons) do
+        local bw = useLong and longWidths[i] or shortWidths[i]
+        totalW = totalW + bw + 1
+    end
+    -- Если не влезает — уменьшаем
+    local availW = w - 2
+    if totalW > availW then
+        useLong = false
+        totalW = titleW + 5
+        for i, btn in ipairs(buttons) do
+            totalW = totalW + shortWidths[i] + 1
+        end
+    end
+
+    -- Позиционирование справа налево
+    local xRight = w - 1
+    for i = #buttons, 1, -1 do
+        local bw = useLong and longWidths[i] or shortWidths[i]
+        local btn = buttons[i]
+        btn.Size = UDim2.new(0, bw, 0.8, 0)
+        btn.Position = UDim2.new(1, -(w - xRight) - bw, 0.1, 0)
+        xRight = xRight - bw - 1
+    end
+end
 
 -- ========== SEARCH ==========
 local searchBar = Instance.new("TextBox")
@@ -997,7 +1002,7 @@ local currentTab = "All"
 local function SwitchTab(name)
     currentTab = name
     if getgenv().XyqwTheme == "Rainbow" then
-        if RefreshButtons then RefreshButtons() end
+        if getgenv().RefreshButtons then getgenv().RefreshButtons() end
         return
     end
     for n, btn in pairs(tabButtons) do
@@ -1010,7 +1015,7 @@ local function SwitchTab(name)
         end
         btn.BorderColor3 = RED_MAIN
     end
-    if RefreshButtons then RefreshButtons() end
+    if getgenv().RefreshButtons then getgenv().RefreshButtons() end
 end
 
 for i, name in ipairs(TAB_LIST) do
@@ -1029,7 +1034,6 @@ for i, name in ipairs(TAB_LIST) do
     btn.MouseButton1Click:Connect(function() SwitchTab(name) end)
 end
 
--- Функция обновления размера вкладок (растягиваются при широком окне)
 local function UpdateTabLayout()
     local w = mainFrame.AbsoluteSize.X
     local useLong = w >= 500
@@ -1060,22 +1064,16 @@ scrollFrame.Parent = mainFrame
 local buttons = {}
 local buttonHeight = 34
 
--- Функция обновления размера кнопок скриптов
 local function UpdateScriptButtonLayout()
     local w = mainFrame.AbsoluteSize.X
     local useLong = w >= 500
-    local arrowText = useLong and "Auto" or "▶"
-    local hideText = useLong and "Hide" or "⊘"
-    local starEmpty = useLong and "Fav" or "☆"
-    local starFilled = useLong and "Fav+" or "★"
     for _, entry in ipairs(buttons) do
-        entry.AutoBtn.Text = getgenv().XyqwAutoExec[entry.Data.Name] and (useLong and "On" or "✓") or arrowText
-        entry.HideBtn.Text = hideText
-        entry.Star.Text = getgenv().XyqwFavorites[entry.Data.Name] and starFilled or starEmpty
+        entry.AutoBtn.Text = getgenv().XyqwAutoExec[entry.Data.Name] and (useLong and "On" or "✓") or (useLong and "Auto" or "▶")
+        entry.HideBtn.Text = useLong and "Hide" or "⊘"
+        entry.Star.Text = getgenv().XyqwFavorites[entry.Data.Name] and (useLong and "Fav+" or "★") or (useLong and "Fav" or "☆")
     end
 end
 
--- ========== CREATE BUTTON ==========
 local function CreateScriptButton(data)
     local container = Instance.new("Frame")
     container.Name = "Script_" .. data.Name
@@ -1095,22 +1093,22 @@ local function CreateScriptButton(data)
     statusDot.ZIndex = 2
     statusDot.Parent = container
 
-    -- Название (текст обрезается, не лезет на кнопки)
+    -- УМЕНЬШЕННЫЙ текст (TextSize = 10), TextScaled = false
     local btn = Instance.new("TextButton")
     btn.Name = "MainBtn"
-    btn.Size = UDim2.new(1, -80, 1, 0)
+    btn.Size = UDim2.new(1, -90, 1, 0)
     btn.Position = UDim2.new(0, 12, 0, 0)
     btn.BackgroundTransparency = 1
     btn.TextColor3 = RED_MAIN
     btn.Text = data.Name
-    btn.TextScaled = true
+    btn.TextScaled = false
+    btn.TextSize = 10
     btn.Font = Enum.Font.GothamBold
     btn.TextXAlignment = Enum.TextXAlignment.Left
     btn.TextTruncate = Enum.TextTruncate.AtEnd
     btn.Parent = container
     btn.AutoButtonColor = false
 
-    -- Auto-Execute
     local autoBtn = Instance.new("TextButton")
     autoBtn.Name = "AutoBtn"
     autoBtn.Size = UDim2.new(0, 24, 1, 0)
@@ -1145,7 +1143,6 @@ local function CreateScriptButton(data)
         UpdateScriptButtonLayout()
     end)
 
-    -- Hide (blacklist)
     local hideBtn = Instance.new("TextButton")
     hideBtn.Name = "HideBtn"
     hideBtn.Size = UDim2.new(0, 24, 1, 0)
@@ -1163,10 +1160,9 @@ local function CreateScriptButton(data)
         getgenv().XyqwBlacklist[data.Name] = true
         SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
         ShowRobloxNotification(_("BlacklistAdded"), 2)
-        if RefreshButtons then RefreshButtons() end
+        if getgenv().RefreshButtons then getgenv().RefreshButtons() end
     end)
 
-    -- Star
     local star = Instance.new("TextButton")
     star.Name = "Star"
     star.Size = UDim2.new(0, 24, 1, 0)
@@ -1527,8 +1523,8 @@ local function ShowBlacklistManager()
             getgenv().XyqwBlacklist[name] = nil
             SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
             ShowRobloxNotification(_("BlacklistRemoved"), 2)
-            -- Мгновенное обновление
-            if RefreshButtons then RefreshButtons() end
+            -- Мгновенное обновление главного списка
+            if getgenv().RefreshButtons then getgenv().RefreshButtons() end
             frame:Destroy()
             ShowBlacklistManager()
         end)
@@ -1553,12 +1549,12 @@ local function ShowBlacklistManager()
 
     closeBtn.MouseButton1Click:Connect(function()
         frame:Destroy()
-        if RefreshButtons then RefreshButtons() end
+        if getgenv().RefreshButtons then getgenv().RefreshButtons() end
     end)
 end
 blacklistBtn.MouseButton1Click:Connect(ShowBlacklistManager)
 
--- ========== SETTINGS WINDOW ==========
+-- ========== SETTINGS ==========
 local function ShowSettings()
     local frame = Instance.new("Frame")
     frame.Name = "SettingsFrame"
@@ -1645,7 +1641,7 @@ local function ShowSettings()
     hint.Position = UDim2.new(0, 10, 0, 100)
     hint.BackgroundTransparency = 1
     hint.TextColor3 = Color3.fromRGB(150, 150, 150)
-    hint.Text = "Press bind to hide/show XyqwHub GUI.\nCurrent: " .. getgenv().XyqwSettings.autoHideBind
+    hint.Text = "Press bind to hide/show XyqwHub GUI."
     hint.TextWrapped = true
     hint.TextScaled = true
     hint.Font = Enum.Font.Gotham
@@ -1658,7 +1654,6 @@ local function ShowSettings()
 end
 settingsBtn.MouseButton1Click:Connect(ShowSettings)
 
--- ========== URL TESTER ==========
 urlTestBtn.MouseButton1Click:Connect(function()
     ShowRobloxNotification(_("UrlCheckStarted"), 2)
     task.spawn(function()
@@ -1686,7 +1681,6 @@ urlTestBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- ========== SORT ==========
 sortBtn.MouseButton1Click:Connect(function()
     local modes = {"default", "az", "za", "recent"}
     local idx = 1
@@ -1698,11 +1692,11 @@ sortBtn.MouseButton1Click:Connect(function()
     getgenv().XyqwSettings.sortMode = modes[idx]
     SaveTable(SETTINGS_FILE, getgenv().XyqwSettings)
     UpdateSortBtnText()
-    if RefreshButtons then RefreshButtons() end
+    if getgenv().RefreshButtons then getgenv().RefreshButtons() end
 end)
 
 -- ========== REFRESH ==========
-function RefreshButtons()
+local function RefreshButtonsInternal()
     local search = string.lower(searchBar.Text)
     local sortMode = getgenv().XyqwSettings.sortMode
 
@@ -1784,8 +1778,10 @@ function RefreshButtons()
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, visible * buttonHeight + 20)
 end
 
-RefreshButtons()
-searchBar:GetPropertyChangedSignal("Text"):Connect(RefreshButtons)
+getgenv().RefreshButtons = RefreshButtonsInternal
+
+RefreshButtonsInternal()
+searchBar:GetPropertyChangedSignal("Text"):Connect(RefreshButtonsInternal)
 
 -- ========== CHANGE LOG ==========
 local function ShowChangeLog()
@@ -1853,15 +1849,14 @@ end
 
 changelogButton.MouseButton1Click:Connect(ShowChangeLog)
 
--- ========== СМЕНА ЯЗЫКА ==========
 langButton.MouseButton1Click:Connect(function()
     if getgenv().XyqwLanguage == "EN" then getgenv().XyqwLanguage = "RU" else getgenv().XyqwLanguage = "EN" end
     langButton.Text = getgenv().XyqwLanguage
     searchBar.PlaceholderText = _("Search")
     ShowRobloxNotification(_("LangChanged"), 2)
+    UpdateHeaderLayout()
 end)
 
--- ========== PLAYER LIST ==========
 local function ShowPlayerList()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 350, 0, 400)
@@ -1927,7 +1922,6 @@ local function ShowPlayerList()
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
 
--- ========== SERVER INFO ==========
 local function ShowServerInfo()
     local frame = Instance.new("Frame")
     frame.Name = "ServerInfoFrame"
@@ -2054,7 +2048,8 @@ local function ShowServerInfo()
     local smallBtn = Instance.new("TextButton")
     smallBtn.Size = UDim2.new(0.5, -13, 0, 30)
     smallBtn.Position = UDim2.new(0.5, 3, 0, 194)
-    smallBtn.BackgroundColor3 = RED_DARK    smallBtn.TextColor3 = RED_MAIN
+    smallBtn.BackgroundColor3 = RED_DARK
+    smallBtn.TextColor3 = RED_MAIN
     smallBtn.Text = "TP to small"
     smallBtn.TextScaled = true
     smallBtn.Font = Enum.Font.GothamBold
@@ -2086,7 +2081,6 @@ local function ShowServerInfo()
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
 
--- ========== CUSTOM SCRIPT ==========
 local function ShowCustomScript()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 350, 0, 175)
@@ -2174,7 +2168,6 @@ local function ShowCustomScript()
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
 
--- ========== CUSTOM COLOR ==========
 local function ShowCustomColor()
     local frame = Instance.new("Frame")
     frame.Name = "CustomColorFrame"
@@ -2602,7 +2595,6 @@ local function ApplyTheme(themeName)
         entry.Star.BorderColor3 = RED_MAIN
         entry.AutoBtn.BorderColor3 = RED_MAIN
         entry.HideBtn.BorderColor3 = RED_MAIN
-        -- Auto-Execute цвет (если включён — красный, если выкл — фон темы)
         if getgenv().XyqwAutoExec[entry.Data.Name] then
             entry.AutoBtn.BackgroundColor3 = RED_MAIN
             entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -2742,7 +2734,6 @@ task.spawn(function()
     end
 end)
 
--- ========== AUTO HIDE GUI ==========
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard then
@@ -2798,6 +2789,7 @@ UserInputService.InputChanged:Connect(function(input)
         sizeLabel.Text = math.floor(newX) .. " x " .. math.floor(newY)
         UpdateTabLayout()
         UpdateScriptButtonLayout()
+        UpdateHeaderLayout()
     end
 end)
 
@@ -2807,7 +2799,6 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
--- ========== ПЕРЕТАСКИВАНИЕ ОКНА ==========
 local dragging = false
 local dragStart, startPos
 titleBar.InputBegan:Connect(function(input)
@@ -2841,7 +2832,6 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- ========== ЗАКРЫТИЕ ==========
 closeButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
     dockButton.Visible = true
@@ -2850,9 +2840,9 @@ end)
 -- ========== ИНИЦИАЛИЗАЦИЯ ==========
 UpdateTabLayout()
 UpdateScriptButtonLayout()
-SwitchTab("All")  -- Всегда запускаем на All
+UpdateHeaderLayout()
+SwitchTab("All")
 
--- ========== ФИНАЛ ==========
 task.spawn(function()
     task.wait(0.5)
     ShowRobloxNotification("XyqwHub Loaded!", 4)
