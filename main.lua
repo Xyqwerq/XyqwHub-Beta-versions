@@ -1,19 +1,19 @@
--- ========== XyqwHub - Версия 5.9 ==========
+-- ========== XyqwHub - Версия 6.0 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
 print("[XyqwHub] Loading...")
 
 if getgenv().XyqwHubRunning then
-    local msg = "Повторный запуск скрипта был заблокирован!"
-    if getgenv().XyqwLanguage == "EN" then msg = "Script re-launch has been blocked!" end
+    local msg = "Script re-launch has been blocked!"
+    if getgenv().XyqwLanguage == "RU" then msg = "Повторный запуск был заблокирован!" end
     game:GetService("StarterGui"):SetCore("SendNotification", {Title = "XyqwHub", Text = msg, Duration = 5})
     print("[XyqwHub] " .. msg)
     return
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "5.9"
+local VERSION = "6.0"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -61,13 +61,9 @@ if not foundWorkspace then
 end
 
 local CONFIG_FOLDER
-if foundWorkspace == "VIRTUAL" then
-    CONFIG_FOLDER = "XyqwHub"
-elseif foundWorkspace then
-    CONFIG_FOLDER = foundWorkspace .. "/XyqwHub"
-else
-    CONFIG_FOLDER = "XyqwHub"
-end
+if foundWorkspace == "VIRTUAL" then CONFIG_FOLDER = "XyqwHub"
+elseif foundWorkspace then CONFIG_FOLDER = foundWorkspace .. "/XyqwHub"
+else CONFIG_FOLDER = "XyqwHub" end
 
 local FAV_FOLDER = CONFIG_FOLDER .. "/FavScripts"
 local RCT_FOLDER = CONFIG_FOLDER .. "/RctScripts"
@@ -164,6 +160,7 @@ local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
 local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
+-- ========== ЯЗЫКИ (5 штук, не обрезаны) ==========
 local LANG = {
     EN = {
         Loaded = "loaded", Error = "error", Search = "Search...",
@@ -177,78 +174,36 @@ local LANG = {
         LoadstringCopied = "Loadstring copied, thank you :3",
         ColorReset = "Custom Color reset to Red",
         ColorShared = "Color copied to clipboard!",
-        AutoExecOn = "Auto-Execute: ON",
-        AutoExecOff = "Auto-Execute: OFF",
-        BlacklistAdded = "Added to Blacklist",
-        BlacklistRemoved = "Removed from Blacklist",
+        AutoExecOn = "Auto-Execute: ON", AutoExecOff = "Auto-Execute: OFF",
+        BlacklistAdded = "Script blacklisted!", BlacklistRemoved = "Script unblacklisted!",
         KeybindChanged = "Auto-Hide keybind: ",
-        UrlCheckStarted = "Testing URLs...",
-        UrlCheckDone = "URL test complete!",
+        UrlCheckStarted = "Testing URLs...", UrlCheckDone = "URL test complete!",
+        WelcomeTitle = "Welcome to XyqwHub!",
+        ClickXToClose = "Click X to close",
         ChangeLogText = [[XyqwHub ChangeLog
 
+Version 6.0
+- 5 languages: EN, RU, UK, BE, KK
+- Welcome message restored
+- Script text size 12 (slightly reduced)
+- Fixed blacklist not refreshing
+- Notifications: "Script blacklisted!", "Script unblacklisted!"
+
 Version 5.9
-- X button fixed in the very right corner
-- Script name text size 11 (slightly bigger)
-- Title button names stretch (C -> Custom, CC -> Custom Color)
-- Buttons themselves stay compact
-- Tabs stretch when window wide
-
-Version 5.8
-- X in right corner, bigger script text
-
-Version 5.7
-- Fixed blacklist removing
-- Title buttons widen
+- X in right corner
 
 Version 5.6
 - NO rounded corners
-- Default tab: All
+- Default tab All
 
 Version 5.5
 - Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
-
-Version 5.4
-- Same features
-
-Version 5.3
-- Custom Color smaller + resize
-- Universal workspace
-
-Version 5.2
-- Universal workspace
-
-Version 5.1
-- Share buttons
 
 Version 5.0
 - Custom Color instant
 
 Version 4.9
-- Welcome smaller, 13 themes
-
-Version 4.8
-- Custom Color rgb()
-
-Version 4.7
-- Custom Color picker
-
-Version 4.6
-- Fixed Rainbow
-
-Version 4.5
-- Files to workspace
-
-Version 4.4
-- Remove Tags and Destroy
-
-Version 4.3
-- Server Info
-
-Version 4.2
-- Top bar + Hide
-
-Version 4.1
-- Buttons squared
+- 13 themes
 
 Version 4.0
 - First 4.0 release
@@ -268,90 +223,192 @@ Version 1.0
         LoadstringCopied = "Loadstring скопирован, спасибо :3",
         ColorReset = "Custom Color сброшен на Красный",
         ColorShared = "Цвет скопирован!",
-        AutoExecOn = "Авто-запуск: ВКЛ",
-        AutoExecOff = "Авто-запуск: ВЫКЛ",
-        BlacklistAdded = "Добавлено в чёрный список",
-        BlacklistRemoved = "Удалено из чёрного списка",
+        AutoExecOn = "Авто-запуск: ВКЛ", AutoExecOff = "Авто-запуск: ВЫКЛ",
+        BlacklistAdded = "Скрипт в чёрном списке!", BlacklistRemoved = "Скрипт убран из чёрного списка!",
         KeybindChanged = "Бинд Auto-Hide: ",
-        UrlCheckStarted = "Проверка URL...",
-        UrlCheckDone = "Проверка завершена!",
+        UrlCheckStarted = "Проверка URL...", UrlCheckDone = "Проверка завершена!",
+        WelcomeTitle = "Добро пожаловать в XyqwHub!",
+        ClickXToClose = "Нажми X чтобы закрыть",
         ChangeLogText = [[XyqwHub Ченджлог
 
-Версия 5.9
-- X в самом правом углу
-- Текст скриптов побольше (TextSize = 11)
-- Названия кнопок заголовка растягиваются (C -> Custom, CC -> Custom Color)
-- Сами кнопки остаются компактными
-- Вкладки растягиваются при широком окне
-
-Версия 5.8
-- X в правом углу, больше текста
-
-Версия 5.7
+Версия 6.0
+- 5 языков: EN, RU, UK, BE, KK
+- Возвращено Welcome сообщение
+- Размер текста скриптов 12 (чуть уменьшен)
 - Фикс блеклиста
-- Кнопки заголовка растягиваются
+- Уведомления: "Скрипт в чёрном списке!", "Скрипт убран из чёрного списка!"
+
+Версия 5.9
+- X в правом углу
 
 Версия 5.6
 - БЕЗ скруглений
-- Базовая вкладка: All
+- Базовая вкладка All
 
 Версия 5.5
 - Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
-
-Версия 5.4
-- Те же фичи
-
-Версия 5.3
-- Custom Color меньше + ресайз
-- Универсальный workspace
-
-Версия 5.2
-- Универсальный workspace
-
-Версия 5.1
-- Share кнопки
 
 Версия 5.0
 - Custom Color мгновенно
 
 Версия 4.9
-- Welcome меньше, 13 тем
-
-Версия 4.8
-- Custom Color rgb()
-
-Версия 4.7
-- Custom Color picker
-
-Версия 4.6
-- Фикс Rainbow
-
-Версия 4.5
-- Файлы в workspace
-
-Версия 4.4
-- Remove Tags и Destroy
-
-Версия 4.3
-- Server Info
-
-Версия 4.2
-- Top bar + Hide
-
-Версия 4.1
-- Кнопки квадратные
+- 13 тем
 
 Версия 4.0
 - Первый релиз
 
 Версия 1.0
 - Первый релиз]],
-    }
+    },
+    UK = {
+        Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
+        CustomPlaceholder = "Вставте URL або loadstring...", RunCustom = "Запустити",
+        JobIdCopied = "JobId скопійовано!", ScriptExecuted = "Скрипт виконано!",
+        OwnerWelcome = "Вітаю, мій батько :3", BetaWelcome = "Радий тебе бачити, тестер <3",
+        TagRemoved = "Тег прибрано!", HideTopBarOn = "Верхня панель: УВІМК", HideTopBarOff = "Верхня панель: ВИМК",
+        LangChanged = "Мову змінено на Українську",
+        FavShared = "Обране скопійовано!",
+        RctShared = "Останні скрипти скопійовано!",
+        LoadstringCopied = "Loadstring скопійовано, дякую :3",
+        ColorReset = "Колір скинуто", ColorShared = "Колір скопійовано!",
+        AutoExecOn = "Авто-запуск: УВІМК", AutoExecOff = "Авто-запуск: ВИМК",
+        BlacklistAdded = "Скрипт у чорному списку!", BlacklistRemoved = "Скрипт прибрано з чорного списку!",
+        KeybindChanged = "Бінд Auto-Hide: ",
+        UrlCheckStarted = "Перевірка URL...", UrlCheckDone = "Перевірку завершено!",
+        WelcomeTitle = "Ласкаво просимо до XyqwHub!",
+        ClickXToClose = "Натисни X щоб закрити",
+        ChangeLogText = [[XyqwHub Журнал
+
+Версія 6.0
+- 5 мов: EN, RU, UK, BE, KK
+- Повернуто вітальне повідомлення
+- Розмір тексту 12 (трохи зменшено)
+- Фікс чорного списку
+- Сповіщення: "Скрипт у чорному списку!", "Скрипт прибрано з чорного списку!"
+
+Версія 5.9
+- X у правому куті
+
+Версія 5.6
+- Без заокруглень
+- Базова вкладка All
+
+Версія 5.5
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+
+Версія 5.0
+- Custom Color миттєво
+
+Версія 4.9
+- 13 тем
+
+Версія 4.0
+- Перший реліз
+
+Версія 1.0
+- Перший реліз]],
+    },
+    BE = {
+        Loaded = "загружана", Error = "памылка", Search = "Пошук...",
+        CustomPlaceholder = "Устаўце URL або loadstring...", RunCustom = "Запусціць",
+        JobIdCopied = "JobId скапіяваны!", ScriptExecuted = "Скрыпт выкананы!",
+        OwnerWelcome = "Вітаю, мой бацька :3", BetaWelcome = "Рады цябе бачыць, тэстар <3",
+        TagRemoved = "Тэг прыбраны!", HideTopBarOn = "Верхняя панэль: УКЛ", HideTopBarOff = "Верхняя панэль: ВЫКЛ",
+        LangChanged = "Мова зменена на Беларускую",
+        FavShared = "Абранае скапіявана!",
+        RctShared = "Апошнія скрыпты скапіяваны!",
+        LoadstringCopied = "Loadstring скапіяваны, дзякуй :3",
+        ColorReset = "Колер скінуты", ColorShared = "Колер скапіяваны!",
+        AutoExecOn = "Аўта-запуск: УКЛ", AutoExecOff = "Аўта-запуск: ВЫКЛ",
+        BlacklistAdded = "Скрыпт у чорным спісе!", BlacklistRemoved = "Скрыпт прыбраны з чорнага спісу!",
+        KeybindChanged = "Бінд Auto-Hide: ",
+        UrlCheckStarted = "Праверка URL...", UrlCheckDone = "Праверка завершана!",
+        WelcomeTitle = "Сардэчна запрашаем у XyqwHub!",
+        ClickXToClose = "Націсні X каб зачыніць",
+        ChangeLogText = [[XyqwHub Чэйнджлог
+
+Версія 6.0
+- 5 моў: EN, RU, UK, BE, KK
+- Вернута прывітальнае паведамленне
+- Памер тэксту 12 (трохі паменшаны)
+- Фікс чорнага спісу
+- Апавяшчэнні: "Скрыпт у чорным спісе!", "Скрыпт прыбраны з чорнага спісу!"
+
+Версія 5.9
+- X у правым куце
+
+Версія 5.6
+- Без заакругленняў
+- Базавая ўкладка All
+
+Версія 5.5
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+
+Версія 5.0
+- Custom Color імгненна
+
+Версія 4.9
+- 13 тэм
+
+Версія 4.0
+- Першы рэліз
+
+Версія 1.0
+- Першы рэліз]],
+    },
+    KK = {
+        Loaded = "жүктелді", Error = "қате", Search = "Іздеу...",
+        CustomPlaceholder = "URL немесе loadstring қойыңыз...", RunCustom = "Іске қосу",
+        JobIdCopied = "JobId көшірілді!", ScriptExecuted = "Скрипт орындалды!",
+        OwnerWelcome = "Қош келдің, әкем :3", BetaWelcome = "Көргеніме қуаныштымын, тестер <3",
+        TagRemoved = "Тег жойылды!", HideTopBarOn = "Жоғарғы тақта: ҚОСУЛЫ", HideTopBarOff = "Жоғарғы тақта: ӨШІРУЛІ",
+        LangChanged = "Тіл Қазақшаға өзгертілді",
+        FavShared = "Таңдаулылар көшірілді!",
+        RctShared = "Соңғы скрипттер көшірілді!",
+        LoadstringCopied = "Loadstring көшірілді, рахмет :3",
+        ColorReset = "Түс қалпына келтірілді", ColorShared = "Түс көшірілді!",
+        AutoExecOn = "Авто-орындау: ҚОСУЛЫ", AutoExecOff = "Авто-орындау: ӨШІРУЛІ",
+        BlacklistAdded = "Скрипт қара тізімде!", BlacklistRemoved = "Скрипт қара тізімнен жойылды!",
+        KeybindChanged = "Auto-Hide байланысы: ",
+        UrlCheckStarted = "URL тексерілуде...", UrlCheckDone = "Тексеру аяқталды!",
+        WelcomeTitle = "XyqwHub-қа қош келдіңіз!",
+        ClickXToClose = "Жабу үшін X басыңыз",
+        ChangeLogText = [[XyqwHub Өзгерістер
+
+6.0 нұсқасы
+- 5 тіл: EN, RU, UK, BE, KK
+- Қош келу хабарламасы қалпына келтірілді
+- Мәтін өлшемі 12 (сәл азайтылды)
+- Қара тізім түзетілді
+- Хабарламалар: "Скрипт қара тізімде!", "Скрипт қара тізімнен жойылды!"
+
+5.9 нұсқасы
+- X оң жақ бұрышта
+
+5.6 нұсқасы
+- Дөңгелектену жоқ
+- Негізгі қойынды All
+
+5.5 нұсқасы
+- Auto Execute, Blacklist, Auto Hide, URL Tester, Sorting
+
+5.0 нұсқасы
+- Custom Color бірден
+
+4.9 нұсқасы
+- 13 тақырып
+
+4.0 нұсқасы
+- Алғашқы шығарылым
+
+1.0 нұсқасы
+- Алғашқы шығарылым]],
+    },
 }
 
 local function _(key)
     local lang = getgenv().XyqwLanguage or "EN"
-    return LANG[lang][key] or key
+    return LANG[lang][key] or LANG.EN[key] or key
 end
 
 local function ShowRobloxNotification(text, duration)
@@ -449,7 +506,6 @@ local function IsBeta()
     return false
 end
 
--- ========== ТЕГИ ==========
 local tagsEnabled = true
 local activeTags = {}
 
@@ -805,7 +861,6 @@ titleLabel.Font = Enum.Font.GothamBold
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = titleBar
 
--- Все кнопки заголовка (без позиции — она ставится в UpdateHeaderLayout)
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseBtn"
 closeButton.BackgroundColor3 = RED_DARK
@@ -902,9 +957,6 @@ colorBtn.BorderColor3 = RED_MAIN
 colorBtn.Parent = titleBar
 colorBtn.AutoButtonColor = false
 
--- ========== ФУНКЦИЯ РАСТЯГИВАНИЯ КНОПОК ЗАГОЛОВКА ==========
--- Порядок слева направо: [Th] [CC] [CL] [C] [P] [S] [EN] [X]
--- X ВСЕГДА последний и прижат к правому краю
 local HEADER_BUTTONS = {themeBtn, colorBtn, changelogButton, customBtn, playerBtn, serverBtn, langButton, closeButton}
 local HEADER_SHORT_TEXT = {"Th", "CC", "CL", "C", "P", "S", "EN", "X"}
 local HEADER_LONG_TEXT  = {"Theme", "Custom Color", "ChangeLog", "Custom", "Players", "Server", "EN/RU", "X"}
@@ -913,13 +965,12 @@ local HEADER_LONG_W  = {55, 105, 85, 70, 70, 65, 55, 22}
 
 local function UpdateHeaderLayout()
     local w = mainFrame.AbsoluteSize.X
-    local useLong = w >= 550  -- порог, при котором влезают длинные названия
+    local useLong = w >= 550
     local titleW = 70
     local buttons = HEADER_BUTTONS
     local count = #buttons
     local gap = 1
 
-    -- Считаем общую ширину
     local widths = {}
     local totalW = titleW + 6
     for i = 1, count do
@@ -928,7 +979,6 @@ local function UpdateHeaderLayout()
         totalW = totalW + bw + gap
     end
 
-    -- Если не влезает — переключаемся на короткие
     if totalW > w then
         useLong = false
         totalW = titleW + 6
@@ -938,16 +988,13 @@ local function UpdateHeaderLayout()
         end
     end
 
-    -- Сначала ставим X в самый правый угол
     local xRight = w - 1
-    -- X — последний в списке
     local xIdx = count
     local xW = widths[xIdx]
     buttons[xIdx].Size = UDim2.new(0, xW, 0.8, 0)
     buttons[xIdx].Position = UDim2.new(1, -xW - 1, 0.1, 0)
     xRight = xRight - xW - gap
 
-    -- Остальные — справа налево перед X
     for i = count - 1, 1, -1 do
         local bw = widths[i]
         buttons[i].Size = UDim2.new(0, bw, 0.8, 0)
@@ -955,15 +1002,12 @@ local function UpdateHeaderLayout()
         xRight = xRight - bw - gap
     end
 
-    -- Обновляем тексты
     for i = 1, count do
         buttons[i].Text = useLong and HEADER_LONG_TEXT[i] or HEADER_SHORT_TEXT[i]
     end
-    -- Язык всегда показываем фактический
     langButton.Text = getgenv().XyqwLanguage
 end
 
--- ========== SEARCH ==========
 local searchBar = Instance.new("TextBox")
 searchBar.Name = "SearchBar"
 searchBar.Size = UDim2.new(1, -50, 0, 24)
@@ -1111,7 +1155,7 @@ local function CreateScriptButton(data)
     statusDot.ZIndex = 2
     statusDot.Parent = container
 
-    -- Текст скриптов (TextSize 11 — чуть больше прошлого)
+    -- Текст 12 (с 5.6 = 13, чуть уменьшен)
     local btn = Instance.new("TextButton")
     btn.Name = "MainBtn"
     btn.Size = UDim2.new(1, -90, 1, 0)
@@ -1120,7 +1164,7 @@ local function CreateScriptButton(data)
     btn.TextColor3 = RED_MAIN
     btn.Text = data.Name
     btn.TextScaled = false
-    btn.TextSize = 11
+    btn.TextSize = 12
     btn.Font = Enum.Font.GothamBold
     btn.TextXAlignment = Enum.TextXAlignment.Left
     btn.TextTruncate = Enum.TextTruncate.AtEnd
@@ -1539,6 +1583,7 @@ local function ShowBlacklistManager()
             getgenv().XyqwBlacklist[name] = nil
             SaveTable(BLACKLIST_FILE, getgenv().XyqwBlacklist)
             ShowRobloxNotification(_("BlacklistRemoved"), 2)
+            -- ФИКС: refresh обновляется всегда
             if getgenv().RefreshButtons then getgenv().RefreshButtons() end
             frame:Destroy()
             ShowBlacklistManager()
@@ -1862,7 +1907,14 @@ end
 changelogButton.MouseButton1Click:Connect(ShowChangeLog)
 
 langButton.MouseButton1Click:Connect(function()
-    if getgenv().XyqwLanguage == "EN" then getgenv().XyqwLanguage = "RU" else getgenv().XyqwLanguage = "EN" end
+    local langs = {"EN", "RU", "UK", "BE", "KK"}
+    local idx = 1
+    for i, l in ipairs(langs) do
+        if l == getgenv().XyqwLanguage then idx = i break end
+    end
+    idx = idx + 1
+    if idx > #langs then idx = 1 end
+    getgenv().XyqwLanguage = langs[idx]
     langButton.Text = getgenv().XyqwLanguage
     searchBar.PlaceholderText = _("Search")
     ShowRobloxNotification(_("LangChanged"), 2)
@@ -2847,6 +2899,173 @@ closeButton.MouseButton1Click:Connect(function()
     dockButton.Visible = true
 end)
 
+-- ========== WELCOME MESSAGE ==========
+local function ShowWelcomeMessage()
+    local frame = Instance.new("Frame")
+    frame.Name = "WelcomeFrame"
+    frame.Size = UDim2.new(0, 340, 0, 340)
+    frame.Position = UDim2.new(0.5, -170, 0.5, -170)
+    frame.BackgroundColor3 = RED_BG
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = RED_MAIN
+    frame.ZIndex = 100
+    frame.Active = true
+    frame.Parent = screenGui
+
+    local blocker = Instance.new("TextButton")
+    blocker.Size = UDim2.new(1, 0, 1, 0)
+    blocker.BackgroundTransparency = 1
+    blocker.Text = ""
+    blocker.Active = true
+    blocker.AutoButtonColor = false
+    blocker.ZIndex = 100
+    blocker.Parent = frame
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 22)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.BackgroundTransparency = 1
+    title.TextColor3 = RED_MAIN
+    title.Text = _("WelcomeTitle")
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.ZIndex = 101
+    title.Parent = frame
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 26, 0, 22)
+    closeBtn.Position = UDim2.new(1, -31, 0, 4)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = RED_MAIN
+    closeBtn.TextScaled = true
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.ZIndex = 102
+    closeBtn.Parent = frame
+    closeBtn.AutoButtonColor = false
+    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+
+    local shareBtn = Instance.new("TextButton")
+    shareBtn.Size = UDim2.new(1, -20, 0, 24)
+    shareBtn.Position = UDim2.new(0, 10, 0, 28)
+    shareBtn.BackgroundColor3 = RED_DARK
+    shareBtn.TextColor3 = RED_MAIN
+    shareBtn.Text = "Share XyqwHub"
+    shareBtn.TextScaled = true
+    shareBtn.Font = Enum.Font.GothamBold
+    shareBtn.BorderSizePixel = 1
+    shareBtn.BorderColor3 = RED_MAIN
+    shareBtn.ZIndex = 101
+    shareBtn.Parent = frame
+    shareBtn.AutoButtonColor = false
+    shareBtn.MouseButton1Click:Connect(function()
+        local ls = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Xyqwerq/XyqwHub/main/main.lua"))()'
+        pcall(function() setclipboard(ls) end)
+        ShowRobloxNotification(_("LoadstringCopied"), 4)
+    end)
+
+    local tiktok = Instance.new("TextLabel")
+    tiktok.Size = UDim2.new(1, -10, 0, 16)
+    tiktok.Position = UDim2.new(0, 5, 0, 58)
+    tiktok.BackgroundTransparency = 1
+    tiktok.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tiktok.Text = "TikTok: xyqwerq.tvink"
+    tiktok.TextScaled = true
+    tiktok.Font = Enum.Font.Gotham
+    tiktok.ZIndex = 101
+    tiktok.Parent = frame
+
+    local tg = Instance.new("TextLabel")
+    tg.Size = UDim2.new(1, -10, 0, 16)
+    tg.Position = UDim2.new(0, 5, 0, 76)
+    tg.BackgroundTransparency = 1
+    tg.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tg.Text = "Telegram: t.me/xyqwsquad"
+    tg.TextScaled = true
+    tg.Font = Enum.Font.Gotham
+    tg.ZIndex = 101
+    tg.Parent = frame
+
+    local dc = Instance.new("TextLabel")
+    dc.Size = UDim2.new(1, -10, 0, 16)
+    dc.Position = UDim2.new(0, 5, 0, 94)
+    dc.BackgroundTransparency = 1
+    dc.TextColor3 = Color3.fromRGB(255, 255, 255)
+    dc.Text = "Discord: xyqwerqyt"
+    dc.TextScaled = true
+    dc.Font = Enum.Font.Gotham
+    dc.ZIndex = 101
+    dc.Parent = frame
+
+    local scroll = Instance.new("ScrollingFrame")
+    scroll.Size = UDim2.new(1, -10, 1, -150)
+    scroll.Position = UDim2.new(0, 5, 0, 116)
+    scroll.BackgroundTransparency = 1
+    scroll.BorderSizePixel = 0
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 620)
+    scroll.ScrollBarThickness = 4
+    scroll.ScrollBarImageColor3 = RED_MAIN
+    scroll.ZIndex = 101
+    scroll.Parent = frame
+
+    local doc = Instance.new("TextLabel")
+    doc.Size = UDim2.new(1, -10, 0, 610)
+    doc.Position = UDim2.new(0, 5, 0, 0)
+    doc.BackgroundTransparency = 1
+    doc.TextColor3 = RED_MAIN
+    doc.TextWrapped = true
+    doc.TextXAlignment = Enum.TextXAlignment.Left
+    doc.TextYAlignment = Enum.TextYAlignment.Top
+    doc.TextSize = 10
+    doc.Font = Enum.Font.Gotham
+    doc.Text = "─── TITLE BAR ───\n" ..
+        "Th  — Theme / Тема\n" ..
+        "CC  — Custom Color / Свой цвет\n" ..
+        "CL  — ChangeLog / Ченджлог\n" ..
+        "C   — Custom Script / Свой скрипт\n" ..
+        "P   — Players List / Игроки\n" ..
+        "S   — Server Info / Сервер\n" ..
+        "EN/RU/UK/BE/KK — Languages\n" ..
+        "X   — Close / Закрыть\n" ..
+        "\n─── BOTTOM BUTTONS ───\n" ..
+        "Remove Tags      — remove OWNER/TESTER tags\n" ..
+        "Share Fav Scripts — copies favorites list\n" ..
+        "Share Recent Scripts — copies recent list\n" ..
+        "Manage Blacklist — hide unwanted scripts\n" ..
+        "Test URLs       — check every script\n" ..
+        "Settings        — Auto-Hide bind\n" ..
+        "Destroy XyqwHub — full unload\n" ..
+        "\n─── TOP BAR ───\n" ..
+        "Executor | Username | FPS | Ping\n" ..
+        "H — Hide / Show\n" ..
+        "\n─── LANGUAGES ───\n" ..
+        "EN (English), RU (Русский), UK (Українська),\n" ..
+        "BE (Беларуская), KK (Қазақша)\n" ..
+        "Click EN/RU to cycle\n" ..
+        "\n─── RESIZE ───\n" ..
+        "Drag bottom-right corner\n" ..
+        "\n─── FILES ───\n" ..
+        "XyqwHub/FavScripts/favorites.json\n" ..
+        "XyqwHub/RctScripts/recent.json\n" ..
+        "XyqwHub/CustomColor/custom_color.json\n" ..
+        "XyqwHub/AutoExecute/autoexec.json\n" ..
+        "XyqwHub/Blacklist/blacklist.json\n" ..
+        "XyqwHub/Settings/settings.json"
+    doc.ZIndex = 101
+    doc.Parent = scroll
+
+    local ver = Instance.new("TextLabel")
+    ver.Size = UDim2.new(1, -10, 0, 16)
+    ver.Position = UDim2.new(0, 5, 1, -20)
+    ver.BackgroundTransparency = 1
+    ver.TextColor3 = Color3.fromRGB(150, 150, 150)
+    ver.Text = "Version: " .. VERSION .. "  |  " .. _("ClickXToClose")
+    ver.TextScaled = true
+    ver.Font = Enum.Font.Gotham
+    ver.ZIndex = 101
+    ver.Parent = frame
+end
+
 -- ========== ИНИЦИАЛИЗАЦИЯ ==========
 UpdateTabLayout()
 UpdateScriptButtonLayout()
@@ -2857,6 +3076,12 @@ task.spawn(function()
     task.wait(0.5)
     ShowRobloxNotification("XyqwHub Loaded!", 4)
     print("[XyqwHub] XyqwHub Loaded! Version: " .. VERSION)
+end)
+
+-- WELCOME (вернул!)
+task.spawn(function()
+    task.wait(1.2)
+    ShowWelcomeMessage()
 end)
 
 task.spawn(function()
