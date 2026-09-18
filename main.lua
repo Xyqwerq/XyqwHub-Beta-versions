@@ -14,6 +14,20 @@ end
 getgenv().XyqwHubRunning = true
 
 local VERSION = "6.7"
+-- === ФИКС: гарантированная инициализация ===
+if getgenv().XyqwLanguage == nil then getgenv().XyqwLanguage = "EN" end
+if getgenv().XyqwTheme == nil or type(getgenv().XyqwTheme) ~= "string" then getgenv().XyqwTheme = "Red" end
+if getgenv().TopBarHidden == nil then getgenv().TopBarHidden = false end
+if getgenv().XyqwFavorites == nil then getgenv().XyqwFavorites = {} end
+if getgenv().XyqwRecent == nil then getgenv().XyqwRecent = {} end
+if getgenv().XyqwAutoExec == nil then getgenv().XyqwAutoExec = {} end
+if getgenv().XyqwOrder == nil then getgenv().XyqwOrder = {} end
+if getgenv().XyqwSettings == nil then getgenv().XyqwSettings = {} end
+if not getgenv().XyqwSettings.sortMode then getgenv().XyqwSettings.sortMode = "default" end
+if not getgenv().XyqwSettings.autoHideBind then getgenv().XyqwSettings.autoHideBind = "RightShift" end
+if not getgenv().XyqwSettings.urlStatus then getgenv().XyqwSettings.urlStatus = {} end
+if getgenv().XyqwCustomColor == nil then getgenv().XyqwCustomColor = {r = 255, g = 0, b = 0, dr = 40, dg = 0, db = 0} end
+-- === КОНЕЦ ФИКСА ===
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
