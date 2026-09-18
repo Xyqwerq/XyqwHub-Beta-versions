@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.9.1 ==========
+-- ========== XyqwHub - Версия 7.0 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.9.1"
+local VERSION = "7.0"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -139,12 +139,27 @@ local LANG = {
         ChangeLogText = [[XyqwHub ChangeLog
 
 ========================================
+Version 7.0
+========================================
+- Drag zone increased to 25px
+- Added visual drag handle (yellow strip on left side of each script)
+- Fixed categories not filtering (variable shadowing fix)
+- Updated Welcome with full feature list
+- Full changelog restored (1.0-7.0)
+- All 5 languages updated
+
+========================================
+Version 6.9.2
+========================================
+- Drag zone fix attempt
+- Categories fix attempt
+
+========================================
 Version 6.9.1
 ========================================
 - Full changelog restored (1.0-6.9.1)
-- Mixed detailed + short descriptions for all versions
+- Mixed detailed + short descriptions
 - All 5 languages updated
-- All previous fixes kept
 
 ========================================
 Version 6.9
@@ -201,60 +216,49 @@ Version 6.3
 - Added smooth animations (hover, open/close, color transitions)
 - Added drag & drop for script buttons (hold 0.35s to reorder)
 - Script order is now saved to Settings/order.json
-- Updated welcome message with new controls
 
 ========================================
 Version 6.2
 ========================================
 - Fixed blacklist x not removing item
-- Fixed "Script unblacklisted" notification
 - Full changelog for all languages
-- All UI translated (except social media)
 
 ========================================
 Version 6.1
 ========================================
-- Fixed blacklist refreshing (list now updates instantly)
+- Fixed blacklist refreshing
 
 ========================================
 Version 6.0
 ========================================
 - Added 5 languages: EN, RU, UK, BE, KK
-- Welcome message restored
-- Translated all notifications
 
 ========================================
 Version 5.9
 ========================================
 - X button moved to right corner
-- Added drag support for top bar
+- Top bar drag support
 
 ========================================
 Version 5.6
 ========================================
-- Removed rounded corners (all buttons squared)
-- Default tab is now "All"
-- Fixed tab switching
+- Removed rounded corners
+- Default tab is "All"
 
 ========================================
 Version 5.5
 ========================================
-- Added Auto Execute (play button on each script)
-- Added Auto Hide (bind to hide/show GUI)
-- Added URL Tester (checks if script URLs work)
-- Added Sorting (A-Z, Z-A, Recent)
-- Added Settings window
+- Auto Execute, Auto Hide, URL Tester, Sorting, Settings
 
 ========================================
 Version 5.4
 ========================================
-- Auto Execute Scripts (starts on game join)
-- Script Blacklist (hide unwanted scripts)
-- Auto Hide GUI (custom keybind)
+- Auto Execute Scripts on join
+- Script Blacklist
+- Auto Hide GUI
 - URL Tester (green/red indicators)
-- Script Sorting (A-Z / Z-A / Recent)
-- Share Favorite Scripts (Fav tab only)
-- Share Recent Scripts (Rct tab only)
+- Script Sorting
+- Share Fav/Rct
 
 ========================================
 Version 5.3
@@ -525,7 +529,7 @@ Version 2.0
 Version 1.9
 ========================================
 - Added key for Doors V3 (Cheesy)
-- "Key: joincheesydsc"
+- "Key: joincheesedsc"
 
 ========================================
 Version 1.8
@@ -608,27 +612,42 @@ Version 1.0
         ChangeLogText = [[XyqwHub Ченджлог
 
 ========================================
+Версия 7.0
+========================================
+- Drag zone увеличен до 25px
+- Добавлена визуальная жёлтая полоска слева
+- Фикс категорий (переменная shadowing)
+- Обновлён Welcome с полным списком функций
+- Полный ченджлог восстановлен (1.0-7.0)
+- Все 5 языков обновлены
+
+========================================
+Версия 6.9.2
+========================================
+- Попытка фикса drag zone
+- Попытка фикса категорий
+
+========================================
 Версия 6.9.1
 ========================================
 - Полный ченджлог восстановлен (1.0-6.9.1)
-- Смешаны подробные + краткие описания для всех версий
-- Обновлены все 5 языков
-- Все предыдущие фиксы сохранены
+- Смешаны подробные + краткие описания
+- Все 5 языков обновлены
 
 ========================================
 Версия 6.9
 ========================================
-- Фикс застывания вкладок/кнопок заголовка (fade вместо size)
+- Фикс застывания вкладок/кнопок (fade вместо size)
 - Размер GUI сохраняется между открытиями
-- Drag только за левый край (первые 15px)
+- Drag только за левый край (15px)
 - Фикс категорий (не фильтровались)
 
 ========================================
 Версия 6.8
 ========================================
-- Фикс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (потеряны)
+- Фикс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING
 - Фикс краша темы (nil)
-- Инициализация getgenv() в начале
+- Инициализация getgenv()
 
 ========================================
 Версия 6.7
@@ -650,33 +669,32 @@ Version 1.0
 ========================================
 Версия 6.5
 ========================================
-- Фикс: скрипт запускается только по тапу, не при отпускании после drag
+- Фикс: скрипт запускается только по тапу
 - Добавлен флаг blockClick
-- ZIndex на контейнерах (1), тексте (2), точках (3)
+- ZIndex на контейнерах, тексте, точках
 
 ========================================
 Версия 6.4
 ========================================
 - Названия скриптов по центру
-- Подсветка при drag больше не «подгорает» (используется рамка)
+- Подсветка при drag не «подгорает»
 - Добавлена кнопка Reset Order
-- Система версий: каждое изменение → новая версия
+- Система версий
 
 ========================================
 Версия 6.3
 ========================================
-- Blacklist удалён полностью (кнопка, окно, файлы, проверки)
+- Blacklist удалён полностью
 - Фикс заголовка при запуске
-- Добавлены плавные анимации (hover, открытие/закрытие, смена цвета)
-- Добавлено перетаскивание кнопок скриптов (зажми 0.35 сек)
-- Порядок скриптов сохраняется в Settings/order.json
+- Плавные анимации
+- Drag & drop (hold 0.35s)
+- Порядок в Settings/order.json
 
 ========================================
 Версия 6.2
 ========================================
 - Фикс × в чёрном списке
-- Фикс уведомления "Скрипт убран из чёрного списка!"
-- Полный ченджлог для всех языков
+- Полный ченджлог
 
 ========================================
 Версия 6.1
@@ -686,20 +704,19 @@ Version 1.0
 ========================================
 Версия 6.0
 ========================================
-- Добавлено 5 языков: EN, RU, UK, BE, KK
-- Возвращено приветственное сообщение
+- 5 языков: EN, RU, UK, BE, KK
 
 ========================================
 Версия 5.9
 ========================================
-- Кнопка X перенесена в правый угол
-- Поддержка перетаскивания топ-бара
+- X в правый угол
+- Перетаскивание топ-бара
 
 ========================================
 Версия 5.6
 ========================================
 - Убраны скругления
-- Базовая вкладка теперь "All"
+- Базовая вкладка All
 
 ========================================
 Версия 5.5
@@ -709,13 +726,12 @@ Version 1.0
 ========================================
 Версия 5.4
 ========================================
-- Авто-запуск скриптов при входе
-- Чёрный список скриптов
-- Auto Hide GUI (свой бинд)
-- URL Tester (зелёные/красные индикаторы)
-- Сортировка скриптов (A-Z / Z-A / Недавние)
-- Share Favorite Scripts (только Fav)
-- Share Recent Scripts (только Rct)
+- Авто-запуск скриптов
+- Чёрный список
+- Auto Hide GUI
+- URL Tester
+- Сортировка
+- Share Fav/Rct
 
 ========================================
 Версия 5.3
@@ -776,16 +792,16 @@ Version 1.0
 ========================================
 Версия 4.2
 ========================================
-- Код переписан в минифицированном стиле (всё в 1 строку где можно)
+- Код переписан в минифицированном стиле
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme(themeName) — функция смены темы
+- ApplyTheme(themeName) — смена темы
 - themeOrder + themeIndex — переключение тем
 - ExtractURL(input.Text) — извлечение URL из loadstring
 - SpecialContainer — контейнер для Remove Tags + Destroy
 - removeTagsBtn (50%) — "Remove Tags"
 - destroyBtn (50%) — "Destroy"
-- Rainbow theme — анимация перелива
-- Resize в правом нижнем углу
+- Rainbow тема — анимация перелива
+- Ресайз в правом нижнем углу
 - Стартовое окно 250x300
 - Все кнопки квадратные (нет UICorner)
 - Ярко-красный вместо жёлтого
@@ -986,7 +1002,7 @@ Version 1.0
 Версия 1.9
 ========================================
 - Добавлен ключ для Doors V3 (Cheesy)
-- "Key: joincheesydsc"
+- "Key: joincheesedsc"
 
 ========================================
 Версия 1.8
@@ -1069,34 +1085,49 @@ Version 1.0
         ChangeLogText = [[XyqwHub Журнал
 
 ========================================
+Версія 7.0
+========================================
+- Drag zone збільшено до 25px
+- Додано візуальну жовту смужку ліворуч
+- Фікс категорій (variable shadowing)
+- Оновлено Welcome з повним списком функцій
+- Повний журнал відновлено (1.0-7.0)
+- Всі 5 мов оновлено
+
+========================================
+Версія 6.9.2
+========================================
+- Спроба фіксу drag zone
+- Спроба фіксу категорій
+
+========================================
 Версія 6.9.1
 ========================================
 - Повний журнал відновлено (1.0-6.9.1)
-- Змішано докладні + короткі описи для всіх версій
+- Змішано докладні + короткі описи
 - Оновлено всі 5 мов
-- Всі попередні фікси збережено
 
 ========================================
 Версія 6.9
 ========================================
-- Фікс застигання вкладок/кнопок заголовка (fade замість size)
+- Фікс застигання вкладок/кнопок (fade замість size)
 - Розмір GUI зберігається між відкриттями
-- Drag тільки за лівий край (перші 15px)
-- Фікс категорій (не фільтрувалися)
+- Drag тільки за лівий край (15px)
+- Фікс категорій
 
 ========================================
 Версія 6.8
 ========================================
-- Фікс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (втрачені)
+- Фікс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING
 - Фікс краша теми (nil)
-- Ініціалізація getgenv() на початку
+- Ініціалізація getgenv()
 
 ========================================
 Версія 6.7
 ========================================
 - Переписано з нуля
 - Фікс drag & drop (btn.InputBegan)
-- Фікс анімації відкриття/закриття GUI
+- Фікс анімації GUI
 - Фікс закриття таблиці LANG
 - 5 мов: EN, RU, UK, BE, KK
 - 48 скриптів
@@ -1105,39 +1136,36 @@ Version 1.0
 Версія 6.6
 ========================================
 - Фікс перетягування (btn.InputBegan)
-- Анімації відкриття/закриття GUI (scale + fade)
-- blockClick захист
+- Анімації відкриття/закриття GUI
 
 ========================================
 Версія 6.5
 ========================================
 - Фікс: скрипт запускається лише по тапу
-- Додано флаг blockClick
-- ZIndex на контейнерах (1), тексті (2), точках (3)
+- blockClick захист
+- ZIndex
 
 ========================================
 Версія 6.4
 ========================================
 - Назви скриптів по центру
 - Підсвічування при drag не «підгорає»
-- Додано кнопку Reset Order
-- Система версій
+- Reset Order кнопка
 
 ========================================
 Версія 6.3
 ========================================
-- Blacklist видалено повністю
+- Blacklist видалено
 - Фікс заголовка при запуску
-- Плавні анімації (hover, відкриття/закриття, зміна кольору)
-- Drag & drop кнопок скриптів (hold 0.35s)
+- Плавні анімації
+- Drag & drop (hold 0.35s)
 - Порядок у Settings/order.json
 
 ========================================
 Версія 6.2
 ========================================
 - Фікс × у чорному списку
-- Фікс сповіщення "Скрипт прибрано з чорного списку!"
-- Повний журнал для всіх мов
+- Повний журнал
 
 ========================================
 Версія 6.1
@@ -1148,13 +1176,12 @@ Version 1.0
 Версія 6.0
 ========================================
 - 5 мов: EN, RU, UK, BE, KK
-- Повернуто вітання
 
 ========================================
 Версія 5.9
 ========================================
 - X у правий кут
-- Підтримка перетягування верхньої панелі
+- Перетягування верхньої панелі
 
 ========================================
 Версія 5.6
@@ -1529,34 +1556,49 @@ Version 1.0
         ChangeLogText = [[XyqwHub Чэйнджлог
 
 ========================================
+Версія 7.0
+========================================
+- Drag zone павялічана да 25px
+- Дададзена візуальная жоўтая палоска злева
+- Фікс катэгорый (variable shadowing)
+- Абноўлены Welcome з поўным спісам функцый
+- Поўны чэйнджлог адноўлены (1.0-7.0)
+- Усе 5 моў абноўлены
+
+========================================
+Версія 6.9.2
+========================================
+- Спроба фіксу drag zone
+- Спроба фіксу катэгорый
+
+========================================
 Версія 6.9.1
 ========================================
 - Поўны чэйнджлог адноўлены (1.0-6.9.1)
-- Змешаны падрабязныя + кароткія апісанні для ўсіх версій
+- Змешаны падрабязныя + кароткія апісанні
 - Абноўлены ўсе 5 моў
-- Усе папярэднія фіксы захаваны
 
 ========================================
 Версія 6.9
 ========================================
-- Фікс застывання ўкладак/кнопак загалоўка (fade замест size)
+- Фікс застывання ўкладак/кнопак (fade замест size)
 - Памер GUI захоўваецца паміж адкрыццямі
-- Drag толькі за левы край (першыя 15px)
-- Фікс катэгорый (не фільтраваліся)
+- Drag толькі за левы край (15px)
+- Фікс катэгорый
 
 ========================================
 Версія 6.8
 ========================================
-- Фікс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (страчаны)
+- Фікс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING
 - Фікс краша тэмы (nil)
-- Ініцыялізацыя getgenv() у пачатку
+- Ініцыялізацыя getgenv()
 
 ========================================
 Версія 6.7
 ========================================
 - Перапісана з нуля
 - Фікс drag & drop (btn.InputBegan)
-- Фікс анімацыі адкрыцця/закрыцця GUI
+- Фікс анімацыі GUI
 - Фікс закрыцця табліцы LANG
 - 5 моў: EN, RU, UK, BE, KK
 - 48 скрыптаў
@@ -1565,39 +1607,36 @@ Version 1.0
 Версія 6.6
 ========================================
 - Фікс перацягвання (btn.InputBegan)
-- Анімацыі адкрыцця/закрыцця GUI (scale + fade)
-- blockClick абарона
+- Анімацыі адкрыцця/закрыцця GUI
 
 ========================================
 Версія 6.5
 ========================================
 - Фікс: скрыпт запускаецца толькі па тапе
-- Дададзены флаг blockClick
-- ZIndex на кантэйнерах (1), тэксце (2), кропках (3)
+- blockClick абарона
+- ZIndex
 
 ========================================
 Версія 6.4
 ========================================
 - Назвы скрыптаў па цэнтры
 - Падсветка пры drag не «падгарае»
-- Дададзена кнопка Reset Order
-- Сістэма версій
+- Reset Order кнопка
 
 ========================================
 Версія 6.3
 ========================================
-- Blacklist выдалены цалкам
+- Blacklist выдалены
 - Фікс загалоўка пры запуску
 - Плаўныя анімацыі
-- Drag & drop кнопак скрыптаў (hold 0.35s)
+- Drag & drop (hold 0.35s)
 - Парадак у Settings/order.json
 
 ========================================
 Версія 6.2
 ========================================
 - Фікс × у чорным спісе
-- Фікс апавяшчэння "Скрыпт прыбраны з чорнага спісу!"
-- Поўны чэйнджлог для ўсіх моў
+- Поўны чэйнджлог
 
 ========================================
 Версія 6.1
@@ -1608,13 +1647,12 @@ Version 1.0
 Версія 6.0
 ========================================
 - 5 моў: EN, RU, UK, BE, KK
-- Вернута вітанне
 
 ========================================
 Версія 5.9
 ========================================
 - X у правы кут
-- Падтрымка перацягвання верхняй панэлі
+- Перацягванне верхняй панэлі
 
 ========================================
 Версія 5.6
@@ -1744,8 +1782,8 @@ Version 1.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
 - Search bar
-- Tabs
-- Favorites
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
 - Recently used
 - Script history
 - Theme switcher
@@ -1817,6 +1855,8 @@ Version 1.0
 ========================================
 - Поўнасцю перапісана сістэма тэгаў
 - Тэг прывязаны да HumanoidRootPart
+- Дададзена пазіцыянаванне праз Heartbeat
+- Фікс логікі сканавання
 
 ========================================
 Версія 3.0
@@ -1830,6 +1870,7 @@ Version 1.0
 ========================================
 - Дададзены XyqwHub OWNER тэг
 - Дададзена кнопка "Remove XyqwHub Tag"
+- Дададзена анімацыя градыента для owner тэга
 - Дададзена 2 owner акаўнты
 
 ========================================
@@ -1845,11 +1886,13 @@ Version 1.0
 - Roblox апавяшчэнні (правы ніжні кут)
 - Дададзена кнопка ChangeLog
 - Loading / Loaded апавяшчэнні
+- Тэг бачны ўсім з XyqwHub
 
 ========================================
 Версія 2.6
 ========================================
 - Апавяшчэнні перамешчаны ў правы ніжні кут
+- Новая сістэма апавяшчэнняў
 
 ========================================
 Версія 2.5
@@ -1978,34 +2021,49 @@ Version 1.0
         ChangeLogText = [[XyqwHub Өзгерістер
 
 ========================================
+7.0 нұсқасы
+========================================
+- Drag zone 25px-ке дейін ұлғайтылды
+- Сол жақта визуалды сары жолақ қосылды
+- Санаттар түзетілді (variable shadowing)
+- Welcome функциялардың толық тізімімен жаңартылды
+- Толық өзгерістер қалпына келтірілді (1.0-7.0)
+- Барлық 5 тіл жаңартылды
+
+========================================
+6.9.2 нұсқасы
+========================================
+- Drag zone түзету әрекеті
+- Санаттарды түзету әрекеті
+
+========================================
 6.9.1 нұсқасы
 ========================================
 - Толық өзгерістер қалпына келтірілді (1.0-6.9.1)
-- Барлық нұсқалар үшін егжей-тегжейлі + қысқа сипаттамалар араласқан
+- Егжей-тегжейлі + қысқа сипаттамалар араласқан
 - Барлық 5 тіл жаңартылды
-- Барлық алдыңғы түзетулер сақталды
 
 ========================================
 6.9 нұсқасы
 ========================================
-- Қойындылар/тақырып батырмаларының қатып қалуы түзетілді (fade орнына size)
-- GUI өлшемі ашу/жабу арасында сақталады
-- Drag тек сол жақ шетінен (алғашқы 15px)
-- Санаттар түзетілді (сүзгіленбеді)
+- Қойындылар/батырмалар қатуы түзетілді (fade орнына size)
+- GUI өлшемі сақталады
+- Drag тек сол жақ шетінен (15px)
+- Санаттар түзетілді
 
 ========================================
 6.8 нұсқасы
 ========================================
-- URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING түзетілді (жоғалған)
+- URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING түзетілді
 - Түс құлдырауы түзетілді (nil)
-- getgenv() инициализациясы қосылды
+- getgenv() инициализациясы
 
 ========================================
 6.7 нұсқасы
 ========================================
 - Нөлден қайта жазылды
 - Drag & drop түзетілді (btn.InputBegan)
-- GUI ашу/жабу анимациясы түзетілді
+- GUI анимациясы түзетілді
 - LANG кестесінің жабылуы түзетілді
 - 5 тіл: EN, RU, UK, BE, KK
 - 48 скрипт
@@ -2014,28 +2072,26 @@ Version 1.0
 6.6 нұсқасы
 ========================================
 - Сүйреу түзетілді (btn.InputBegan)
-- GUI ашу/жабу анимациялары (scale + fade)
-- blockClick қорғанысы
+- GUI ашу/жабу анимациялары
 
 ========================================
 6.5 нұсқасы
 ========================================
-- Түзету: скрипт тек таппен іске қосылады
-- blockClick флагы қосылды
-- ZIndex контейнерлерге (1), мәтінге (2), нүктелерге (3)
+- Скрипт тек таппен іске қосылады
+- blockClick қорғанысы
+- ZIndex
 
 ========================================
 6.4 нұсқасы
 ========================================
 - Скрипт атаулары ортада
 - Сүйреу кезіндегі жарық «күйіп кетпейді»
-- Reset Order батырмасы қосылды
-- Нұсқа жүйесі
+- Reset Order батырмасы
 
 ========================================
 6.3 нұсқасы
 ========================================
-- Blacklist толығымен жойылды
+- Blacklist жойылды
 - Тақырып түзетілді
 - Тегіс анимациялар
 - Drag & drop (hold 0.35s)
@@ -2045,8 +2101,7 @@ Version 1.0
 6.2 нұсқасы
 ========================================
 - × қара тізімде түзетілді
-- "Скрипт қара тізімнен жойылды!" хабарламасы түзетілді
-- Барлық тілдер үшін толық өзгерістер
+- Толық өзгерістер
 
 ========================================
 6.1 нұсқасы
@@ -2057,13 +2112,12 @@ Version 1.0
 6.0 нұсқасы
 ========================================
 - 5 тіл: EN, RU, UK, BE, KK
-- Қош келу қалпына келтірілді
 
 ========================================
 5.9 нұсқасы
 ========================================
 - X оң жақ бұрышқа
-- Жоғарғы тақтаны сүйреу қолдауы
+- Жоғарғы тақтаны сүйреу
 
 ========================================
 5.6 нұсқасы
@@ -2267,7 +2321,6 @@ Version 1.0
 - Тег жүйесі толығымен қайта жазылды
 - Тег HumanoidRootPart-қа бекітілді
 - Heartbeat арқылы позициялау қосылды
-- Сканерлеу логикасы түзетілді
 
 ========================================
 3.0 нұсқасы
@@ -2281,7 +2334,6 @@ Version 1.0
 ========================================
 - XyqwHub OWNER тегі қосылды
 - "Remove XyqwHub Tag" батырмасы қосылды
-- Owner тегі үшін градиент анимациясы қосылды
 - 2 owner аккаунт қосылды
 
 ========================================
@@ -2294,16 +2346,14 @@ Version 1.0
 ========================================
 2.7 нұсқасы
 ========================================
-- Roblox хабарламалары (оң жақ төменгі бұрыш)
+- Roblox хабарламалары
 - ChangeLog батырмасы қосылды
 - Loading / Loaded хабарламалары
-- Тег XyqwHub барларға көрінеді
 
 ========================================
 2.6 нұсқасы
 ========================================
 - Хабарламалар оң жақ төменгі бұрышқа жылжытылды
-- Жаңа хабарлама жүйесі
 
 ========================================
 2.5 нұсқасы
@@ -2311,14 +2361,12 @@ Version 1.0
 - Барлық хабарламалар EN/RU-ға аударылды
 - Re-launch protection
 - Тіл ауыстыру батырмасы түзетілді
-- Иесі үшін қош келу
 
 ========================================
 2.4 нұсқасы
 ========================================
 - Re-launch protection қосылды
 - DESTROY батырмасы флагты тазалайды
-- Тек иесі үшін қош келу
 
 ========================================
 2.3 нұсқасы
@@ -3214,10 +3262,20 @@ local function CreateScriptButton(data)
     container.ZIndex = 1
     container.Parent = scrollFrame
 
+    local dragStrip = Instance.new("Frame")
+    dragStrip.Name = "DragStrip"
+    dragStrip.Size = UDim2.new(0, 25, 1, 0)
+    dragStrip.Position = UDim2.new(0, 0, 0, 0)
+    dragStrip.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+    dragStrip.BackgroundTransparency = 0.6
+    dragStrip.BorderSizePixel = 0
+    dragStrip.ZIndex = 2
+    dragStrip.Parent = container
+
     local statusDot = Instance.new("Frame")
     statusDot.Name = "StatusDot"
     statusDot.Size = UDim2.new(0, 6, 0, 6)
-    statusDot.Position = UDim2.new(0, 3, 0.5, -3)
+    statusDot.Position = UDim2.new(0, 12, 0.5, -3)
     statusDot.BackgroundColor3 = URL_UNKNOWN
     statusDot.BorderSizePixel = 0
     statusDot.ZIndex = 3
@@ -3225,15 +3283,15 @@ local function CreateScriptButton(data)
 
     local btn = Instance.new("TextButton")
     btn.Name = "MainBtn"
-    btn.Size = UDim2.new(1, -70, 1, 0)
-    btn.Position = UDim2.new(0, 5, 0, 0)
+    btn.Size = UDim2.new(1, -95, 1, 0)
+    btn.Position = UDim2.new(0, 30, 0, 0)
     btn.BackgroundTransparency = 1
     btn.TextColor3 = RED_MAIN
     btn.Text = data.Name
     btn.TextScaled = false
     btn.TextSize = 17
     btn.Font = Enum.Font.GothamBold
-    btn.TextXAlignment = Enum.TextXAlignment.Center
+    btn.TextXAlignment = Enum.TextXAlignment.Left
     btn.TextTruncate = Enum.TextTruncate.AtEnd
     btn.ZIndex = 2
     btn.Parent = container
@@ -3350,13 +3408,11 @@ local function CreateScriptButton(data)
     local originalPos = nil
     local holdTask = nil
     local holdThreshold = 0.35
-    local dragZone = 15
+    local dragZone = 25
 
-    container.InputBegan:Connect(function(input)
+    dragStrip.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            local localX = input.Position.X - container.AbsolutePosition.X
-            if localX > dragZone then return end
-            blockClick = false
+            blockClick = true
             holdTask = task.delay(holdThreshold, function()
                 if not dragging then
                     dragging = true
@@ -3364,6 +3420,7 @@ local function CreateScriptButton(data)
                     dragStart = input.Position
                     originalPos = container.Position
                     scrollFrame.ScrollingEnabled = false
+                    dragStrip.BackgroundTransparency = 0
                     TweenColor(container, "BorderColor3", Color3.fromRGB(255, 200, 0), 0.15)
                     TweenColor(container, "BackgroundColor3", RED_DARK, 0.15)
                 end
@@ -3390,6 +3447,7 @@ local function CreateScriptButton(data)
                 dragging = false
                 container.ZIndex = 1
                 scrollFrame.ScrollingEnabled = true
+                dragStrip.BackgroundTransparency = 0.6
                 TweenColor(container, "BorderColor3", RED_MAIN, 0.15)
                 TweenColor(container, "BackgroundColor3", RED_BG, 0.15)
                 local curY = container.AbsolutePosition.Y - scrollFrame.AbsolutePosition.Y + scrollFrame.CanvasPosition.Y
@@ -3412,7 +3470,7 @@ local function CreateScriptButton(data)
         end
     end)
 
-    table.insert(buttons, {Container = container, Btn = btn, Star = star, AutoBtn = autoBtn, Data = data, StatusDot = statusDot})
+    table.insert(buttons, {Container = container, Btn = btn, Star = star, AutoBtn = autoBtn, Data = data, StatusDot = statusDot, DragStrip = dragStrip})
 end
 
 ApplyOrderFromFile()
@@ -4948,14 +5006,14 @@ local function ShowWelcomeMessage()
     scroll.Position = UDim2.new(0, 5, 0, 116)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 640)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 850)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 101
     scroll.Parent = frame
 
     local doc = Instance.new("TextLabel")
-    doc.Size = UDim2.new(1, -10, 0, 630)
+    doc.Size = UDim2.new(1, -10, 0, 840)
     doc.Position = UDim2.new(0, 5, 0, 0)
     doc.BackgroundTransparency = 1
     doc.TextColor3 = RED_MAIN
@@ -4965,39 +5023,73 @@ local function ShowWelcomeMessage()
     doc.TextSize = 10
     doc.Font = Enum.Font.Gotham
     doc.Text = "─── TITLE BAR ───\n" ..
-        "Th  — Theme\n" ..
-        "CC  — Custom Color\n" ..
+        "Th  — Theme (cycle 13 themes)\n" ..
+        "CC  — Custom Color picker\n" ..
         "CL  — ChangeLog\n" ..
-        "C   — Custom Script\n" ..
+        "C   — Custom Script (paste URL)\n" ..
         "P   — Players List\n" ..
         "S   — Server Info\n" ..
-        "EN/RU/UK/BE/KK — Languages\n" ..
-        "X   — Close\n" ..
-        "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
-        "Remove Tags      — remove tags\n" ..
-        "Test URLs       — check scripts\n" ..
-        "Settings        — Auto-Hide bind\n" ..
-        "Reset Order     — restore default order\n" ..
-        "Destroy XyqwHub — full unload\n" ..
-        "\n─── Fav TAB ───\n" ..
-        "Share Favorite Scripts\n" ..
-        "\n─── Rct TAB ───\n" ..
-        "Share Recent Scripts\n" ..
-        "\n─── SCRIPT BUTTONS ───\n" ..
-        "▶ / Auto  — Auto-Execute\n" ..
-        "☆ / ★     — Favorites\n" ..
-        "Hold 0.35s on left edge to reorder\n" ..
+        "EN/RU/UK/BE/KK — Languages (click to cycle)\n" ..
+        "X   — Close (goes to dock button)\n" ..
         "\n─── TOP BAR ───\n" ..
         "Executor | Username | FPS | Ping\n" ..
-        "H — Hide / Show\n" ..
-        "\n─── LANGUAGES ───\n" ..
-        "EN, RU, UK, BE, KK\n" ..
-        "Click EN/RU to cycle\n" ..
+        "H — Hide / Show top bar\n" ..
+        "Drag top bar to move it\n" ..
+        "\n─── SEARCH & SORT ───\n" ..
+        "Search bar — filter scripts by name\n" ..
+        "A-Z button — cycle: A-Z / Z-A / Rct\n" ..
+        "\n─── TABS ───\n" ..
+        "All  — all 48 scripts\n" ..
+        "BB   — Blade Ball scripts\n" ..
+        "MM2  — Murder Mystery 2 scripts\n" ..
+        "INK  — Ink Game scripts\n" ..
+        "Misc — Universal/miscellaneous scripts\n" ..
+        "Fav  — only favorites (star)\n" ..
+        "Rct  — recently used (last 5)\n" ..
+        "\n─── SCRIPT BUTTONS ───\n" ..
+        "▶ / Auto — toggle Auto-Execute\n" ..
+        "☆ / ★    — add/remove from Favorites\n" ..
+        "Click name — run script\n" ..
+        "Hold 0.35s on YELLOW STRIP (left) — reorder\n" ..
+        "(Scroll list freely, drag only on yellow left edge)\n" ..
+        "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
+        "Remove Tags      — remove OWNER/TESTER tags\n" ..
+        "Test URLs        — check all script URLs (green/red)\n" ..
+        "Settings         — Auto-Hide keybind\n" ..
+        "Reset Order      — restore default script order\n" ..
+        "Destroy XyqwHub  — full unload\n" ..
+        "\n─── Fav TAB ───\n" ..
+        "Share Favorite Scripts — copy list to clipboard\n" ..
+        "\n─── Rct TAB ───\n" ..
+        "Share Recent Scripts — copy list to clipboard\n" ..
+        "\n─── AUTO-HIDE ───\n" ..
+        "Default bind: RightShift\n" ..
+        "Change in Settings\n" ..
+        "Hides/shows whole GUI\n" ..
+        "\n─── THEMES ───\n" ..
+        "Red, Blue, Green, Purple, Pink, Orange,\n" ..
+        "Cyan, Yellow, Lime, Magenta, White,\n" ..
+        "Rainbow, Custom\n" ..
+        "Click Th to cycle\n" ..
+        "\n─── CUSTOM COLOR ───\n" ..
+        "R/G/B sliders (0-255)\n" ..
+        "HEX input (#FF0000)\n" ..
+        "Presets: Cyan, Pink, Orange, Lime, Gold, White\n" ..
+        "Apply / Reset / Share Color\n" ..
         "\n─── RESIZE ───\n" ..
-        "Drag bottom-right corner\n" ..
-        "\n─── FILES ───\n" ..
-        "XyqwHub/FavScripts, RctScripts, CustomColor,\n" ..
-        "AutoExecute, Settings (settings.json, order.json)"
+        "Drag bottom-right red square\n" ..
+        "Min: 280x340, Max: 900x1000\n" ..
+        "\n─── DOCK BUTTON ───\n" ..
+        "Appears when GUI closed\n" ..
+        "Click — reopen GUI\n" ..
+        "Drag — move it\n" ..
+        "\n─── FILES (saved) ───\n" ..
+        "XyqwHub/FavScripts/favorites.json\n" ..
+        "XyqwHub/RctScripts/recent.json\n" ..
+        "XyqwHub/CustomColor/custom_color.json\n" ..
+        "XyqwHub/AutoExecute/autoexec.json\n" ..
+        "XyqwHub/Settings/settings.json\n" ..
+        "XyqwHub/Settings/order.json"
     doc.ZIndex = 101
     doc.Parent = scroll
 
@@ -5034,4 +5126,3 @@ task.spawn(function()
     if IsOwner() then ShowRobloxNotification(_("OwnerWelcome"), 5)
     elseif IsBeta() then ShowRobloxNotification(_("BetaWelcome"), 5) end
 end)
-
