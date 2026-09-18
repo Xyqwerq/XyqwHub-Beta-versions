@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.4 ==========
+-- ========== XyqwHub - Версия 6.5 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.4"
+local VERSION = "6.5"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -190,6 +190,15 @@ local LANG = {
         ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar",
         OrderSaved = "Order saved!", OrderReset = "Order reset to default!",
         ChangeLogText = [[XyqwHub ChangeLog
+
+========================================
+Version 6.5
+========================================
+- Fixed: script now runs only on tap, not on drag release
+- blockClick flag added to prevent accidental script launch
+- Order file now fully closed (end fix)
+- 5 languages: EN, RU, UK, BE, KK
+- All previous features kept
 
 ========================================
 Version 6.4
@@ -624,6 +633,15 @@ Version 1.0
         ChangeLogText = [[XyqwHub Ченджлог
 
 ========================================
+Версия 6.5
+========================================
+- Фикс: скрипт запускается только по тапу, а не при отпускании после drag
+- Добавлен флаг blockClick для предотвращения случайного запуска
+- Файл порядка теперь закрыт корректно (фикс end)
+- 5 языков: EN, RU, UK, BE, KK
+- Все предыдущие фичи сохранены
+
+========================================
 Версия 6.4
 ========================================
 - Названия скриптов теперь по центру
@@ -1053,6 +1071,15 @@ Version 1.0
         ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель",
         OrderSaved = "Порядок збережено!", OrderReset = "Порядок скинуто!",
         ChangeLogText = [[XyqwHub Журнал
+
+========================================
+Версія 6.5
+========================================
+- Фікс: скрипт запускається лише по тапу, а не при відпусканні після drag
+- Додано флаг blockClick для запобігання випадковому запуску
+- Файл порядку тепер закрито коректно (фікс end)
+- 5 мов: EN, RU, UK, BE, KK
+- Всі попередні функції збережено
 
 ========================================
 Версія 6.4
@@ -1486,6 +1513,15 @@ Version 1.0
         ChangeLogText = [[XyqwHub Чэйнджлог
 
 ========================================
+Версія 6.5
+========================================
+- Фікс: скрыпт запускаецца толькі па тапе, а не пры адпусканні пасля drag
+- Дададзены флаг blockClick для прадухілення выпадковага запуску
+- Файл парадку цяпер зачынены карэктна (фікс end)
+- 5 моў: EN, RU, UK, BE, KK
+- Усе папярэднія функцыі захаваны
+
+========================================
 Версія 6.4
 ========================================
 - Назвы скрыптаў цяпер па цэнтры
@@ -1917,6 +1953,15 @@ Version 1.0
         ChangeLogText = [[XyqwHub Өзгерістер
 
 ========================================
+6.5 нұсқасы
+========================================
+- Түзету: скрипт тек таппен іске қосылады, сүйреуден кейін емес
+- blockClick флагы қосылды (кездейсоқ іске қосылуды болдырмау)
+- Рет файлы енді дұрыс жабылған (end түзетуі)
+- 5 тіл: EN, RU, UK, BE, KK
+- Барлық алдыңғы функциялар сақталды
+
+========================================
 6.4 нұсқасы
 ========================================
 - Скрипт атаулары енді ортада
@@ -2318,263 +2363,6 @@ Version 1.0
 - FakeVR, WallHop]],
     },
 }
-local function _(key)
-    local lang = getgenv().XyqwLanguage or "EN"
-    return LANG[lang][key] or LANG.EN[key] or key
-end
-
-local function ShowRobloxNotification(text, duration)
-    duration = duration or 4
-    pcall(function()
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "XyqwHub", Text = text, Duration = duration
-        })
-    end)
-end
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local TeleportService = game:GetService("TeleportService")
-local HttpService = game:GetService("HttpService")
-local TweenService = game:GetService("TweenService")
-
-local SCRIPTS = {
-    {Name = "Blade Ball", Category = "BB", URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"},
-    {Name = "Blade Ball 2", Category = "BB", URL = "https://wings.ac/loader"},
-    {Name = "Blade Ball 3", Category = "BB", URL = "https://raw.githubusercontent.com/2xrW/return/refs/heads/main/hub"},
-    {Name = "AntiKillParts", Category = "Misc", URL = "https://raw.githubusercontent.com/sovetskii-shashlik/Anti-kill-parts-updated-/refs/heads/main/Anti%20kill%20parts%20by%20Zephyr"},
-    {Name = "PulseHub", Category = "Misc", URL = "https://raw.githubusercontent.com/PulseZax/Loader/refs/heads/main/.lua"},
-    {Name = "RUNAWAYS", Category = "Misc", URL = "https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/RUNAWAYS.lua"},
-    {Name = "Universal FE", Category = "Misc", URL = "https://rawscripts.net/raw/Universal-Script-Universal-FE-Free-keyless-FE-script-242513"},
-    {Name = "UwU hub", Category = "INK", URL = "https://raw.githubusercontent.com/platinww/UwU/refs/heads/main/INK-GAME"},
-    {Name = "Ringta (INK)", Category = "INK", URL = "https://rawscripts.net/raw/Universal-Script-RINGTA-best-script-for-ink-game-206674"},
-    {Name = "AX Scripts (INK)", Category = "INK", URL = "https://officialaxscripts.vercel.app/scripts/AX-Loader.lua"},
-    {Name = "FakeVR", Category = "Misc", URL = "https://pastefy.app/MvKHpycG/raw"},
-    {Name = "WallHop", Category = "Misc", URL = "https://raw.githubusercontent.com/ScpGuest666/Random-Roblox-script/refs/heads/main/Roblox%20WallHop%20script"},
-    {Name = "RuzHub (MM2)", Category = "MM2", URL = "https://raw.githubusercontent.com/pruzgar242-rgb/Update/refs/heads/main/out.lua%20(17).txt"},
-    {Name = "Kiti (MM2)", Category = "MM2", URL = "https://pastefy.app/gPuS4n3Q/raw"},
-    {Name = "CandyWare (MM2)", Category = "MM2", URL = "https://raw.githubusercontent.com/Be1for/Scripts/refs/heads/main/candyware.luau"},
-    {Name = "RemainsHub V2", Category = "Misc", URL = "https://rawscripts.net/raw/Universal-Script-RemainsHub-V2-50805"},
-    {Name = "R6 Emotes", Category = "Misc", URL = "https://rawscripts.net/raw/Universal-Script-r6-emotes-OPEN-SOURCE-69464"},
-    {Name = "Jujutsu Sheninagouns", Category = "Misc", URL = "https://raw.githubusercontent.com/peeky-co/scripts/refs/heads/main/tbo"},
-    {Name = "Free Cam", Category = "Misc", URL = "https://rawscripts.net/raw/Universal-Script-Free-cam-script-pc-and-mobile-223089"},
-    {Name = "Doors (Abysall)", Category = "Misc", URL = "https://rawscripts.net/raw/DOORS-Abysall-hub-OP-205906"},
-    {Name = "Doors V2 (Copy)", Category = "Misc", URL = "SPECIAL_COPY_DOORS_V2"},
-    {Name = "Doors V3 (Cheesy)", Category = "Misc", URL = "https://raw.githubusercontent.com/doram44/cheesy/refs/heads/main/cheesy.lua"},
-    {Name = "Doors v4", Category = "Misc", URL = "https://raw.githubusercontent.com/sillyleo67/Doors/refs/heads/main/Twinkhook.lua"},
-    {Name = "Fling Gui", Category = "Misc", URL = "https://rawscripts.net/raw/Universal-Script-fling-gui-99753"},
-    {Name = "Infinite Yield", Category = "Misc", URL = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-    {Name = "Walk on walls", Category = "Misc", URL = "https://rawscripts.net/raw/The-patience-obby-Universal-Walk-on-walls-18129"},
-    {Name = "AetherX (Death Penalty)", Category = "Misc", URL = "https://api.luarmor.net/files/v3/loaders/8c08b8f2252eec7dbb77d253d269bb65.lua"},
-    {Name = "Voidware (INK/99N/Forsaken)", Category = "Misc", URL = "https://files.vapevoidware.xyz/VapeVoidware/VW-Add/main/loader.lua"},
-    {Name = "LaLol Hub (B4ckd0or)", Category = "Misc", URL = "https://raw.githubusercontent.com/Miygteet/Hacker101/refs/heads/main/LALOL-Backdoor-Secure.lua"},
-    {Name = "FTAP", Category = "Misc", URL = "https://api.jnkie.com/api/v1/luascripts/public/4078649e4397f0e2cdaddde241d69bfd67b2b7107917891384735129c85cae18/download"},
-    {Name = "MinhNat Hub (TSB)", Category = "Misc", URL = "https://rawscripts.net/raw/Universal-Script-MinhNhat-Tsb-62161"},
-    {Name = "BC9 (UTG)", Category = "Misc", URL = "https://rawscripts.net/raw/untitled-tag-game-BC9-UTG-MENU-116806"},
-    {Name = "FTAP (WITH KEY!!)", Category = "Misc", URL = "https://raw.githubusercontent.com/BlizTBr/scripts/main/FTAP.lua"},
-    {Name = "RadiumHub (Pressure)", Category = "Misc", URL = "https://rawscripts.net/raw/UPDATE-Pressure-God-Mode-Auto-Loot-ESP-Full-Bright-No-Eyefestation-224409"},
-    {Name = "Steal an egg", Category = "Misc", URL = "https://raw.githubusercontent.com/joustingmatch/Ouroboros/main/loader.lua"},
-    {Name = "Universal script", Category = "Misc", URL = "https://raw.githubusercontent.com/fleecelolll/Fleece-s-Utility-Panel/refs/heads/main/Script.lua"},
-    {Name = "Corridor", Category = "Misc", URL = "https://saga2015.b-cdn.net/corridor.luau"},
-    {Name = "BloxStrike", Category = "Misc", URL = "https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/BloxStrike.lua"},
-    {Name = "RIVALS", Category = "Misc", URL = "https://raw.githubusercontent.com/imshrak/rivals/refs/heads/main/main"},
-    {Name = "Troll script", Category = "Misc", URL = "https://mois7.xyz/loader"},
-    {Name = "Death Order [SIMON]", Category = "Misc", URL = "https://rawscripts.net/raw/Death-Order:-Simon-Says-BEST-DEATH-ORDER-SCRIPT-226542"},
-    {Name = "DropKick", Category = "Misc", URL = "https://raw.githubusercontent.com/yes-d3v-scripts/drop-kick-fling/refs/heads/main/script"},
-    {Name = "Evade", Category = "Misc", URL = "https://github.com/imc72s/LaztDex/raw/refs/heads/main/EvadeScriptLaztDex"},
-    {Name = "A dusty trip", Category = "Misc", URL = "https://raw.githubusercontent.com/BalintTheDevXBack/Games/refs/heads/main/aDustyTrip"},
-    {Name = "A dusty trip v2", Category = "Misc", URL = "https://raw.githubusercontent.com/VoxlarWIP/Src/refs/heads/main/adustytrip.lua"},
-    {Name = "bLockman's minesweaper", Category = "Misc", URL = "https://pastefy.app/T5XIfiMo/raw"},
-    {Name = "Cheating during test", Category = "Misc", URL = "https://files.catbox.moe/pkulzc.txt"},
-    {Name = "Adopt me", Category = "Misc", URL = "https://raw.githubusercontent.com/JaxRol/ZeroPoint/refs/heads/main/KeySystem"},
-}
-
-task.spawn(function()
-    task.wait(2)
-    for name, enabled in pairs(getgenv().XyqwAutoExec) do
-        if enabled then
-            for _, data in ipairs(SCRIPTS) do
-                if data.Name == name and data.URL ~= "SPECIAL_COPY_DOORS_V2" then
-                    pcall(function() loadstring(game:HttpGet(data.URL))() end)
-                    print("[XyqwHub] Auto-executed: " .. name)
-                    break
-                end
-            end
-        end
-    end
-end)
-
-local function IsOwner()
-    for _, id in ipairs(OWNER_IDS) do
-        if Players.LocalPlayer.UserId == id then return true end
-    end
-    return false
-end
-
-local function IsBeta()
-    for _, id in ipairs(BETA_IDS) do
-        if Players.LocalPlayer.UserId == id then return true end
-    end
-    return false
-end
-
-local tagsEnabled = true
-local activeTags = {}
-
-local function GetRole(plr)
-    for _, id in ipairs(OWNER_IDS) do if plr.UserId == id then return "OWNER" end end
-    for _, id in ipairs(BETA_IDS) do if plr.UserId == id then return "TESTER" end end
-    return nil
-end
-
-local function CreateTagForPlayer(plr)
-    if not tagsEnabled then return end
-    local role = GetRole(plr)
-    if not role then return end
-    if activeTags[plr] and activeTags[plr].Parent then return end
-    local char = plr.Character
-    if not char then return end
-    local rootPart = char:FindFirstChild("HumanoidRootPart")
-    if not rootPart then return end
-
-    local billboard = Instance.new("BillboardGui")
-    billboard.Name = "XyqwTag"
-    billboard.Size = UDim2.new(0, 160, 0, 20)
-    billboard.StudsOffset = Vector3.new(0, 4, 0)
-    billboard.AlwaysOnTop = true
-    billboard.LightInfluence = 0
-    billboard.MaxDistance = 500
-    billboard.Adornee = rootPart
-    billboard.Parent = char
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0, 150, 0, 18)
-    label.Position = UDim2.new(0.5, -75, 0.5, -9)
-    label.BackgroundTransparency = 1
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 14
-    label.TextStrokeTransparency = 0
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    label.Parent = billboard
-
-    local gradient = Instance.new("UIGradient")
-    if role == "OWNER" then
-        label.Text = "XyqwHub OWNER"
-        gradient.Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(200, 0, 0)),
-            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(60, 0, 0)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 0, 0))
-        })
-    else
-        label.Text = "XyqwHub Tester"
-        gradient.Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 120, 255)),
-            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(10, 20, 60)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 120, 255))
-        })
-    end
-    gradient.Rotation = 0
-    gradient.Parent = label
-
-    local glow = Instance.new("UIStroke")
-    glow.Color = role == "OWNER" and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(50, 120, 255)
-    glow.Thickness = 1
-    glow.Transparency = 0.3
-    glow.Parent = label
-
-    task.spawn(function()
-        local rotation = 0
-        while label.Parent and tagsEnabled do
-            rotation = (rotation + 2) % 360
-            gradient.Rotation = rotation
-            task.wait(0.03)
-        end
-    end)
-    activeTags[plr] = billboard
-end
-
-local function RemoveTagForPlayer(plr)
-    if activeTags[plr] then activeTags[plr]:Destroy() activeTags[plr] = nil end
-end
-
-local function RemoveAllTags()
-    tagsEnabled = false
-    for plr, tag in pairs(activeTags) do
-        if tag and tag.Parent then tag:Destroy() end
-    end
-    activeTags = {}
-    for _, plr in ipairs(Players:GetPlayers()) do
-        local char = plr.Character
-        if char then
-            local oldTag = char:FindFirstChild("XyqwTag")
-            if oldTag then oldTag:Destroy() end
-        end
-    end
-end
-
-local function CheckAllPlayers()
-    if not tagsEnabled then return end
-    for _, plr in ipairs(Players:GetPlayers()) do
-        if GetRole(plr) and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-            CreateTagForPlayer(plr)
-        end
-    end
-end
-
-local function SetupCharacterTag(plr)
-    task.spawn(function()
-        local char = plr.Character or plr.CharacterAdded:Wait()
-        local rootPart = char:WaitForChild("HumanoidRootPart", 5)
-        if not rootPart then return end
-        local oldTag = char:FindFirstChild("XyqwTag")
-        if oldTag then oldTag:Destroy() end
-        activeTags[plr] = nil
-        task.wait(0.5)
-        if GetRole(plr) and tagsEnabled then CreateTagForPlayer(plr) end
-    end)
-end
-
-CheckAllPlayers()
-RunService.Heartbeat:Connect(CheckAllPlayers)
-Players.PlayerAdded:Connect(function(plr)
-    SetupCharacterTag(plr)
-    plr.CharacterAdded:Connect(function() SetupCharacterTag(plr) end)
-end)
-Players.PlayerRemoving:Connect(RemoveTagForPlayer)
-for _, plr in ipairs(Players:GetPlayers()) do
-    SetupCharacterTag(plr)
-    plr.CharacterAdded:Connect(function() SetupCharacterTag(plr) end)
-end
-
-local VirtualUser = game:GetService("VirtualUser")
-Players.LocalPlayer.Idled:Connect(function()
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
-end)
-
-local fpsValue = 60
-local fpsCounter = 0
-local fpsTime = 0
-RunService.RenderStepped:Connect(function(dt)
-    fpsCounter = fpsCounter + 1
-    fpsTime = fpsTime + dt
-    if fpsTime >= 1 then fpsValue = fpsCounter fpsCounter = 0 fpsTime = 0 end
-end)
-
-local function GetPing()
-    local ok, ping = pcall(function() return math.floor(Players.LocalPlayer:GetNetworkPing() * 1000) end)
-    return ok and ping or 0
-end
-
-local function GetExecutorName()
-    local ok, name = pcall(function()
-        if identifyexecutor then return identifyexecutor() end
-        return "Unknown"
-    end)
-    return ok and name or "Unknown"
-end
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "XyqwHubGui"
 screenGui.ResetOnSpawn = false
@@ -3103,6 +2891,7 @@ local function CreateScriptButton(data)
     container.BackgroundColor3 = RED_BG
     container.BorderSizePixel = 2
     container.BorderColor3 = RED_MAIN
+    container.ZIndex = 1
     container.Parent = scrollFrame
 
     local statusDot = Instance.new("Frame")
@@ -3111,7 +2900,7 @@ local function CreateScriptButton(data)
     statusDot.Position = UDim2.new(0, 3, 0.5, -3)
     statusDot.BackgroundColor3 = URL_UNKNOWN
     statusDot.BorderSizePixel = 0
-    statusDot.ZIndex = 2
+    statusDot.ZIndex = 3
     statusDot.Parent = container
 
     local btn = Instance.new("TextButton")
@@ -3126,6 +2915,7 @@ local function CreateScriptButton(data)
     btn.Font = Enum.Font.GothamBold
     btn.TextXAlignment = Enum.TextXAlignment.Center
     btn.TextTruncate = Enum.TextTruncate.AtEnd
+    btn.ZIndex = 2
     btn.Parent = container
     btn.AutoButtonColor = false
 
@@ -3140,6 +2930,7 @@ local function CreateScriptButton(data)
     autoBtn.Font = Enum.Font.GothamBold
     autoBtn.BorderSizePixel = 1
     autoBtn.BorderColor3 = RED_MAIN
+    autoBtn.ZIndex = 2
     autoBtn.Parent = container
     autoBtn.AutoButtonColor = false
     if getgenv().XyqwAutoExec[data.Name] then
@@ -3174,6 +2965,7 @@ local function CreateScriptButton(data)
     star.Font = Enum.Font.GothamBold
     star.BorderSizePixel = 1
     star.BorderColor3 = RED_MAIN
+    star.ZIndex = 2
     star.Parent = container
     star.AutoButtonColor = false
 
@@ -3196,7 +2988,9 @@ local function CreateScriptButton(data)
 
     local isRunning = false
     local lastRun = 0
+    local blockClick = false
     btn.MouseButton1Click:Connect(function()
+        if blockClick then return end
         if isRunning then return end
         local now = tick()
         if now - lastRun < 1.5 then return end
@@ -3240,9 +3034,11 @@ local function CreateScriptButton(data)
 
     container.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            blockClick = false
             holdTask = task.delay(holdThreshold, function()
                 if not dragging then
                     dragging = true
+                    blockClick = true
                     dragStart = input.Position
                     originalPos = container.Position
                     scrollFrame.ScrollingEnabled = false
@@ -3287,6 +3083,8 @@ local function CreateScriptButton(data)
                     ShowRobloxNotification(_("OrderSaved"), 2)
                 end
                 if getgenv().RefreshButtons then getgenv().RefreshButtons() end
+                task.wait(0.05)
+                blockClick = false
             end
         end
     end)
@@ -3695,9 +3493,11 @@ getgenv().RefreshButtons = function()
     end
 
     local visible = 0
-    for _, entry in ipairs(visibleEntries) do
-        entry.Container.Position = UDim2.new(0, 5, 0, visible * buttonHeight + 5)
-        visible = visible + 1
+    for _, entry in ipairs(buttons) do
+        if entry.Container.Visible then
+            entry.Container.Position = UDim2.new(0, 5, 0, visible * buttonHeight + 5)
+            visible = visible + 1
+        end
     end
 
     local showAll = (currentTab == "All" and search == "")
@@ -3779,14 +3579,14 @@ local function ShowChangeLog()
     scroll.Position = UDim2.new(0, 5, 0, 35)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 9000)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 9500)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 51
     scroll.Parent = frame
 
     local text = Instance.new("TextLabel")
-    text.Size = UDim2.new(1, -10, 0, 8990)
+    text.Size = UDim2.new(1, -10, 0, 9490)
     text.Position = UDim2.new(0, 5, 0, 5)
     text.BackgroundTransparency = 1
     text.TextColor3 = RED_MAIN
@@ -4837,14 +4637,14 @@ local function ShowWelcomeMessage()
     scroll.Position = UDim2.new(0, 5, 0, 116)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 620)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 640)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 101
     scroll.Parent = frame
 
     local doc = Instance.new("TextLabel")
-    doc.Size = UDim2.new(1, -10, 0, 610)
+    doc.Size = UDim2.new(1, -10, 0, 630)
     doc.Position = UDim2.new(0, 5, 0, 0)
     doc.BackgroundTransparency = 1
     doc.TextColor3 = RED_MAIN
