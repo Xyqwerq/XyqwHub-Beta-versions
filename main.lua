@@ -2822,43 +2822,48 @@ task.spawn(function()
     end
 end)
 
--- ========== ANTI-KICK ==========
+-- ========== ANTI-KICK (как в Infinite Yield) ==========
 local antiKickConnection = nil
+local antiKickOldNamecall = nil
+
 local function StartAntiKick()
     if antiKickConnection then return end
-    antiKickConnection = Players.LocalPlayer.OnTeleport:Connect(function()
-        if getgenv().XyqwAntiKick then
-            task.wait(1)
-            pcall(function()
-                TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
-            end)
+    getgenv().XyqwAntiKick = true
+
+    local ok, err = pcall(function()
+        if not hookmetamethod then
+            error("hookmetamethod not supported")
         end
+
+        local LP = game:GetService("Players").LocalPlayer
+
+        antiKickOldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+            local method = getnamecallmethod()
+            if method == "Kick" and self == LP then
+                if getgenv().XyqwAntiKick then
+                    ShowRobloxNotification("AntiKick: Blocked kick attempt!", 3)
+                    return nil
+                end
+            end
+            return antiKickOldNamecall(self, ...)
+        end)
+
+        antiKickConnection = true
     end)
-    ShowRobloxNotification(_("AntiKickOn"), 2)
-end
-local function StopAntiKick()
-    if antiKickConnection then
-        antiKickConnection:Disconnect()
+
+    if ok then
+        ShowRobloxNotification(_("AntiKickOn"), 2)
+    else
+        getgenv().XyqwAntiKick = false
         antiKickConnection = nil
+        ShowRobloxNotification("AntiKick: " .. tostring(err), 4)
     end
+end
+
+local function StopAntiKick()
+    getgenv().XyqwAntiKick = false
+    antiKickConnection = nil
     ShowRobloxNotification(_("AntiKickOff"), 2)
-end
-
-local function IsOwner()
-    for _, id in ipairs(OWNER_IDS) do if Players.LocalPlayer.UserId == id then return true end end
-    return false
-end
-local function IsBeta()
-    for _, id in ipairs(BETA_IDS) do if Players.LocalPlayer.UserId == id then return true end end
-    return false
-end
-
-local tagsEnabled = true
-local activeTags = {}
-local function GetRole(plr)
-    for _, id in ipairs(OWNER_IDS) do if plr.UserId == id then return "OWNER" end end
-    for _, id in ipairs(BETA_IDS) do if plr.UserId == id then return "TESTER" end end
-    return nil
 end
 
 local function CreateTagForPlayer(plr)
