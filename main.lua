@@ -418,7 +418,6 @@ Version 1.0
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
     },
-}
     UK = {
         Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
         CustomPlaceholder = "Вставте URL або loadstring...", RunCustom = "Запустити",
