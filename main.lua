@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 7.1.0 ==========
+-- ========== XyqwHub - Версия 7.2.0 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "7.1.0"
+local VERSION = "7.2.0"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -113,7 +113,7 @@ local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
 local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
--- ========== LANG: EN ==========
+-- ========== LANG ==========
 local LANG = {}
 LANG.EN = {
     Loaded = "loaded", Error = "error", Search = "Search...",
@@ -140,6 +140,15 @@ LANG.EN = {
     ExecutorInfoTitle = "Executor Info", RunUNCTest = "Run UNC Test", RunSUNCTest = "Run sUNC Test",
     Testing = "Testing...", TestResult = "Result",
     ChangeLogText = [[XyqwHub ChangeLog
+
+========================================
+Version 7.2.0
+========================================
+- ALL windows are now resizable (drag bottom-right corner)
+- All windows are now draggable (drag title)
+- Executor Info window is smaller (300x400)
+- Executor Info is now scrollable
+- Added universal MakeResizable() and MakeDraggable() functions
 
 ========================================
 Version 7.1.0
@@ -645,6 +654,15 @@ LANG.RU = {
     ChangeLogText = [[XyqwHub Ченджлог
 
 ========================================
+Версия 7.2.0
+========================================
+- ВСЕ окна теперь можно ресайзить (тянуть за правый нижний угол)
+- ВСЕ окна теперь можно перетаскивать (тянуть за заголовок)
+- Окно Executor Info стало меньше (300x400)
+- Executor Info теперь листается
+- Добавлены универсальные функции MakeResizable() и MakeDraggable()
+
+========================================
 Версия 7.1.0
 ========================================
 - Убрана кнопка A-Z
@@ -1117,7 +1135,6 @@ LANG.RU = {
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
 }
-
 -- ========== LANG: UK ==========
 LANG.UK = {
     Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
@@ -1144,6 +1161,15 @@ LANG.UK = {
     ExecutorInfoTitle = "Інфо про виконавця", RunUNCTest = "Запустити UNC тест", RunSUNCTest = "Запустити sUNC тест",
     Testing = "Тестування...", TestResult = "Результат",
     ChangeLogText = [[XyqwHub Журнал
+
+========================================
+Версія 7.2.0
+========================================
+- ВСІ вікна тепер можна ресайзити (тягнути за правий нижній кут)
+- ВСІ вікна тепер можна перетягувати (тягнути за заголовок)
+- Вікно Executor Info стало менше (300x400)
+- Executor Info тепер гортається
+- Додано універсальні функції MakeResizable() і MakeDraggable()
 
 ========================================
 Версія 7.1.0
@@ -1618,6 +1644,7 @@ LANG.UK = {
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
 }
+
 -- ========== LANG: BE ==========
 LANG.BE = {
     Loaded = "загружана", Error = "памылка", Search = "Пошук...",
@@ -1644,6 +1671,15 @@ LANG.BE = {
     ExecutorInfoTitle = "Інфа пра выканаўцу", RunUNCTest = "Запусціць UNC тэст", RunSUNCTest = "Запусціць sUNC тэст",
     Testing = "Тэставанне...", TestResult = "Вынік",
     ChangeLogText = [[XyqwHub Чэйнджлог
+
+========================================
+Версія 7.2.0
+========================================
+- УСЕ вокны цяпер можна рэсайзіць (цягнуць за правы ніжні кут)
+- УСЕ вокны цяпер можна перацягваць (цягнуць за загаловак)
+- Акно Executor Info стала менш (300x400)
+- Executor Info цяпер гартаецца
+- Дададзены універсальныя функцыі MakeResizable() і MakeDraggable()
 
 ========================================
 Версія 7.1.0
@@ -2118,7 +2154,6 @@ LANG.BE = {
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
 }
-
 -- ========== LANG: KK ==========
 LANG.KK = {
     Loaded = "жүктелді", Error = "қате", Search = "Іздеу...",
@@ -2145,6 +2180,15 @@ LANG.KK = {
     ExecutorInfoTitle = "Орындаушы туралы", RunUNCTest = "UNC тестін іске қосу", RunSUNCTest = "sUNC тестін іске қосу",
     Testing = "Тексеру...", TestResult = "Нәтиже",
     ChangeLogText = [[XyqwHub Өзгерістер
+
+========================================
+7.2.0 нұсқасы
+========================================
+- БАРЛЫҚ терезелерді енді ресайздеуге болады (оң жақ төменгі бұрыштан тарту)
+- БАРЛЫҚ терезелерді енді сүйреуге болады (тақырыптан тарту)
+- Executor Info терезесі кішірейтілді (300x400)
+- Executor Info енді айналдырылады
+- Әмбебап MakeResizable() және MakeDraggable() функциялары қосылды
 
 ========================================
 7.1.0 нұсқасы
@@ -2431,7 +2475,8 @@ LANG.KK = {
 3.7 нұсқасы
 ========================================
 - Тестер тегі қосылды (көк градиент)
-- Тестерлерге қош келу қосылды- 2 тестер қосылды (9686718765, 3701387385)
+- Тестерлерге қош келу қосылды
+- 2 тестер қосылды (9686718765, 3701387385)
 
 ========================================
 3.6 нұсқасы
@@ -2615,7 +2660,7 @@ LANG.KK = {
 - Алғашқы шығарылым
 - Негізгі GUI
 - Blade Ball, AntiKillParts, PulseHub
-- RUNAWAYS, Universal FE, UwU Hub
+- RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
 }
 
@@ -2640,6 +2685,76 @@ local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
+
+-- ========== УНИВЕРСАЛЬНЫЕ ФУНКЦИИ ДЛЯ ВСЕХ ОКОН ==========
+local function MakeResizable(frame, minW, minH, maxW, maxH)
+    minW = minW or 200
+    minH = minH or 150
+    maxW = maxW or 900
+    maxH = maxH or 1000
+
+    local handle = Instance.new("TextButton")
+    handle.Name = "UniversalResizeHandle"
+    handle.Size = UDim2.new(0, 12, 0, 12)
+    handle.Position = UDim2.new(1, -12, 1, -12)
+    handle.BackgroundColor3 = RED_MAIN
+    handle.Text = ""
+    handle.BorderSizePixel = 0
+    handle.ZIndex = 200
+    handle.Parent = frame
+    handle.AutoButtonColor = false
+
+    local resizing = false
+    local rsStart, rsSize
+
+    handle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            resizing = true
+            rsStart = input.Position
+            rsSize = frame.Size
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if resizing and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - rsStart
+            local newX = math.clamp(rsSize.X.Offset + delta.X, minW, maxW)
+            local newY = math.clamp(rsSize.Y.Offset + delta.Y, minH, maxH)
+            frame.Size = UDim2.new(0, newX, 0, newY)
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            resizing = false
+        end
+    end)
+end
+
+local function MakeDraggable(frame, dragPart)
+    dragPart = dragPart or frame
+    local dragging = false
+    local dragStart, startPos
+
+    dragPart.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+        end
+    end)
+    dragPart.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
 
 local SCRIPTS = {
     {Name = "Blade Ball", Category = "BB", URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"},
@@ -2707,6 +2822,7 @@ task.spawn(function()
     end
 end)
 
+-- ========== ANTI-KICK ==========
 local antiKickConnection = nil
 local function StartAntiKick()
     if antiKickConnection then return end
@@ -3783,6 +3899,7 @@ resetOrderBtn.MouseButton1Click:Connect(function()
     ShowRobloxNotification(_("OrderReset"), 3)
 end)
 
+-- ========== ANTI-KICK BUTTON ==========
 local antiKickContainer = Instance.new("Frame")
 antiKickContainer.Name = "AntiKickContainer"
 antiKickContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -3864,6 +3981,7 @@ ShowSettings = function()
     frame.BorderColor3 = RED_MAIN
     frame.ZIndex = 50
     frame.Active = true
+    frame.ClipsDescendants = true
     frame.Parent = screenGui
 
     local title = Instance.new("TextLabel")
@@ -3876,6 +3994,16 @@ ShowSettings = function()
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
     title.Parent = frame
+
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 26)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 52
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
 
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 26, 0, 24)
@@ -3955,6 +4083,8 @@ ShowSettings = function()
         if inputConnection then pcall(function() inputConnection:Disconnect() end) inputConnection = nil end
         frame:Destroy()
     end)
+
+    MakeResizable(frame, 250, 180, 700, 500)
 end
 settingsBtn.MouseButton1Click:Connect(ShowSettings)
 
@@ -4064,6 +4194,7 @@ local function ShowChangeLog()
     frame.BorderColor3 = RED_MAIN
     frame.ZIndex = 50
     frame.Active = true
+    frame.ClipsDescendants = true
     frame.Parent = screenGui
 
     local title = Instance.new("TextLabel")
@@ -4076,6 +4207,16 @@ local function ShowChangeLog()
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
     title.Parent = frame
+
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 30)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 52
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
 
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 30, 0, 28)
@@ -4115,6 +4256,7 @@ local function ShowChangeLog()
     text.Parent = scroll
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+    MakeResizable(frame, 250, 200, 900, 1000)
 end
 
 changelogButton.MouseButton1Click:Connect(ShowChangeLog)
@@ -4149,6 +4291,7 @@ local function ShowPlayerList()
     frame.BorderColor3 = RED_MAIN
     frame.ZIndex = 50
     frame.Active = true
+    frame.ClipsDescendants = true
     frame.Parent = screenGui
 
     local title = Instance.new("TextLabel")
@@ -4161,6 +4304,16 @@ local function ShowPlayerList()
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
     title.Parent = frame
+
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 30)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 52
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
 
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 30, 0, 28)
@@ -4203,6 +4356,7 @@ local function ShowPlayerList()
     end
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+    MakeResizable(frame, 250, 200, 900, 1000)
 end
 
 local function ShowServerInfo()
@@ -4215,6 +4369,7 @@ local function ShowServerInfo()
     frame.BorderColor3 = RED_MAIN
     frame.ZIndex = 50
     frame.Active = true
+    frame.ClipsDescendants = true
     frame.Parent = screenGui
 
     local title = Instance.new("TextLabel")
@@ -4227,6 +4382,16 @@ local function ShowServerInfo()
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
     title.Parent = frame
+
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 30)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 52
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
 
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 30, 0, 28)
@@ -4356,6 +4521,7 @@ local function ShowServerInfo()
     end)
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+    MakeResizable(frame, 280, 250, 700, 700)
 end
 
 local function ShowCustomScript()
@@ -4367,6 +4533,7 @@ local function ShowCustomScript()
     frame.BorderColor3 = RED_MAIN
     frame.ZIndex = 50
     frame.Active = true
+    frame.ClipsDescendants = true
     frame.Parent = screenGui
 
     local title = Instance.new("TextLabel")
@@ -4379,6 +4546,16 @@ local function ShowCustomScript()
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
     title.Parent = frame
+
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 30)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 52
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
 
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 30, 0, 28)
@@ -4443,12 +4620,12 @@ local function ShowCustomScript()
     end)
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+    MakeResizable(frame, 250, 150, 700, 500)
 end
 
 customBtn.MouseButton1Click:Connect(ShowCustomScript)
 playerBtn.MouseButton1Click:Connect(ShowPlayerList)
 serverBtn.MouseButton1Click:Connect(ShowServerInfo)
--- ========== INFO BUTTON: Executor Info + UNC/sUNC ==========
 local function RunUNCTest()
     local passed, failed = 0, 0
     local results = {}
@@ -4547,17 +4724,29 @@ end
 local function ShowExecutorInfo()
     local frame = Instance.new("Frame")
     frame.Name = "ExecutorInfoFrame"
-    frame.Size = UDim2.new(0, 400, 0, 480)
-    frame.Position = UDim2.new(0.5, -200, 0.5, -240)
+    frame.Size = UDim2.new(0, 300, 0, 400)
+    frame.Position = UDim2.new(0.5, -150, 0.5, -200)
     frame.BackgroundColor3 = RED_BG
     frame.BorderSizePixel = 2
     frame.BorderColor3 = RED_MAIN
     frame.ZIndex = 50
     frame.Active = true
+    frame.ClipsDescendants = true
     frame.Parent = screenGui
 
+    -- Драгбар
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 26)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 52
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
+
     local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, -40, 0, 28)
+    title.Size = UDim2.new(1, -40, 0, 24)
     title.Position = UDim2.new(0, 5, 0, 5)
     title.BackgroundTransparency = 1
     title.TextColor3 = RED_MAIN
@@ -4568,53 +4757,22 @@ local function ShowExecutorInfo()
     title.Parent = frame
 
     local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 30, 0, 28)
-    closeBtn.Position = UDim2.new(1, -35, 0, 2)
+    closeBtn.Size = UDim2.new(0, 26, 0, 24)
+    closeBtn.Position = UDim2.new(1, -30, 0, 4)
     closeBtn.BackgroundTransparency = 1
     closeBtn.Text = "X"
     closeBtn.TextColor3 = RED_MAIN
     closeBtn.TextScaled = true
     closeBtn.Font = Enum.Font.GothamBold
-    closeBtn.ZIndex = 51
+    closeBtn.ZIndex = 52
     closeBtn.Parent = frame
     closeBtn.AutoButtonColor = false
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 
-    local infoLabel = Instance.new("TextLabel")
-    infoLabel.Size = UDim2.new(1, -20, 0, 110)
-    infoLabel.Position = UDim2.new(0, 10, 0, 40)
-    infoLabel.BackgroundColor3 = RED_DARK
-    infoLabel.BorderSizePixel = 1
-    infoLabel.BorderColor3 = RED_MAIN
-    infoLabel.TextColor3 = RED_MAIN
-    infoLabel.TextWrapped = true
-    infoLabel.TextXAlignment = Enum.TextXAlignment.Left
-    infoLabel.TextYAlignment = Enum.TextYAlignment.Top
-    infoLabel.TextSize = 12
-    infoLabel.Font = Enum.Font.Gotham
-    infoLabel.ZIndex = 51
-    infoLabel.Parent = frame
-
-    local executorName = GetExecutorName()
-    local hasWritefile = type(writefile) == "function" and "✓" or "✗"
-    local hasSetclip = type(setclipboard) == "function" and "✓" or "✗"
-    local hasHttpGet = type(game.HttpGet) == "function" and "✓" or "✗"
-    local hasIdentify = type(identifyexecutor) == "function" and "✓" or "✗"
-
-    infoLabel.Text = string.format(
-        "Executor: %s\n" ..
-        "Version: %s\n" ..
-        "Platform: %s\n" ..
-        "writefile: %s\n" ..
-        "setclipboard: %s\n" ..
-        "game:HttpGet: %s\n" ..
-        "identifyexecutor: %s",
-        executorName, VERSION, "Mobile", hasWritefile, hasSetclip, hasHttpGet, hasIdentify
-    )
-
+    -- Кнопки UNC/sUNC сверху
     local uncBtn = Instance.new("TextButton")
-    uncBtn.Size = UDim2.new(0.5, -13, 0, 30)
-    uncBtn.Position = UDim2.new(0, 10, 0, 158)
+    uncBtn.Size = UDim2.new(0.5, -13, 0, 26)
+    uncBtn.Position = UDim2.new(0, 8, 0, 32)
     uncBtn.BackgroundColor3 = RED_MAIN
     uncBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
     uncBtn.Text = _("RunUNCTest")
@@ -4626,8 +4784,8 @@ local function ShowExecutorInfo()
     uncBtn.AutoButtonColor = false
 
     local suncBtn = Instance.new("TextButton")
-    suncBtn.Size = UDim2.new(0.5, -13, 0, 30)
-    suncBtn.Position = UDim2.new(0.5, 3, 0, 158)
+    suncBtn.Size = UDim2.new(0.5, -13, 0, 26)
+    suncBtn.Position = UDim2.new(0.5, 5, 0, 32)
     suncBtn.BackgroundColor3 = RED_MAIN
     suncBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
     suncBtn.Text = _("RunSUNCTest")
@@ -4638,9 +4796,37 @@ local function ShowExecutorInfo()
     suncBtn.Parent = frame
     suncBtn.AutoButtonColor = false
 
+    -- Инфо об экзекьюторе
+    local infoLabel = Instance.new("TextLabel")
+    infoLabel.Size = UDim2.new(1, -20, 0, 90)
+    infoLabel.Position = UDim2.new(0, 10, 0, 64)
+    infoLabel.BackgroundColor3 = RED_DARK
+    infoLabel.BorderSizePixel = 1
+    infoLabel.BorderColor3 = RED_MAIN
+    infoLabel.TextColor3 = RED_MAIN
+    infoLabel.TextWrapped = true
+    infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+    infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+    infoLabel.TextSize = 11
+    infoLabel.Font = Enum.Font.Gotham
+    infoLabel.ZIndex = 51
+    infoLabel.Parent = frame
+
+    local executorName = GetExecutorName()
+    local hasWritefile = type(writefile) == "function" and "✓" or "✗"
+    local hasSetclip = type(setclipboard) == "function" and "✓" or "✗"
+    local hasHttpGet = type(game.HttpGet) == "function" and "✓" or "✗"
+    local hasIdentify = type(identifyexecutor) == "function" and "✓" or "✗"
+
+    infoLabel.Text = string.format(
+        "Executor: %s\nVersion: %s | Platform: Mobile\nwritefile: %s  setclipboard: %s\ngame:HttpGet: %s  identify: %s",
+        executorName, VERSION, hasWritefile, hasSetclip, hasHttpGet, hasIdentify
+    )
+
+    -- Заголовок результатов
     local resultTitle = Instance.new("TextLabel")
-    resultTitle.Size = UDim2.new(1, -20, 0, 20)
-    resultTitle.Position = UDim2.new(0, 10, 0, 194)
+    resultTitle.Size = UDim2.new(1, -20, 0, 18)
+    resultTitle.Position = UDim2.new(0, 10, 0, 158)
     resultTitle.BackgroundTransparency = 1
     resultTitle.TextColor3 = RED_MAIN
     resultTitle.Text = _("TestResult") .. ":"
@@ -4650,9 +4836,10 @@ local function ShowExecutorInfo()
     resultTitle.ZIndex = 51
     resultTitle.Parent = frame
 
+    -- Скролл с результатами (листается)
     local resultScroll = Instance.new("ScrollingFrame")
-    resultScroll.Size = UDim2.new(1, -20, 1, -240)
-    resultScroll.Position = UDim2.new(0, 10, 0, 218)
+    resultScroll.Size = UDim2.new(1, -20, 1, -186)
+    resultScroll.Position = UDim2.new(0, 10, 0, 180)
     resultScroll.BackgroundColor3 = RED_DARK
     resultScroll.BorderSizePixel = 1
     resultScroll.BorderColor3 = RED_MAIN
@@ -4670,7 +4857,7 @@ local function ShowExecutorInfo()
     resultLabel.TextWrapped = true
     resultLabel.TextXAlignment = Enum.TextXAlignment.Left
     resultLabel.TextYAlignment = Enum.TextYAlignment.Top
-    resultLabel.TextSize = 12
+    resultLabel.TextSize = 11
     resultLabel.Font = Enum.Font.Gotham
     resultLabel.Text = "Нажми UNC или sUNC чтобы запустить тест..."
     resultLabel.ZIndex = 52
@@ -4696,10 +4883,11 @@ local function ShowExecutorInfo()
         local passed, failed, results = RunSUNCTest()
         UpdateResults(passed, failed, results)
     end)
+
+    MakeResizable(frame, 250, 250, 700, 700)
 end
 
 infoBtn.MouseButton1Click:Connect(ShowExecutorInfo)
-
 local function ShowCustomColor()
     local frame = Instance.new("Frame")
     frame.Name = "CustomColorFrame"
@@ -4723,6 +4911,16 @@ local function ShowCustomColor()
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 51
     title.Parent = frame
+
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 24)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 52
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
 
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 24, 0, 22)
@@ -5008,6 +5206,7 @@ local function ShowCustomColor()
     end)
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+    MakeResizable(frame, 280, 350, 600, 800)
 end
 
 colorBtn.MouseButton1Click:Connect(ShowCustomColor)
@@ -5309,6 +5508,7 @@ local function ShowWelcomeMessage()
     frame.BorderColor3 = RED_MAIN
     frame.ZIndex = 100
     frame.Active = true
+    frame.ClipsDescendants = true
     frame.Parent = screenGui
 
     local blocker = Instance.new("TextButton")
@@ -5330,6 +5530,16 @@ local function ShowWelcomeMessage()
     title.Font = Enum.Font.GothamBold
     title.ZIndex = 101
     title.Parent = frame
+
+    local dragBar = Instance.new("TextButton")
+    dragBar.Size = UDim2.new(1, -35, 0, 24)
+    dragBar.Position = UDim2.new(0, 2, 0, 3)
+    dragBar.BackgroundTransparency = 1
+    dragBar.Text = ""
+    dragBar.ZIndex = 102
+    dragBar.Parent = frame
+    dragBar.AutoButtonColor = false
+    MakeDraggable(frame, dragBar)
 
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 26, 0, 22)
@@ -5401,14 +5611,14 @@ local function ShowWelcomeMessage()
     scroll.Position = UDim2.new(0, 5, 0, 116)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 950)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 1000)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 101
     scroll.Parent = frame
 
     local doc = Instance.new("TextLabel")
-    doc.Size = UDim2.new(1, -10, 0, 940)
+    doc.Size = UDim2.new(1, -10, 0, 990)
     doc.Position = UDim2.new(0, 5, 0, 0)
     doc.BackgroundTransparency = 1
     doc.TextColor3 = RED_MAIN
@@ -5417,7 +5627,12 @@ local function ShowWelcomeMessage()
     doc.TextYAlignment = Enum.TextYAlignment.Top
     doc.TextSize = 10
     doc.Font = Enum.Font.Gotham
-    doc.Text = "─── 7.1.0 НОВОЕ ───\n" ..
+    doc.Text = "─── 7.2.0 НОВОЕ ───\n" ..
+        "★ ВСЕ окна теперь ресайзятся (тяни правый нижний угол)\n" ..
+        "★ ВСЕ окна теперь можно перетаскивать (тяни заголовок)\n" ..
+        "★ Executor Info стало меньше (300x400)\n" ..
+        "★ Executor Info теперь листается (скролл результатов)\n" ..
+        "\n─── 7.1.0 ───\n" ..
         "★ Кнопка Info (вместо A-Z)\n" ..
         "   - Executor Info (имя, версия, функции)\n" ..
         "   - UNC тест (26 проверок)\n" ..
@@ -5457,8 +5672,9 @@ local function ShowWelcomeMessage()
         "Cyan, Yellow, Lime, Magenta, White,\n" ..
         "Rainbow, Custom\n" ..
         "\n─── RESIZE ───\n" ..
-        "Drag bottom-right red square\n" ..
-        "Min: 280x340, Max: 900x1000\n" ..
+        "Main GUI: drag bottom-right red square\n" ..
+        "OTHER WINDOWS: drag bottom-right corner\n" ..
+        "Min: 280x340, Max: 900x1000 (Main)\n" ..
         "\n─── FILES ───\n" ..
         "XyqwHub/FavScripts/favorites.json\n" ..
         "XyqwHub/RctScripts/recent.json\n" ..
@@ -5479,6 +5695,8 @@ local function ShowWelcomeMessage()
     ver.Font = Enum.Font.Gotham
     ver.ZIndex = 101
     ver.Parent = frame
+
+    MakeResizable(frame, 280, 250, 900, 1000)
 end
 
 UpdateTabLayout()
