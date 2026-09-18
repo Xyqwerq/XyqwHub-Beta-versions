@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.6 ==========
+-- ========== XyqwHub - Версия 6.7 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,78 +13,25 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.6"
+local VERSION = "6.7"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
-local POSSIBLE_WORKSPACES = {
-    "/sdcard/Delta/Workspace", "/sdcard/Delta",
-    "/storage/emulated/0/Delta/Workspace", "/storage/emulated/0/Delta",
-    "/storage/emulated/0/Android/data/com.roblox.client/files/Delta/Workspace",
-    "/storage/emulated/0/Android/data/com.roblox.client/files/Delta",
-    "/data/user/0/com.roblox.client/files/Delta/Workspace",
-    "/data/data/com.roblox.client/files/Delta/Workspace",
-    "/storage/emulated/0/Documents/Delta/Workspace",
-    "/sdcard/Solara/Workspace", "/storage/emulated/0/Solara/Workspace",
-    "/sdcard/Arceus X/Workspace", "/sdcard/ArceusX/Workspace",
-    "/storage/emulated/0/Arceus X/Workspace", "/storage/emulated/0/ArceusX/Workspace",
-    "/storage/emulated/0/Android/data/com.roblox.client/files/Arceus X/Workspace",
-    "/sdcard/Codex/Workspace", "/storage/emulated/0/Codex/Workspace",
-    "/sdcard/Xen/Workspace", "/storage/emulated/0/Xen/Workspace",
-    "/sdcard/Fluxus/Workspace", "/storage/emulated/0/Fluxus/Workspace",
-    "/sdcard/Hydrogen/Workspace", "/storage/emulated/0/Hydrogen/Workspace",
-    "/sdcard/Krnl/Workspace", "/sdcard/Triggers/Workspace",
-    "/sdcard/Wave/Workspace", "/sdcard/Real/Workspace",
-    "/sdcard/VegaX/Workspace", "/sdcard/Fandango/Workspace",
-    "/sdcard/Mystic/Workspace", "/sdcard/Anemo/Workspace",
-    "/sdcard/KiwiX/Workspace", "/sdcard/Workspace",
-    "/storage/emulated/0/Executor/Workspace",
-    "/storage/emulated/0/Workspace",
-}
-
-local foundWorkspace = nil
-for _, path in ipairs(POSSIBLE_WORKSPACES) do
-    pcall(function() if isfolder(path) then foundWorkspace = path end end)
-    if foundWorkspace then break end
-end
-
-if not foundWorkspace then
-    pcall(function()
-        if writefile then
-            writefile("XyqwHub_test.txt", "test")
-            if isfile("XyqwHub_test.txt") then
-                foundWorkspace = "VIRTUAL"
-                delfile("XyqwHub_test.txt")
-            end
-        end
-    end)
-end
-
-local CONFIG_FOLDER
-if foundWorkspace == "VIRTUAL" then CONFIG_FOLDER = "XyqwHub"
-elseif foundWorkspace then CONFIG_FOLDER = foundWorkspace .. "/XyqwHub"
-else CONFIG_FOLDER = "XyqwHub" end
-
-local FAV_FOLDER = CONFIG_FOLDER .. "/FavScripts"
-local RCT_FOLDER = CONFIG_FOLDER .. "/RctScripts"
-local CUSTOM_COLOR_FOLDER = CONFIG_FOLDER .. "/CustomColor"
-local AUTOEXEC_FOLDER = CONFIG_FOLDER .. "/AutoExecute"
-local SETTINGS_FOLDER = CONFIG_FOLDER .. "/Settings"
-
-local FAV_FILE = FAV_FOLDER .. "/favorites.json"
-local RCT_FILE = RCT_FOLDER .. "/recent.json"
-local CUSTOM_COLOR_FILE = CUSTOM_COLOR_FOLDER .. "/custom_color.json"
-local AUTOEXEC_FILE = AUTOEXEC_FOLDER .. "/autoexec.json"
-local SETTINGS_FILE = SETTINGS_FOLDER .. "/settings.json"
-local ORDER_FILE = SETTINGS_FOLDER .. "/order.json"
+local CONFIG_FOLDER = "XyqwHub"
+local FAV_FILE = CONFIG_FOLDER .. "/FavScripts/favorites.json"
+local RCT_FILE = CONFIG_FOLDER .. "/RctScripts/recent.json"
+local CUSTOM_COLOR_FILE = CONFIG_FOLDER .. "/CustomColor/custom_color.json"
+local AUTOEXEC_FILE = CONFIG_FOLDER .. "/AutoExecute/autoexec.json"
+local SETTINGS_FILE = CONFIG_FOLDER .. "/Settings/settings.json"
+local ORDER_FILE = CONFIG_FOLDER .. "/Settings/order.json"
 
 pcall(function()
     if not isfolder(CONFIG_FOLDER) then makefolder(CONFIG_FOLDER) end
-    if not isfolder(FAV_FOLDER) then makefolder(FAV_FOLDER) end
-    if not isfolder(RCT_FOLDER) then makefolder(RCT_FOLDER) end
-    if not isfolder(CUSTOM_COLOR_FOLDER) then makefolder(CUSTOM_COLOR_FOLDER) end
-    if not isfolder(AUTOEXEC_FOLDER) then makefolder(AUTOEXEC_FOLDER) end
-    if not isfolder(SETTINGS_FOLDER) then makefolder(SETTINGS_FOLDER) end
+    if not isfolder(CONFIG_FOLDER .. "/FavScripts") then makefolder(CONFIG_FOLDER .. "/FavScripts") end
+    if not isfolder(CONFIG_FOLDER .. "/RctScripts") then makefolder(CONFIG_FOLDER .. "/RctScripts") end
+    if not isfolder(CONFIG_FOLDER .. "/CustomColor") then makefolder(CONFIG_FOLDER .. "/CustomColor") end
+    if not isfolder(CONFIG_FOLDER .. "/AutoExecute") then makefolder(CONFIG_FOLDER .. "/AutoExecute") end
+    if not isfolder(CONFIG_FOLDER .. "/Settings") then makefolder(CONFIG_FOLDER .. "/Settings") end
 end)
 
 local function SaveTable(path, tbl)
@@ -117,12 +64,7 @@ if not getgenv().XyqwSettings.urlStatus then getgenv().XyqwSettings.urlStatus = 
 if getgenv().XyqwCustomColor == nil then
     local saved = LoadTable(CUSTOM_COLOR_FILE)
     if saved.r and saved.g and saved.b then
-        getgenv().XyqwCustomColor = {
-            r = saved.r, g = saved.g, b = saved.b,
-            dr = saved.dr or math.floor(saved.r * 0.15),
-            dg = saved.dg or math.floor(saved.g * 0.15),
-            db = saved.db or math.floor(saved.b * 0.15),
-        }
+        getgenv().XyqwCustomColor = {r = saved.r, g = saved.g, b = saved.b, dr = saved.dr or 40, dg = saved.dg or 0, db = saved.db or 0}
     else
         getgenv().XyqwCustomColor = {r = 255, g = 0, b = 0, dr = 40, dg = 0, db = 0}
     end
@@ -153,42 +95,39 @@ local RED_DARK = THEMES[getgenv().XyqwTheme].DARK
 local RED_BG = THEMES[getgenv().XyqwTheme].BG
 local RED_TITLE = THEMES[getgenv().XyqwTheme].TITLE
 
-local URL_OK = Color3.fromRGB(0, 255, 100)
-local URL_BAD = Color3.fromRGB(255, 50, 50)
-local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
-local URL_CHECKING = Color3.fromRGB(255, 200, 0)
-
 local LANG = {
     EN = {
         Loaded = "loaded", Error = "error", Search = "Search...",
-        CustomPlaceholder = "Paste URL or loadstring...", RunCustom = "Run",
+        CustomPlaceholder = "Paste URL...", RunCustom = "Run",
         JobIdCopied = "JobId copied!", ScriptExecuted = "Script executed!",
         OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
-        TagRemoved = "Tag removed!", HideTopBarOn = "Hide Top Bar: ON", HideTopBarOff = "Hide Top Bar: OFF",
-        LangChanged = "Language changed to English",
-        FavShared = "Favorites shared! Check clipboard",
-        RctShared = "Recent scripts shared! Check clipboard",
-        LoadstringCopied = "Loadstring copied, thank you :3",
-        ColorReset = "Custom Color reset to Red",
-        ColorShared = "Color copied to clipboard!",
-        AutoExecOn = "Auto-Execute: ON", AutoExecOff = "Auto-Execute: OFF",
-        KeybindChanged = "Auto-Hide keybind: ",
-        UrlCheckStarted = "Testing URLs...", UrlCheckDone = "URL test complete!",
-        WelcomeTitle = "Welcome to XyqwHub!",
-        ClickXToClose = "Click X to close",
-        PlayersTitle = "Players", ServerTitle = "Server Info", CustomTitle = "Custom Script",
-        CustomColorTitle = "Custom Color", ChangeLogTitle = "ChangeLog", SettingsTitle = "Settings",
-        Apply = "Apply", Reset = "Reset", ShareColor = "Share Color", CopyJobId = "Copy JobId",
-        Rejoin = "Rejoin", ServerHop = "ServerHop", TPToSmall = "TP to Small", RemoveTags = "Remove Tags",
-        ShareFav = "Share Favorite Scripts", ShareRct = "Share Recent Scripts",
-        TestURLs = "Test URLs", SettingsBtn = "Settings (Auto-Hide bind)", Destroy = "Destroy XyqwHub",
-        ResetOrder = "Reset Order",
+        TagRemoved = "Tag removed!", LangChanged = "Language changed to English",
+        FavShared = "Favorites shared!", RctShared = "Recent shared!",
+        LoadstringCopied = "Loadstring copied!", ColorReset = "Color reset",
+        ColorShared = "Color copied!", AutoExecOn = "Auto-Execute: ON", AutoExecOff = "Auto-Execute: OFF",
+        KeybindChanged = "Auto-Hide keybind: ", UrlCheckStarted = "Testing URLs...",
+        UrlCheckDone = "URL test complete!", WelcomeTitle = "Welcome to XyqwHub!",
+        ClickXToClose = "Click X to close", PlayersTitle = "Players", ServerTitle = "Server Info",
+        CustomTitle = "Custom Script", CustomColorTitle = "Custom Color", ChangeLogTitle = "ChangeLog",
+        SettingsTitle = "Settings", Apply = "Apply", Reset = "Reset", ShareColor = "Share Color",
+        CopyJobId = "Copy JobId", Rejoin = "Rejoin", ServerHop = "ServerHop", TPToSmall = "TP to Small",
+        RemoveTags = "Remove Tags", ShareFav = "Share Favorite Scripts", ShareRct = "Share Recent Scripts",
+        TestURLs = "Test URLs", SettingsBtn = "Settings", Destroy = "Destroy XyqwHub", ResetOrder = "Reset Order",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Players", Creator = "Creator",
         Presets = "Presets", AutoHideBind = "Auto-Hide keybind:",
-        WelcomeFiles = "Files: XyqwHub/FavScripts, RctScripts, CustomColor",
-        ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar",
-        OrderSaved = "Order saved!", OrderReset = "Order reset to default!",
+        ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar", HideTopBarOn = "Hide Top Bar: ON",
+        HideTopBarOff = "Hide Top Bar: OFF", OrderSaved = "Order saved!", OrderReset = "Order reset!",
         ChangeLogText = [[XyqwHub ChangeLog
+
+========================================
+Version 6.7
+========================================
+- Rewritten from scratch
+- Fixed drag & drop (btn.InputBegan)
+- Fixed GUI open/close animation
+- Fixed LANG table closing
+- 5 languages: EN, RU, UK, BE, KK
+- 48 scripts
 
 ========================================
 Version 6.6
@@ -196,14 +135,13 @@ Version 6.6
 - Fixed drag & drop (moved to btn.InputBegan)
 - Added GUI open/close animation (scale + fade)
 - blockClick protection
-- 5 languages: EN, RU, UK, BE, KK
 
 ========================================
 Version 6.5
 ========================================
 - Fixed: script now runs only on tap, not on drag release
 - blockClick flag added
-- ZIndex added to containers (1), text (2), dots (3)
+- ZIndex added to containers, text, dots
 
 ========================================
 Version 6.4
@@ -223,14 +161,64 @@ Version 6.3
 - Script order saved to Settings/order.json
 
 ========================================
+Version 6.2
+========================================
+- Fixed blacklist x not removing item
+- Full changelog for all languages
+
+========================================
+Version 6.1
+========================================
+- Fixed blacklist refreshing
+
+========================================
 Version 6.0
 ========================================
 - Added 5 languages: EN, RU, UK, BE, KK
+- Welcome message restored
+
+========================================
+Version 5.9
+========================================
+- X button moved to right corner
+- Top bar drag support
+
+========================================
+Version 5.6
+========================================
+- Removed rounded corners
+- Default tab is "All"
 
 ========================================
 Version 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+
+========================================
+Version 5.4
+========================================
+- Auto Execute Scripts on join
+- Script Blacklist
+- Auto Hide GUI
+- URL Tester (green/red)
+- Script Sorting
+- Share Fav/Rct
+
+========================================
+Version 5.3
+========================================
+- Custom Color smaller + resize
+- Universal workspace fix
+
+========================================
+Version 5.2
+========================================
+- Universal workspace support
+
+========================================
+Version 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
 
 ========================================
 Version 5.0
@@ -244,41 +232,263 @@ Version 4.9
 - 13 themes
 
 ========================================
+Version 4.8
+========================================
+- Custom Color rgb() support
+
+========================================
+Version 4.7
+========================================
+- Custom Color picker
+
+========================================
+Version 4.6
+========================================
+- Fixed Rainbow tab flicker
+
+========================================
+Version 4.5
+========================================
+- Files to workspace
+
+========================================
+Version 4.4
+========================================
+- Remove Tags and Destroy separate
+
+========================================
+Version 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
 Version 4.2
 ========================================
 - Minified style
 - THEMES = {Red, Blue, Rainbow}
+- ApplyTheme function
+- Rainbow animated
 - Resize corner
 - Small start 250x300
 - All buttons squared
+- 1 row of buttons
+- Hide Top Bar toggle
+- FPS/Ping top bar
+- Draggable top bar and dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites, Recently used, Script history
-- Player list, Server info, Copy JobId
+- Favorites (star)
+- Recently used
+- Custom script runner
+- Player list
+- Server info + Copy JobId
 - Anti-AFK
 - 46 scripts
+
+========================================
+Version 4.1
+========================================
+- Fixed buttons overlap
+- Returned red border, red background, red text
+- Added resize handle
+- Added Hide Top Bar toggle
+- Small start size
 
 ========================================
 Version 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar, Tabs, Favorites
-- Recently used, Theme switcher
+- Search bar
+- Tabs
+- Favorites
+- Recently used
+- Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId, Animations, Keybinds, Anti-AFK
+- Copy JobId
+- Animations, Keybinds, Anti-AFK
+
+========================================
+Version 3.9
+========================================
+- Added "Script executed!" notification for all scripts
+- Added Doors v4
+- Added Kiti (MM2)
+- Renamed BETA tag to Tester
+- Updated changelog canvas
+
+========================================
+Version 3.8
+========================================
+- Fixed tag not restoring after respawn
+- Tag now uses CharacterAdded + task.wait
+
+========================================
+Version 3.7
+========================================
+- Added tester tag (blue gradient)
+- Added tester welcome message
+- Added 2 testers
+
+========================================
+Version 3.6
+========================================
+- Fixed accidental button clicks in title bar
+- Added cooldown for ChangeLog and language buttons
+
+========================================
+Version 3.5
+========================================
+- Added owner-only welcome message
+
+========================================
+Version 3.4
+========================================
+- Darker red color for tag
+- Normal background for Remove/Destroy buttons
+
+========================================
+Version 3.3
+========================================
+- Fixed tag size (no longer stretches)
+- Fixed gradient (via Rotation)
+- Added UIStroke glow
+
+========================================
+Version 3.2
+========================================
+- Brought back gradient animation
+- Smaller text size
+- Added UIStroke glow
+
+========================================
+Version 3.1
+========================================
+- Completely rewrote tag system
+- Tag is now attached to HumanoidRootPart
 
 ========================================
 Version 3.0
 ========================================
-- Tag system v3
-- Owner tags with gradient
+- Removed gradient
+- Added debug prints
+- Simplified tag logic
+
+========================================
+Version 2.9
+========================================
+- Added XyqwHub OWNER tag
+- Added "Remove XyqwHub Tag" button
+- Added 2 owner accounts
+
+========================================
+Version 2.8
+========================================
+- XyqwHub Loaded! now appears immediately
+- ChangeLog translated to EN/RU
+- Tag now visible for owners only
+
+========================================
+Version 2.7
+========================================
+- Roblox notifications (bottom right)
+- ChangeLog button added
+- Loading / Loaded notifications
+
+========================================
+Version 2.6
+========================================
+- Notifications moved to bottom right
+
+========================================
+Version 2.5
+========================================
+- All messages translated to EN/RU
+- Re-launch protection
+- Fixed language change button
+
+========================================
+Version 2.4
+========================================
+- Re-launch protection added
+- DESTROY button resets the flag
+
+========================================
+Version 2.3
+========================================
+- Added Adopt me
+
+========================================
+Version 2.2
+========================================
+- Added bLockman's minesweaper
+- Added Cheating during test
+
+========================================
+Version 2.1
+========================================
+- Added DropKick
+- Added Evade
+- Added A Dusty Trip
+- Added A Dusty Trip v2
 
 ========================================
 Version 2.0
 ========================================
+- Removed Auto Execute
 - All buttons in one list
-- Re-launch protection
-- Roblox notifications
+- Version 2.0 stable
+
+========================================
+Version 1.9
+========================================
+- Added key for Doors V3 (Cheesy)
+
+========================================
+Version 1.8
+========================================
+- Added Death Order [SIMON]
+- Added CandyWare (MM2)
+
+========================================
+Version 1.7
+========================================
+- Added Troll script
+
+========================================
+Version 1.6
+========================================
+- Added Steal an egg
+- Added Universal script
+- Added Corridor
+- Added BloxStrike
+- Added RIVALS
+
+========================================
+Version 1.5
+========================================
+- EN/RU hint at top and bottom of welcome
+
+========================================
+Version 1.4
+========================================
+- EN/RU hint in welcome
+
+========================================
+Version 1.3
+========================================
+- Hint how to change language after welcome
+
+========================================
+Version 1.2
+========================================
+- Fixed language change button
+- langCooldown protection
+
+========================================
+Version 1.1
+========================================
+- Added language change (EN/RU)
+- LangButton
 
 ========================================
 Version 1.0
@@ -291,34 +501,36 @@ Version 1.0
     },
     RU = {
         Loaded = "загружен", Error = "ошибка", Search = "Поиск...",
-        CustomPlaceholder = "Ссылка или loadstring...", RunCustom = "Запустить",
+        CustomPlaceholder = "Ссылка...", RunCustom = "Запустить",
         JobIdCopied = "JobId скопирован!", ScriptExecuted = "Скрипт выполнен!",
         OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
-        TagRemoved = "Тег убран!", HideTopBarOn = "Скрыть топ бар: вкл", HideTopBarOff = "Скрыть топ бар: выкл",
-        LangChanged = "Язык изменён на Русский",
-        FavShared = "Избранное скопировано!",
-        RctShared = "Недавние скопированы!",
-        LoadstringCopied = "Loadstring скопирован, спасибо :3",
-        ColorReset = "Custom Color сброшен на Красный",
-        ColorShared = "Цвет скопирован!",
-        AutoExecOn = "Авто-запуск: ВКЛ", AutoExecOff = "Авто-запуск: ВЫКЛ",
-        KeybindChanged = "Бинд Auto-Hide: ",
-        UrlCheckStarted = "Проверка URL...", UrlCheckDone = "Проверка завершена!",
-        WelcomeTitle = "Добро пожаловать в XyqwHub!",
-        ClickXToClose = "Нажми X чтобы закрыть",
-        PlayersTitle = "Игроки", ServerTitle = "Инфо о сервере", CustomTitle = "Свой скрипт",
-        CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог", SettingsTitle = "Настройки",
-        Apply = "Применить", Reset = "Сбросить", ShareColor = "Поделиться цветом", CopyJobId = "Копировать JobId",
-        Rejoin = "Перезайти", ServerHop = "Сменить сервер", TPToSmall = "ТП в маленький", RemoveTags = "Убрать теги",
-        ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними",
-        TestURLs = "Проверить URL", SettingsBtn = "Настройки (Бинд Auto-Hide)", Destroy = "Удалить XyqwHub",
-        ResetOrder = "Сбросить порядок",
+        TagRemoved = "Тег убран!", LangChanged = "Язык изменён на Русский",
+        FavShared = "Избранное скопировано!", RctShared = "Недавние скопированы!",
+        LoadstringCopied = "Loadstring скопирован!", ColorReset = "Цвет сброшен",
+        ColorShared = "Цвет скопирован!", AutoExecOn = "Авто-запуск: ВКЛ", AutoExecOff = "Авто-запуск: ВЫКЛ",
+        KeybindChanged = "Бинд Auto-Hide: ", UrlCheckStarted = "Проверка URL...",
+        UrlCheckDone = "Проверка завершена!", WelcomeTitle = "Добро пожаловать в XyqwHub!",
+        ClickXToClose = "Нажми X чтобы закрыть", PlayersTitle = "Игроки", ServerTitle = "Инфо о сервере",
+        CustomTitle = "Свой скрипт", CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог",
+        SettingsTitle = "Настройки", Apply = "Применить", Reset = "Сбросить", ShareColor = "Поделиться цветом",
+        CopyJobId = "Копировать JobId", Rejoin = "Перезайти", ServerHop = "Сменить сервер", TPToSmall = "ТП в маленький",
+        RemoveTags = "Убрать теги", ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними",
+        TestURLs = "Проверить URL", SettingsBtn = "Настройки", Destroy = "Удалить XyqwHub", ResetOrder = "Сбросить порядок",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Игроки", Creator = "Создатель",
         Presets = "Пресеты", AutoHideBind = "Бинд Auto-Hide:",
-        WelcomeFiles = "Файлы: XyqwHub/FavScripts, RctScripts, CustomColor",
-        ShareHub = "Поделиться XyqwHub", HideTopBar = "Скрыть топ бар",
-        OrderSaved = "Порядок сохранён!", OrderReset = "Порядок сброшен!",
+        ShareHub = "Поделиться XyqwHub", HideTopBar = "Скрыть топ бар", HideTopBarOn = "Скрыть топ бар: ВКЛ",
+        HideTopBarOff = "Скрыть топ бар: ВЫКЛ", OrderSaved = "Порядок сохранён!", OrderReset = "Порядок сброшен!",
         ChangeLogText = [[XyqwHub Ченджлог
+
+========================================
+Версия 6.7
+========================================
+- Переписан с нуля
+- Фикс drag & drop (btn.InputBegan)
+- Фикс анимации открытия/закрытия GUI
+- Фикс закрытия таблицы LANG
+- 5 языков: EN, RU, UK, BE, KK
+- 48 скриптов
 
 ========================================
 Версия 6.6
@@ -326,7 +538,6 @@ Version 1.0
 - Фикс перетаскивания (btn.InputBegan)
 - Анимации открытия/закрытия GUI (scale + fade)
 - blockClick защита
-- 5 языков: EN, RU, UK, BE, KK
 
 ========================================
 Версия 6.5
@@ -349,18 +560,68 @@ Version 1.0
 - Blacklist удалён
 - Фикс заголовка при запуске
 - Плавные анимации
-- Drag & drop кнопок скриптов (hold 0.35s)
+- Drag & drop (hold 0.35s)
 - Порядок в Settings/order.json
+
+========================================
+Версия 6.2
+========================================
+- Фикс × в чёрном списке
+- Полный ченджлог
+
+========================================
+Версия 6.1
+========================================
+- Фикс обновления чёрного списка
 
 ========================================
 Версия 6.0
 ========================================
 - 5 языков: EN, RU, UK, BE, KK
+- Возвращено приветствие
+
+========================================
+Версия 5.9
+========================================
+- X в правый угол
+- Перетаскивание топ-бара
+
+========================================
+Версия 5.6
+========================================
+- Убраны скругления
+- Базовая вкладка All
 
 ========================================
 Версия 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+
+========================================
+Версия 5.4
+========================================
+- Авто-запуск скриптов
+- Чёрный список
+- Auto Hide GUI
+- URL Tester (зелёный/красный)
+- Сортировка
+- Share Fav/Rct
+
+========================================
+Версия 5.3
+========================================
+- Custom Color меньше + ресайз
+- Фикс универсального workspace
+
+========================================
+Версия 5.2
+========================================
+- Поддержка универсального workspace
+
+========================================
+Версия 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
 
 ========================================
 Версия 5.0
@@ -373,41 +634,262 @@ Version 1.0
 - Welcome меньше + скролл, 13 тем
 
 ========================================
+Версия 4.8
+========================================
+- Custom Color поддержка rgb()
+
+========================================
+Версия 4.7
+========================================
+- Custom Color picker
+
+========================================
+Версия 4.6
+========================================
+- Фикс мерцания вкладок в Rainbow
+
+========================================
+Версия 4.5
+========================================
+- Файлы в workspace
+
+========================================
+Версия 4.4
+========================================
+- Remove Tags и Destroy раздельно
+
+========================================
+Версия 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
 Версия 4.2
 ========================================
 - Минифицированный стиль
 - THEMES = {Red, Blue, Rainbow}
+- ApplyTheme
+- Rainbow анимация
 - Ресайз в углу
 - Стартовое окно 250x300
 - Квадратные кнопки
+- Кнопки в 1 ряд
+- Hide Top Bar
+- FPS/Ping в топ-баре
+- Перетаскивание top bar и dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites, Recently used, Script history
-- Player list, Server info, Copy JobId
+- Favorites (звезда)
+- Recently used
+- Custom script runner
+- Player list
+- Server info + Copy JobId
 - Anti-AFK
 - 46 скриптов
+
+========================================
+Версия 4.1
+========================================
+- Фикс наложения кнопок
+- Возвращён красный бордер, фон, текст
+- Добавлен ресайз
+- Добавлен Hide Top Bar
+- Маленький стартовый размер
 
 ========================================
 Версия 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar, Tabs, Favorites
-- Recently used, Theme switcher
+- Search bar
+- Tabs
+- Favorites
+- Recently used
+- Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId, Animations, Keybinds, Anti-AFK
+- Copy JobId
+- Animations, Keybinds, Anti-AFK
+
+========================================
+Версия 3.9
+========================================
+- Уведомление "Script executed!" для всех скриптов
+- Добавлен Doors v4
+- Добавлен Kiti (MM2)
+- BETA тег переименован в Tester
+
+========================================
+Версия 3.8
+========================================
+- Фикс восстановления тега после респавна
+- Тег использует CharacterAdded + task.wait
+
+========================================
+Версия 3.7
+========================================
+- Добавлен тег тестера (синий градиент)
+- Добавлено приветствие для тестеров
+- Добавлено 2 тестера
+
+========================================
+Версия 3.6
+========================================
+- Фикс случайных кликов по кнопкам в заголовке
+- Добавлен кулдаун для ChangeLog и языка
+
+========================================
+Версия 3.5
+========================================
+- Добавлено приветствие только для владельца
+
+========================================
+Версия 3.4
+========================================
+- Более тёмный красный для тега
+- Обычный фон для Remove/Destroy
+
+========================================
+Версия 3.3
+========================================
+- Фикс размера тега
+- Фикс градиента (через Rotation)
+- Добавлен UIStroke glow
+
+========================================
+Версия 3.2
+========================================
+- Возвращена анимация градиента
+- Уменьшен размер текста
+- Добавлен UIStroke glow
+
+========================================
+Версия 3.1
+========================================
+- Полностью переписана система тегов
+- Тег привязан к HumanoidRootPart
 
 ========================================
 Версия 3.0
 ========================================
-- Система тегов v3
-- Owner теги с градиентом
+- Убран градиент
+- Добавлены debug prints
+- Упрощена логика тега
+
+========================================
+Версия 2.9
+========================================
+- Добавлен XyqwHub OWNER тег
+- Добавлена кнопка "Remove XyqwHub Tag"
+- Добавлено 2 owner аккаунта
+
+========================================
+Версия 2.8
+========================================
+- XyqwHub Loaded! появляется сразу
+- ChangeLog переведён на EN/RU
+- Тег виден только владельцам
+
+========================================
+Версия 2.7
+========================================
+- Roblox уведомления (правый нижний угол)
+- Добавлена кнопка ChangeLog
+- Loading / Loaded уведомления
+
+========================================
+Версия 2.6
+========================================
+- Уведомления перемещены в правый нижний угол
+
+========================================
+Версия 2.5
+========================================
+- Все сообщения переведены EN/RU
+- Re-launch protection
+- Фикс кнопки смены языка
+
+========================================
+Версия 2.4
+========================================
+- Добавлен Re-launch protection
+- Кнопка DESTROY сбрасывает флаг
+
+========================================
+Версия 2.3
+========================================
+- Добавлен Adopt me
+
+========================================
+Версия 2.2
+========================================
+- Добавлен bLockman's minesweaper
+- Добавлен Cheating during test
+
+========================================
+Версия 2.1
+========================================
+- Добавлен DropKick
+- Добавлен Evade
+- Добавлен A Dusty Trip
+- Добавлен A Dusty Trip v2
 
 ========================================
 Версия 2.0
 ========================================
+- Убран Auto Execute
 - Все кнопки в одном списке
-- Re-launch protection
-- Roblox уведомления
+- Версия 2.0 stable
+
+========================================
+Версия 1.9
+========================================
+- Добавлен ключ для Doors V3 (Cheesy)
+
+========================================
+Версия 1.8
+========================================
+- Добавлен Death Order [SIMON]
+- Добавлен CandyWare (MM2)
+
+========================================
+Версия 1.7
+========================================
+- Добавлен Troll script
+
+========================================
+Версия 1.6
+========================================
+- Добавлен Steal an egg
+- Добавлен Universal script
+- Добавлен Corridor
+- Добавлен BloxStrike
+- Добавлен RIVALS
+
+========================================
+Версия 1.5
+========================================
+- EN/RU подсказка сверху и снизу welcome
+
+========================================
+Версия 1.4
+========================================
+- EN/RU подсказка в welcome
+
+========================================
+Версия 1.3
+========================================
+- Подсказка как сменить язык после welcome
+
+========================================
+Версия 1.2
+========================================
+- Фикс кнопки смены языка
+- langCooldown protection
+
+========================================
+Версия 1.1
+========================================
+- Добавлена смена языка (EN/RU)
+- LangButton
 
 ========================================
 Версия 1.0
@@ -420,41 +902,43 @@ Version 1.0
     },
     UK = {
         Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
-        CustomPlaceholder = "Вставте URL або loadstring...", RunCustom = "Запустити",
+        CustomPlaceholder = "Посилання...", RunCustom = "Запустити",
         JobIdCopied = "JobId скопійовано!", ScriptExecuted = "Скрипт виконано!",
         OwnerWelcome = "Вітаю, мій батько :3", BetaWelcome = "Радий тебе бачити, тестер <3",
-        TagRemoved = "Тег прибрано!", HideTopBarOn = "Верхня панель: УВІМК", HideTopBarOff = "Верхня панель: ВИМК",
-        LangChanged = "Мову змінено на Українську",
-        FavShared = "Обране скопійовано!",
-        RctShared = "Останні скрипти скопійовано!",
-        LoadstringCopied = "Loadstring скопійовано, дякую :3",
-        ColorReset = "Колір скинуто", ColorShared = "Колір скопійовано!",
-        AutoExecOn = "Авто-запуск: УВІМК", AutoExecOff = "Авто-запуск: ВИМК",
-        KeybindChanged = "Бінд Auto-Hide: ",
-        UrlCheckStarted = "Перевірка URL...", UrlCheckDone = "Перевірку завершено!",
-        WelcomeTitle = "Ласкаво просимо до XyqwHub!",
-        ClickXToClose = "Натисни X щоб закрити",
-        PlayersTitle = "Гравці", ServerTitle = "Інфо про сервер", CustomTitle = "Свій скрипт",
-        CustomColorTitle = "Свій колір", ChangeLogTitle = "Журнал", SettingsTitle = "Налаштування",
-        Apply = "Застосувати", Reset = "Скинути", ShareColor = "Поділитись кольором", CopyJobId = "Копіювати JobId",
-        Rejoin = "Перезайти", ServerHop = "Змінити сервер", TPToSmall = "ТП в маленький", RemoveTags = "Прибрати теги",
-        ShareFav = "Поділитись обраним", ShareRct = "Поділитись останніми",
-        TestURLs = "Перевірити URL", SettingsBtn = "Налаштування (Бінд Auto-Hide)", Destroy = "Видалити XyqwHub",
-        ResetOrder = "Скинути порядок",
+        TagRemoved = "Тег прибрано!", LangChanged = "Мову змінено на Українську",
+        FavShared = "Обране скопійовано!", RctShared = "Останні скопійовано!",
+        LoadstringCopied = "Loadstring скопійовано!", ColorReset = "Колір скинуто",
+        ColorShared = "Колір скопійовано!", AutoExecOn = "Авто-запуск: УВІМК", AutoExecOff = "Авто-запуск: ВИМК",
+        KeybindChanged = "Бінд Auto-Hide: ", UrlCheckStarted = "Перевірка URL...",
+        UrlCheckDone = "Перевірку завершено!", WelcomeTitle = "Ласкаво просимо до XyqwHub!",
+        ClickXToClose = "Натисни X щоб закрити", PlayersTitle = "Гравці", ServerTitle = "Інфо про сервер",
+        CustomTitle = "Свій скрипт", CustomColorTitle = "Свій колір", ChangeLogTitle = "Журнал",
+        SettingsTitle = "Налаштування", Apply = "Застосувати", Reset = "Скинути", ShareColor = "Поділитись кольором",
+        CopyJobId = "Копіювати JobId", Rejoin = "Перезайти", ServerHop = "Змінити сервер", TPToSmall = "ТП в маленький",
+        RemoveTags = "Прибрати теги", ShareFav = "Поділитись обраним", ShareRct = "Поділитись останніми",
+        TestURLs = "Перевірити URL", SettingsBtn = "Налаштування", Destroy = "Видалити XyqwHub", ResetOrder = "Скинути порядок",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Гравці", Creator = "Творець",
         Presets = "Пресети", AutoHideBind = "Бінд Auto-Hide:",
-        WelcomeFiles = "Файли: XyqwHub/FavScripts, RctScripts, CustomColor",
-        ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель",
-        OrderSaved = "Порядок збережено!", OrderReset = "Порядок скинуто!",
+        ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель", HideTopBarOn = "Сховати: УВІМК",
+        HideTopBarOff = "Сховати: ВИМК", OrderSaved = "Порядок збережено!", OrderReset = "Порядок скинуто!",
         ChangeLogText = [[XyqwHub Журнал
+
+========================================
+Версія 6.7
+========================================
+- Переписано з нуля
+- Фікс drag & drop (btn.InputBegan)
+- Фікс анімації відкриття/закриття GUI
+- Фікс закриття таблиці LANG
+- 5 мов: EN, RU, UK, BE, KK
+- 48 скриптів
 
 ========================================
 Версія 6.6
 ========================================
 - Фікс перетягування (btn.InputBegan)
-- Анімації відкриття/закриття GUI (scale + fade)
+- Анімації відкриття/закриття GUI
 - blockClick захист
-- 5 мов: EN, RU, UK, BE, KK
 
 ========================================
 Версія 6.5
@@ -477,18 +961,68 @@ Version 1.0
 - Blacklist видалено
 - Фікс заголовка при запуску
 - Плавні анімації
-- Drag & drop кнопок скриптів (hold 0.35s)
+- Drag & drop (hold 0.35s)
 - Порядок у Settings/order.json
+
+========================================
+Версія 6.2
+========================================
+- Фікс × у чорному списку
+- Повний журнал
+
+========================================
+Версія 6.1
+========================================
+- Фікс оновлення чорного списку
 
 ========================================
 Версія 6.0
 ========================================
 - 5 мов: EN, RU, UK, BE, KK
+- Повернуто вітання
+
+========================================
+Версія 5.9
+========================================
+- X у правий кут
+- Перетягування верхньої панелі
+
+========================================
+Версія 5.6
+========================================
+- Прибрано заокруглення
+- Базова вкладка All
 
 ========================================
 Версія 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+
+========================================
+Версія 5.4
+========================================
+- Авто-запуск скриптів
+- Чорний список
+- Auto Hide GUI
+- URL Tester
+- Сортування
+- Share Fav/Rct
+
+========================================
+Версія 5.3
+========================================
+- Custom Color менше + ресайз
+- Фікс універсального workspace
+
+========================================
+Версія 5.2
+========================================
+- Підтримка універсального workspace
+
+========================================
+Версія 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
 
 ========================================
 Версія 5.0
@@ -501,41 +1035,262 @@ Version 1.0
 - Welcome менше + скрол, 13 тем
 
 ========================================
+Версія 4.8
+========================================
+- Custom Color підтримка rgb()
+
+========================================
+Версія 4.7
+========================================
+- Custom Color picker
+
+========================================
+Версія 4.6
+========================================
+- Фікс мерехтіння вкладок у Rainbow
+
+========================================
+Версія 4.5
+========================================
+- Файли у workspace
+
+========================================
+Версія 4.4
+========================================
+- Remove Tags і Destroy окремо
+
+========================================
+Версія 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
 Версія 4.2
 ========================================
 - Мініфікований стиль
 - THEMES = {Red, Blue, Rainbow}
+- ApplyTheme
+- Rainbow анімація
 - Ресайз у куті
 - Стартове вікно 250x300
 - Квадратні кнопки
+- Кнопки в 1 ряд
+- Hide Top Bar
+- FPS/Ping у топ-барі
+- Перетягування top bar і dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites, Recently used, Script history
-- Player list, Server info, Copy JobId
+- Favorites (зірка)
+- Recently used
+- Custom script runner
+- Player list
+- Server info + Copy JobId
 - Anti-AFK
 - 46 скриптів
+
+========================================
+Версія 4.1
+========================================
+- Фікс накладання кнопок
+- Повернуто червоний бордер, фон, текст
+- Додано ресайз
+- Додано Hide Top Bar
+- Маленький стартовий розмір
 
 ========================================
 Версія 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar, Tabs, Favorites
-- Recently used, Theme switcher
+- Search bar
+- Tabs
+- Favorites
+- Recently used
+- Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId, Animations, Keybinds, Anti-AFK
+- Copy JobId
+- Animations, Keybinds, Anti-AFK
+
+========================================
+Версія 3.9
+========================================
+- Сповіщення "Script executed!" для всіх скриптів
+- Додано Doors v4
+- Додано Kiti (MM2)
+- BETA тег перейменовано в Tester
+
+========================================
+Версія 3.8
+========================================
+- Фікс відновлення тега після респавну
+- Тег використовує CharacterAdded + task.wait
+
+========================================
+Версія 3.7
+========================================
+- Додано тег тестера (синій градієнт)
+- Додано вітання для тестерів
+- Додано 2 тестери
+
+========================================
+Версія 3.6
+========================================
+- Фікс випадкових кліків по кнопках у заголовку
+- Додано кулдаун для ChangeLog та мови
+
+========================================
+Версія 3.5
+========================================
+- Додано вітання тільки для власника
+
+========================================
+Версія 3.4
+========================================
+- Темніший червоний для тега
+- Звичайний фон для Remove/Destroy
+
+========================================
+Версія 3.3
+========================================
+- Фікс розміру тега
+- Фікс градієнта (через Rotation)
+- Додано UIStroke glow
+
+========================================
+Версія 3.2
+========================================
+- Повернуто анімацію градієнта
+- Зменшено розмір тексту
+- Додано UIStroke glow
+
+========================================
+Версія 3.1
+========================================
+- Повністю переписано систему тегів
+- Тег прив'язано до HumanoidRootPart
 
 ========================================
 Версія 3.0
 ========================================
-- Система тегів v3
-- Owner теги з градієнтом
+- Прибрано градієнт
+- Додано debug prints
+- Спрощено логіку тега
+
+========================================
+Версія 2.9
+========================================
+- Додано XyqwHub OWNER тег
+- Додано кнопку "Remove XyqwHub Tag"
+- Додано 2 owner акаунти
+
+========================================
+Версія 2.8
+========================================
+- XyqwHub Loaded! з'являється одразу
+- ChangeLog перекладено на EN/RU
+- Тег видно тільки власникам
+
+========================================
+Версія 2.7
+========================================
+- Roblox сповіщення (правий нижній кут)
+- Додано кнопку ChangeLog
+- Loading / Loaded сповіщення
+
+========================================
+Версія 2.6
+========================================
+- Сповіщення переміщено у правий нижній кут
+
+========================================
+Версія 2.5
+========================================
+- Всі повідомлення перекладено EN/RU
+- Re-launch protection
+- Фікс кнопки зміни мови
+
+========================================
+Версія 2.4
+========================================
+- Додано Re-launch protection
+- Кнопка DESTROY скидає флаг
+
+========================================
+Версія 2.3
+========================================
+- Додано Adopt me
+
+========================================
+Версія 2.2
+========================================
+- Додано bLockman's minesweaper
+- Додано Cheating during test
+
+========================================
+Версія 2.1
+========================================
+- Додано DropKick
+- Додано Evade
+- Додано A Dusty Trip
+- Додано A Dusty Trip v2
 
 ========================================
 Версія 2.0
 ========================================
+- Прибрано Auto Execute
 - Всі кнопки в одному списку
-- Re-launch protection
-- Roblox сповіщення
+- Версія 2.0 stable
+
+========================================
+Версія 1.9
+========================================
+- Додано ключ для Doors V3 (Cheesy)
+
+========================================
+Версія 1.8
+========================================
+- Додано Death Order [SIMON]
+- Додано CandyWare (MM2)
+
+========================================
+Версія 1.7
+========================================
+- Додано Troll script
+
+========================================
+Версія 1.6
+========================================
+- Додано Steal an egg
+- Додано Universal script
+- Додано Corridor
+- Додано BloxStrike
+- Додано RIVALS
+
+========================================
+Версія 1.5
+========================================
+- EN/RU підказка зверху та знизу welcome
+
+========================================
+Версія 1.4
+========================================
+- EN/RU підказка в welcome
+
+========================================
+Версія 1.3
+========================================
+- Підказка як змінити мову після welcome
+
+========================================
+Версія 1.2
+========================================
+- Фікс кнопки зміни мови
+- langCooldown protection
+
+========================================
+Версія 1.1
+========================================
+- Додано зміну мови (EN/RU)
+- LangButton
 
 ========================================
 Версія 1.0
@@ -548,41 +1303,43 @@ Version 1.0
     },
     BE = {
         Loaded = "загружана", Error = "памылка", Search = "Пошук...",
-        CustomPlaceholder = "Устаўце URL або loadstring...", RunCustom = "Запусціць",
+        CustomPlaceholder = "Спасылка...", RunCustom = "Запусціць",
         JobIdCopied = "JobId скапіяваны!", ScriptExecuted = "Скрыпт выкананы!",
         OwnerWelcome = "Вітаю, мой бацька :3", BetaWelcome = "Рады цябе бачыць, тэстар <3",
-        TagRemoved = "Тэг прыбраны!", HideTopBarOn = "Верхняя панэль: УКЛ", HideTopBarOff = "Верхняя панэль: ВЫКЛ",
-        LangChanged = "Мова зменена на Беларускую",
-        FavShared = "Абранае скапіявана!",
-        RctShared = "Апошнія скрыпты скапіяваны!",
-        LoadstringCopied = "Loadstring скапіяваны, дзякуй :3",
-        ColorReset = "Колер скінуты", ColorShared = "Колер скапіяваны!",
-        AutoExecOn = "Аўта-запуск: УКЛ", AutoExecOff = "Аўта-запуск: ВЫКЛ",
-        KeybindChanged = "Бінд Auto-Hide: ",
-        UrlCheckStarted = "Праверка URL...", UrlCheckDone = "Праверка завершана!",
-        WelcomeTitle = "Сардэчна запрашаем у XyqwHub!",
-        ClickXToClose = "Націсні X каб зачыніць",
-        PlayersTitle = "Гульцы", ServerTitle = "Інфа пра сервер", CustomTitle = "Свой скрыпт",
-        CustomColorTitle = "Свой колер", ChangeLogTitle = "Чэйнджлог", SettingsTitle = "Налады",
-        Apply = "Ужыць", Reset = "Скінуць", ShareColor = "Падзяліцца колерам", CopyJobId = "Капіяваць JobId",
-        Rejoin = "Перазайсці", ServerHop = "Змяніць сервер", TPToSmall = "ТП у маленькі", RemoveTags = "Прыбраць тэгі",
-        ShareFav = "Падзяліцца абраным", ShareRct = "Падзяліцца апошнімі",
-        TestURLs = "Праверыць URL", SettingsBtn = "Налады (Бінд Auto-Hide)", Destroy = "Выдаліць XyqwHub",
-        ResetOrder = "Скінуць парадак",
+        TagRemoved = "Тэг прыбраны!", LangChanged = "Мова зменена на Беларускую",
+        FavShared = "Абранае скапіявана!", RctShared = "Апошнія скапіяваны!",
+        LoadstringCopied = "Loadstring скапіяваны!", ColorReset = "Колер скінуты",
+        ColorShared = "Колер скапіяваны!", AutoExecOn = "Аўта-запуск: УКЛ", AutoExecOff = "Аўта-запуск: ВЫКЛ",
+        KeybindChanged = "Бінд Auto-Hide: ", UrlCheckStarted = "Праверка URL...",
+        UrlCheckDone = "Праверка завершана!", WelcomeTitle = "Сардэчна запрашаем у XyqwHub!",
+        ClickXToClose = "Націсні X каб зачыніць", PlayersTitle = "Гульцы", ServerTitle = "Інфа пра сервер",
+        CustomTitle = "Свой скрыпт", CustomColorTitle = "Свой колер", ChangeLogTitle = "Чэйнджлог",
+        SettingsTitle = "Налады", Apply = "Ужыць", Reset = "Скінуць", ShareColor = "Падзяліцца колерам",
+        CopyJobId = "Капіяваць JobId", Rejoin = "Перазайсці", ServerHop = "Змяніць сервер", TPToSmall = "ТП у маленькі",
+        RemoveTags = "Прыбраць тэгі", ShareFav = "Падзяліцца абраным", ShareRct = "Падзяліцца апошнімі",
+        TestURLs = "Праверыць URL", SettingsBtn = "Налады", Destroy = "Выдаліць XyqwHub", ResetOrder = "Скінуць парадак",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Гульцы", Creator = "Стваральнік",
         Presets = "Прэсеты", AutoHideBind = "Бінд Auto-Hide:",
-        WelcomeFiles = "Файлы: XyqwHub/FavScripts, RctScripts, CustomColor",
-        ShareHub = "Падзяліцца XyqwHub", HideTopBar = "Схаваць верхнюю панэль",
-        OrderSaved = "Парадак захаваны!", OrderReset = "Парадак скінуты!",
+        ShareHub = "Падзяліцца XyqwHub", HideTopBar = "Схаваць панэль", HideTopBarOn = "Схаваць: УКЛ",
+        HideTopBarOff = "Схаваць: ВЫКЛ", OrderSaved = "Парадак захаваны!", OrderReset = "Парадак скінуты!",
         ChangeLogText = [[XyqwHub Чэйнджлог
+
+========================================
+Версія 6.7
+========================================
+- Перапісана з нуля
+- Фікс drag & drop (btn.InputBegan)
+- Фікс анімацыі адкрыцця/закрыцця GUI
+- Фікс закрыцця табліцы LANG
+- 5 моў: EN, RU, UK, BE, KK
+- 48 скрыптаў
 
 ========================================
 Версія 6.6
 ========================================
 - Фікс перацягвання (btn.InputBegan)
-- Анімацыі адкрыцця/закрыцця GUI (scale + fade)
+- Анімацыі адкрыцця/закрыцця GUI
 - blockClick абарона
-- 5 моў: EN, RU, UK, BE, KK
 
 ========================================
 Версія 6.5
@@ -605,18 +1362,68 @@ Version 1.0
 - Blacklist выдалены
 - Фікс загалоўка пры запуску
 - Плаўныя анімацыі
-- Drag & drop кнопак скрыптаў (hold 0.35s)
+- Drag & drop (hold 0.35s)
 - Парадак у Settings/order.json
+
+========================================
+Версія 6.2
+========================================
+- Фікс × у чорным спісе
+- Поўны чэйнджлог
+
+========================================
+Версія 6.1
+========================================
+- Фікс абнаўлення чорнага спісу
 
 ========================================
 Версія 6.0
 ========================================
 - 5 моў: EN, RU, UK, BE, KK
+- Вернута вітанне
+
+========================================
+Версія 5.9
+========================================
+- X у правы кут
+- Перацягванне верхняй панэлі
+
+========================================
+Версія 5.6
+========================================
+- Прыбраны заакругленні
+- Базавая ўкладка All
 
 ========================================
 Версія 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+
+========================================
+Версія 5.4
+========================================
+- Аўта-запуск скрыптаў
+- Чорны спіс
+- Auto Hide GUI
+- URL Tester
+- Сартаванне
+- Share Fav/Rct
+
+========================================
+Версія 5.3
+========================================
+- Custom Color менш + рэсайз
+- Фікс універсальнага workspace
+
+========================================
+Версія 5.2
+========================================
+- Падтрымка ўніверсальнага workspace
+
+========================================
+Версія 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
 
 ========================================
 Версія 5.0
@@ -629,41 +1436,262 @@ Version 1.0
 - Welcome менш + скрол, 13 тэм
 
 ========================================
+Версія 4.8
+========================================
+- Custom Color падтрымка rgb()
+
+========================================
+Версія 4.7
+========================================
+- Custom Color picker
+
+========================================
+Версія 4.6
+========================================
+- Фікс мігацення ўкладак у Rainbow
+
+========================================
+Версія 4.5
+========================================
+- Файлы ў workspace
+
+========================================
+Версія 4.4
+========================================
+- Remove Tags і Destroy асобна
+
+========================================
+Версія 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
 Версія 4.2
 ========================================
 - Мініфікаваны стыль
 - THEMES = {Red, Blue, Rainbow}
+- ApplyTheme
+- Rainbow анімацыя
 - Рэсайз у куце
 - Стартавае акно 250x300
 - Квадратныя кнопкі
+- Кнопкі ў 1 шэраг
+- Hide Top Bar
+- FPS/Ping у топ-бары
+- Перацягванне top bar і dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites, Recently used, Script history
-- Player list, Server info, Copy JobId
+- Favorites (зорка)
+- Recently used
+- Custom script runner
+- Player list
+- Server info + Copy JobId
 - Anti-AFK
 - 46 скрыптаў
+
+========================================
+Версія 4.1
+========================================
+- Фікс накладання кнопак
+- Вернуты чырвоны бордэр, фон, тэкст
+- Дададзены рэсайз
+- Дададзены Hide Top Bar
+- Маленькі стартавы памер
 
 ========================================
 Версія 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar, Tabs, Favorites
-- Recently used, Theme switcher
+- Search bar
+- Tabs
+- Favorites
+- Recently used
+- Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId, Animations, Keybinds, Anti-AFK
+- Copy JobId
+- Animations, Keybinds, Anti-AFK
+
+========================================
+Версія 3.9
+========================================
+- Апавяшчэнне "Script executed!" для ўсіх скрыптаў
+- Дададзены Doors v4
+- Дададзены Kiti (MM2)
+- BETA тэг перайменаваны ў Tester
+
+========================================
+Версія 3.8
+========================================
+- Фікс аднаўлення тэга пасля рэспаўна
+- Тэг выкарыстоўвае CharacterAdded + task.wait
+
+========================================
+Версія 3.7
+========================================
+- Дададзены тэг тэстара (сіні градыент)
+- Дададзена прывітанне для тэстараў
+- Дададзена 2 тэстары
+
+========================================
+Версія 3.6
+========================================
+- Фікс выпадковых клікаў па кнопках у загалоўку
+- Дададзены кулдаўн для ChangeLog і мовы
+
+========================================
+Версія 3.5
+========================================
+- Дададзена прывітанне толькі для ўладальніка
+
+========================================
+Версія 3.4
+========================================
+- Больш цёмны чырвоны для тэга
+- Звычайны фон для Remove/Destroy
+
+========================================
+Версія 3.3
+========================================
+- Фікс памеру тэга
+- Фікс градыента (праз Rotation)
+- Дададзены UIStroke glow
+
+========================================
+Версія 3.2
+========================================
+- Вернута анімацыя градыента
+- Зменшаны памер тэксту
+- Дададзены UIStroke glow
+
+========================================
+Версія 3.1
+========================================
+- Поўнасцю перапісана сістэма тэгаў
+- Тэг прывязаны да HumanoidRootPart
 
 ========================================
 Версія 3.0
 ========================================
-- Сістэма тэгаў v3
-- Owner тэгі з градыентам
+- Прыбраны градыент
+- Дададзены debug prints
+- Спрошчана логіка тэга
+
+========================================
+Версія 2.9
+========================================
+- Дададзены XyqwHub OWNER тэг
+- Дададзена кнопка "Remove XyqwHub Tag"
+- Дададзена 2 owner акаўнты
+
+========================================
+Версія 2.8
+========================================
+- XyqwHub Loaded! з'яўляецца адразу
+- ChangeLog перакладзены на EN/RU
+- Тэг бачны толькі ўладальнікам
+
+========================================
+Версія 2.7
+========================================
+- Roblox апавяшчэнні (правы ніжні кут)
+- Дададзена кнопка ChangeLog
+- Loading / Loaded апавяшчэнні
+
+========================================
+Версія 2.6
+========================================
+- Апавяшчэнні перамешчаны ў правы ніжні кут
+
+========================================
+Версія 2.5
+========================================
+- Усе паведамленні перакладзены EN/RU
+- Re-launch protection
+- Фікс кнопкі змены мовы
+
+========================================
+Версія 2.4
+========================================
+- Дададзены Re-launch protection
+- Кнопка DESTROY скідвае флаг
+
+========================================
+Версія 2.3
+========================================
+- Дададзены Adopt me
+
+========================================
+Версія 2.2
+========================================
+- Дададзены bLockman's minesweaper
+- Дададзены Cheating during test
+
+========================================
+Версія 2.1
+========================================
+- Дададзены DropKick
+- Дададзены Evade
+- Дададзены A Dusty Trip
+- Дададзены A Dusty Trip v2
 
 ========================================
 Версія 2.0
 ========================================
+- Прыбраны Auto Execute
 - Усе кнопкі ў адным спісе
-- Re-launch protection
-- Roblox апавяшчэнні
+- Версія 2.0 stable
+
+========================================
+Версія 1.9
+========================================
+- Дададзены ключ для Doors V3 (Cheesy)
+
+========================================
+Версія 1.8
+========================================
+- Дададзены Death Order [SIMON]
+- Дададзены CandyWare (MM2)
+
+========================================
+Версія 1.7
+========================================
+- Дададзены Troll script
+
+========================================
+Версія 1.6
+========================================
+- Дададзены Steal an egg
+- Дададзены Universal script
+- Дададзены Corridor
+- Дададзены BloxStrike
+- Дададзены RIVALS
+
+========================================
+Версія 1.5
+========================================
+- EN/RU падказка зверху і знізу welcome
+
+========================================
+Версія 1.4
+========================================
+- EN/RU падказка ў welcome
+
+========================================
+Версія 1.3
+========================================
+- Падказка як змяніць мову пасля welcome
+
+========================================
+Версія 1.2
+========================================
+- Фікс кнопкі змены мовы
+- langCooldown protection
+
+========================================
+Версія 1.1
+========================================
+- Дададзена змена мовы (EN/RU)
+- LangButton
 
 ========================================
 Версія 1.0
@@ -676,41 +1704,43 @@ Version 1.0
     },
     KK = {
         Loaded = "жүктелді", Error = "қате", Search = "Іздеу...",
-        CustomPlaceholder = "URL немесе loadstring қойыңыз...", RunCustom = "Іске қосу",
+        CustomPlaceholder = "Сілтеме...", RunCustom = "Іске қосу",
         JobIdCopied = "JobId көшірілді!", ScriptExecuted = "Скрипт орындалды!",
         OwnerWelcome = "Қош келдің, әкем :3", BetaWelcome = "Көргеніме қуаныштымын, тестер <3",
-        TagRemoved = "Тег жойылды!", HideTopBarOn = "Жоғарғы тақта: ҚОСУЛЫ", HideTopBarOff = "Жоғарғы тақта: ӨШІРУЛІ",
-        LangChanged = "Тіл Қазақшаға өзгертілді",
-        FavShared = "Таңдаулылар көшірілді!",
-        RctShared = "Соңғы скрипттер көшірілді!",
-        LoadstringCopied = "Loadstring көшірілді, рахмет :3",
-        ColorReset = "Түс қалпына келтірілді", ColorShared = "Түс көшірілді!",
-        AutoExecOn = "Авто-орындау: ҚОСУЛЫ", AutoExecOff = "Авто-орындау: ӨШІРУЛІ",
-        KeybindChanged = "Auto-Hide байланысы: ",
-        UrlCheckStarted = "URL тексерілуде...", UrlCheckDone = "Тексеру аяқталды!",
-        WelcomeTitle = "XyqwHub-қа қош келдіңіз!",
-        ClickXToClose = "Жабу үшін X басыңыз",
-        PlayersTitle = "Ойыншылар", ServerTitle = "Сервер туралы", CustomTitle = "Өз скрипті",
-        CustomColorTitle = "Өз түсі", ChangeLogTitle = "Өзгерістер", SettingsTitle = "Параметрлер",
-        Apply = "Қолдану", Reset = "Қалпына келтіру", ShareColor = "Түспен бөлісу", CopyJobId = "JobId көшіру",
-        Rejoin = "Қайта кіру", ServerHop = "Серверді ауыстыру", TPToSmall = "Кішіге ТП", RemoveTags = "Тегтерді алу",
-        ShareFav = "Таңдаулылармен бөлісу", ShareRct = "Соңғылармен бөлісу",
-        TestURLs = "URL тексеру", SettingsBtn = "Параметрлер (Auto-Hide байланысы)", Destroy = "XyqwHub жою",
-        ResetOrder = "Ретті қалпына келтіру",
+        TagRemoved = "Тег жойылды!", LangChanged = "Тіл Қазақшаға өзгертілді",
+        FavShared = "Таңдаулылар көшірілді!", RctShared = "Соңғылар көшірілді!",
+        LoadstringCopied = "Loadstring көшірілді!", ColorReset = "Түс қалпына келтірілді",
+        ColorShared = "Түс көшірілді!", AutoExecOn = "Авто-орындау: ҚОСУЛЫ", AutoExecOff = "Авто-орындау: ӨШІРУЛІ",
+        KeybindChanged = "Auto-Hide байланысы: ", UrlCheckStarted = "URL тексерілуде...",
+        UrlCheckDone = "Тексеру аяқталды!", WelcomeTitle = "XyqwHub-қа қош келдіңіз!",
+        ClickXToClose = "Жабу үшін X басыңыз", PlayersTitle = "Ойыншылар", ServerTitle = "Сервер туралы",
+        CustomTitle = "Өз скрипті", CustomColorTitle = "Өз түсі", ChangeLogTitle = "Өзгерістер",
+        SettingsTitle = "Параметрлер", Apply = "Қолдану", Reset = "Қалпына келтіру", ShareColor = "Түспен бөлісу",
+        CopyJobId = "JobId көшіру", Rejoin = "Қайта кіру", ServerHop = "Серверді ауыстыру", TPToSmall = "Кішіге ТП",
+        RemoveTags = "Тегтерді алу", ShareFav = "Таңдаулылармен бөлісу", ShareRct = "Соңғылармен бөлісу",
+        TestURLs = "URL тексеру", SettingsBtn = "Параметрлер", Destroy = "XyqwHub жою", ResetOrder = "Ретті қалпына келтіру",
         PlaceId = "PlaceId", JobId = "JobId", Players = "Ойыншылар", Creator = "Жасаушы",
         Presets = "Пресеттер", AutoHideBind = "Auto-Hide байланысы:",
-        WelcomeFiles = "Файлдар: XyqwHub/FavScripts, RctScripts, CustomColor",
-        ShareHub = "XyqwHub-пен бөлісу", HideTopBar = "Жоғарғы тақтаны жасыру",
-        OrderSaved = "Рет сақталды!", OrderReset = "Рет қалпына келтірілді!",
+        ShareHub = "XyqwHub-пен бөлісу", HideTopBar = "Жоғарғы тақтаны жасыру", HideTopBarOn = "Жасыру: ҚОСУЛЫ",
+        HideTopBarOff = "Жасыру: ӨШІРУЛІ", OrderSaved = "Рет сақталды!", OrderReset = "Рет қалпына келтірілді!",
         ChangeLogText = [[XyqwHub Өзгерістер
+
+========================================
+6.7 нұсқасы
+========================================
+- Нөлден қайта жазылды
+- Drag & drop түзетілді (btn.InputBegan)
+- GUI ашу/жабу анимациясы түзетілді
+- LANG кестесінің жабылуы түзетілді
+- 5 тіл: EN, RU, UK, BE, KK
+- 48 скрипт
 
 ========================================
 6.6 нұсқасы
 ========================================
 - Сүйреу түзетілді (btn.InputBegan)
-- GUI ашу/жабу анимациялары (scale + fade)
+- GUI ашу/жабу анимациялары
 - blockClick қорғанысы
-- 5 тіл: EN, RU, UK, BE, KK
 
 ========================================
 6.5 нұсқасы
@@ -733,18 +1763,68 @@ Version 1.0
 - Blacklist жойылды
 - Тақырып түзетілді
 - Тегіс анимациялар
-- Скрипт батырмаларын сүйреу (hold 0.35s)
+- Drag & drop (hold 0.35s)
 - Рет Settings/order.json-да
+
+========================================
+6.2 нұсқасы
+========================================
+- × қара тізімде түзетілді
+- Толық өзгерістер
+
+========================================
+6.1 нұсқасы
+========================================
+- Қара тізім жаңарту түзетілді
 
 ========================================
 6.0 нұсқасы
 ========================================
 - 5 тіл: EN, RU, UK, BE, KK
+- Қош келу қалпына келтірілді
+
+========================================
+5.9 нұсқасы
+========================================
+- X оң жақ бұрышқа
+- Жоғарғы тақтаны сүйреу
+
+========================================
+5.6 нұсқасы
+========================================
+- Дөңгелектену жойылды
+- Негізгі қойынды All
 
 ========================================
 5.5 нұсқасы
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+
+========================================
+5.4 нұсқасы
+========================================
+- Авто-орындау
+- Қара тізім
+- Auto Hide GUI
+- URL Tester
+- Сұрыптау
+- Share Fav/Rct
+
+========================================
+5.3 нұсқасы
+========================================
+- Custom Color кішірек + ресайз
+- Әмбебап workspace түзетілді
+
+========================================
+5.2 нұсқасы
+========================================
+- Әмбебап workspace қолдауы
+
+========================================
+5.1 нұсқасы
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
 
 ========================================
 5.0 нұсқасы
@@ -757,41 +1837,262 @@ Version 1.0
 - Welcome кішірек + скролл, 13 тақырып
 
 ========================================
+4.8 нұсқасы
+========================================
+- Custom Color rgb() қолдауы
+
+========================================
+4.7 нұсқасы
+========================================
+- Custom Color picker
+
+========================================
+4.6 нұсқасы
+========================================
+- Rainbow қойынды жыпылықтауы түзетілді
+
+========================================
+4.5 нұсқасы
+========================================
+- Файлдар workspace-ке
+
+========================================
+4.4 нұсқасы
+========================================
+- Remove Tags және Destroy бөлек
+
+========================================
+4.3 нұсқасы
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
 4.2 нұсқасы
 ========================================
 - Минификацияланған стиль
 - THEMES = {Red, Blue, Rainbow}
+- ApplyTheme
+- Rainbow анимация
 - Ресайз бұрышта
 - Бастапқы 250x300
 - Шаршы батырмалар
+- 1 қатарда
+- Hide Top Bar
+- FPS/Ping жоғарғы тақтада
+- Top bar және dock сүйреу
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites, Recently used, Script history
-- Player list, Server info, Copy JobId
+- Favorites (жұлдыз)
+- Recently used
+- Custom script runner
+- Player list
+- Server info + Copy JobId
 - Anti-AFK
 - 46 скрипт
+
+========================================
+4.1 нұсқасы
+========================================
+- Батырмалардың қабаттасуы түзетілді
+- Қызыл бордюр, фон, мәтін қайтарылды
+- Ресайз қосылды
+- Hide Top Bar қосылды
+- Кішкентай бастапқы өлшем
 
 ========================================
 4.0 нұсқасы
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar, Tabs, Favorites
-- Recently used, Theme switcher
+- Search bar
+- Tabs
+- Favorites
+- Recently used
+- Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId, Animations, Keybinds, Anti-AFK
+- Copy JobId
+- Animations, Keybinds, Anti-AFK
+
+========================================
+3.9 нұсқасы
+========================================
+- Барлық скрипттер үшін "Script executed!" хабарламасы
+- Doors v4 қосылды
+- Kiti (MM2) қосылды
+- BETA тегі Tester болып өзгертілді
+
+========================================
+3.8 нұсқасы
+========================================
+- Респавннан кейін тег қалпына келтіру түзетілді
+- Тег CharacterAdded + task.wait қолданады
+
+========================================
+3.7 нұсқасы
+========================================
+- Тестер тегі қосылды (көк градиент)
+- Тестерлерге қош келу қосылды
+- 2 тестер қосылды
+
+========================================
+3.6 нұсқасы
+========================================
+- Тақырыптағы батырмалардың кездейсоқ басылуы түзетілді
+- ChangeLog және тіл үшін кулдаун қосылды
+
+========================================
+3.5 нұсқасы
+========================================
+- Тек иесі үшін қош келу қосылды
+
+========================================
+3.4 нұсқасы
+========================================
+- Тег үшін қою қызыл
+- Remove/Destroy үшін қарапайым фон
+
+========================================
+3.3 нұсқасы
+========================================
+- Тег өлшемі түзетілді
+- Градиент түзетілді (Rotation арқылы)
+- UIStroke glow қосылды
+
+========================================
+3.2 нұсқасы
+========================================
+- Градиент анимациясы қайтарылды
+- Мәтін өлшемі кішірейтілді
+- UIStroke glow қосылды
+
+========================================
+3.1 нұсқасы
+========================================
+- Тег жүйесі толығымен қайта жазылды
+- Тег HumanoidRootPart-қа бекітілді
 
 ========================================
 3.0 нұсқасы
 ========================================
-- Тег жүйесі v3
-- Owner тегтері градиентпен
+- Градиент жойылды
+- debug prints қосылды
+- Тег логикасы жеңілдетілді
+
+========================================
+2.9 нұсқасы
+========================================
+- XyqwHub OWNER тегі қосылды
+- "Remove XyqwHub Tag" батырмасы қосылды
+- 2 owner аккаунт қосылды
+
+========================================
+2.8 нұсқасы
+========================================
+- XyqwHub Loaded! бірден пайда болады
+- ChangeLog EN/RU-ға аударылды
+- Тег тек иелеріне көрінеді
+
+========================================
+2.7 нұсқасы
+========================================
+- Roblox хабарламалары (оң жақ төменгі бұрыш)
+- ChangeLog батырмасы қосылды
+- Loading / Loaded хабарламалары
+
+========================================
+2.6 нұсқасы
+========================================
+- Хабарламалар оң жақ төменгі бұрышқа жылжытылды
+
+========================================
+2.5 нұсқасы
+========================================
+- Барлық хабарламалар EN/RU-ға аударылды
+- Re-launch protection
+- Тіл ауыстыру батырмасы түзетілді
+
+========================================
+2.4 нұсқасы
+========================================
+- Re-launch protection қосылды
+- DESTROY батырмасы флагты тазалайды
+
+========================================
+2.3 нұсқасы
+========================================
+- Adopt me қосылды
+
+========================================
+2.2 нұсқасы
+========================================
+- bLockman's minesweaper қосылды
+- Cheating during test қосылды
+
+========================================
+2.1 нұсқасы
+========================================
+- DropKick қосылды
+- Evade қосылды
+- A Dusty Trip қосылды
+- A Dusty Trip v2 қосылды
 
 ========================================
 2.0 нұсқасы
 ========================================
+- Auto Execute жойылды
 - Барлық батырмалар бір тізімде
-- Re-launch protection
-- Roblox хабарламалары
+- 2.0 stable нұсқасы
+
+========================================
+1.9 нұсқасы
+========================================
+- Doors V3 (Cheesy) үшін кілт қосылды
+
+========================================
+1.8 нұсқасы
+========================================
+- Death Order [SIMON] қосылды
+- CandyWare (MM2) қосылды
+
+========================================
+1.7 нұсқасы
+========================================
+- Troll script қосылды
+
+========================================
+1.6 нұсқасы
+========================================
+- Steal an egg қосылды
+- Universal script қосылды
+- Corridor қосылды
+- BloxStrike қосылды
+- RIVALS қосылды
+
+========================================
+1.5 нұсқасы
+========================================
+- EN/RU кеңесі welcome жоғары және төмен
+
+========================================
+1.4 нұсқасы
+========================================
+- welcome-те EN/RU кеңесі
+
+========================================
+1.3 нұсқасы
+========================================
+- welcome-тен кейін тілді ауыстыру туралы кеңес
+
+========================================
+1.2 нұсқасы
+========================================
+- Тіл ауыстыру батырмасы түзетілді
+- langCooldown protection
+
+========================================
+1.1 нұсқасы
+========================================
+- Тіл ауыстыру қосылды (EN/RU)
+- LangButton
 
 ========================================
 1.0 нұсқасы
@@ -1734,7 +3035,6 @@ local function CreateScriptButton(data)
         isRunning = false
     end)
 
-    -- ========== DRAG & DROP (FIXED) ==========
     local dragStart = nil
     local dragging = false
     local originalPos = nil
