@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.5 ==========
+-- ========== XyqwHub - Версия 6.6 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.5"
+local VERSION = "6.6"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -191,21 +191,27 @@ local LANG = {
         ChangeLogText = [[XyqwHub ChangeLog
 
 ========================================
+Version 6.6
+========================================
+- Fixed drag & drop (moved to btn.InputBegan)
+- Added GUI open/close animation (scale + fade)
+- blockClick protection
+- 5 languages: EN, RU, UK, BE, KK
+
+========================================
 Version 6.5
 ========================================
 - Fixed: script now runs only on tap, not on drag release
-- blockClick flag added to prevent accidental script launch
+- blockClick flag added
 - ZIndex added to containers (1), text (2), dots (3)
-- Order file now fully closed (end fix)
-- 5 languages: EN, RU, UK, BE, KK
 
 ========================================
 Version 6.4
 ========================================
 - Script names now centered
-- Drag highlight no longer burns the button (uses border instead)
-- Added Reset Order button (restores default script order)
-- Version bump system: every fix/change -> new version
+- Drag highlight no longer burns the button
+- Added Reset Order button
+- Version bump system
 
 ========================================
 Version 6.3
@@ -213,19 +219,8 @@ Version 6.3
 - Removed Blacklist completely
 - Fixed header layout at startup
 - Added smooth animations
-- Added drag & drop for script buttons (hold 0.35s)
+- Added drag & drop (hold 0.35s)
 - Script order saved to Settings/order.json
-
-========================================
-Version 6.2
-========================================
-- Fixed blacklist x not removing item
-- Full changelog for all languages
-
-========================================
-Version 6.1
-========================================
-- Fixed blacklist refreshing
 
 ========================================
 Version 6.0
@@ -233,31 +228,9 @@ Version 6.0
 - Added 5 languages: EN, RU, UK, BE, KK
 
 ========================================
-Version 5.9
-========================================
-- X button moved to right corner
-- Top bar drag support
-
-========================================
-Version 5.6
-========================================
-- Removed rounded corners
-- Default tab is "All"
-
-========================================
 Version 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
-
-========================================
-Version 5.4
-========================================
-- Auto Execute Scripts on join
-- Script Blacklist
-- Auto Hide GUI
-- URL Tester (green/red)
-- Script Sorting
-- Share Fav/Rct
 
 ========================================
 Version 5.0
@@ -271,30 +244,16 @@ Version 4.9
 - 13 themes
 
 ========================================
-Version 4.7
-========================================
-- Custom Color picker
-
-========================================
 Version 4.2
 ========================================
 - Minified style
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme function
-- Rainbow animated
 - Resize corner
 - Small start 250x300
 - All buttons squared
-- 1 row of buttons
-- Hide Top Bar toggle
-- FPS/Ping top bar
-- Draggable top bar and dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites (star)
-- Recently used
-- Custom script runner
-- Player list
-- Server info + Copy JobId
+- Favorites, Recently used, Script history
+- Player list, Server info, Copy JobId
 - Anti-AFK
 - 46 scripts
 
@@ -302,15 +261,11 @@ Version 4.2
 Version 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar
-- Tabs
-- Favorites
-- Recently used
-- Theme switcher
+- Search bar, Tabs, Favorites
+- Recently used, Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId
-- Animations, Keybinds, Anti-AFK
+- Copy JobId, Animations, Keybinds, Anti-AFK
 
 ========================================
 Version 3.0
@@ -366,19 +321,25 @@ Version 1.0
         ChangeLogText = [[XyqwHub Ченджлог
 
 ========================================
+Версия 6.6
+========================================
+- Фикс перетаскивания (btn.InputBegan)
+- Анимации открытия/закрытия GUI (scale + fade)
+- blockClick защита
+- 5 языков: EN, RU, UK, BE, KK
+
+========================================
 Версия 6.5
 ========================================
 - Фикс: скрипт запускается только по тапу
 - Добавлен флаг blockClick
 - ZIndex на контейнерах, тексте, точках
-- Файл порядка закрыт корректно
-- 5 языков: EN, RU, UK, BE, KK
 
 ========================================
 Версия 6.4
 ========================================
 - Названия скриптов по центру
-- Подсветка при drag больше не «подгорает»
+- Подсветка при drag не «подгорает»
 - Добавлена кнопка Reset Order
 - Система версий
 
@@ -388,19 +349,8 @@ Version 1.0
 - Blacklist удалён
 - Фикс заголовка при запуске
 - Плавные анимации
-- Drag & drop кнопок скриптов
+- Drag & drop кнопок скриптов (hold 0.35s)
 - Порядок в Settings/order.json
-
-========================================
-Версия 6.2
-========================================
-- Фикс × в чёрном списке
-- Полный ченджлог
-
-========================================
-Версия 6.1
-========================================
-- Фикс обновления чёрного списка
 
 ========================================
 Версия 6.0
@@ -408,31 +358,9 @@ Version 1.0
 - 5 языков: EN, RU, UK, BE, KK
 
 ========================================
-Версия 5.9
-========================================
-- X в правый угол
-- Перетаскивание топ-бара
-
-========================================
-Версия 5.6
-========================================
-- Убраны скругления
-- Базовая вкладка All
-
-========================================
 Версия 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
-
-========================================
-Версия 5.4
-========================================
-- Авто-запуск скриптов
-- Чёрный список
-- Auto Hide GUI
-- URL Tester
-- Сортировка
-- Share Fav/Rct
 
 ========================================
 Версия 5.0
@@ -442,34 +370,19 @@ Version 1.0
 ========================================
 Версия 4.9
 ========================================
-- Welcome меньше + скролл
-- 13 тем
-
-========================================
-Версия 4.7
-========================================
-- Custom Color picker
+- Welcome меньше + скролл, 13 тем
 
 ========================================
 Версия 4.2
 ========================================
 - Минифицированный стиль
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme
-- Rainbow анимация
 - Ресайз в углу
 - Стартовое окно 250x300
 - Квадратные кнопки
-- Кнопки в 1 ряд
-- Hide Top Bar
-- FPS/Ping в топ-баре
-- Перетаскивание top bar и dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites (звезда)
-- Recently used
-- Custom script runner
-- Player list
-- Server info + Copy JobId
+- Favorites, Recently used, Script history
+- Player list, Server info, Copy JobId
 - Anti-AFK
 - 46 скриптов
 
@@ -477,15 +390,11 @@ Version 1.0
 Версия 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar
-- Tabs
-- Favorites
-- Recently used
-- Theme switcher
+- Search bar, Tabs, Favorites
+- Recently used, Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId
-- Animations, Keybinds, Anti-AFK
+- Copy JobId, Animations, Keybinds, Anti-AFK
 
 ========================================
 Версия 3.0
@@ -509,6 +418,7 @@ Version 1.0
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
     },
+}
     UK = {
         Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
         CustomPlaceholder = "Вставте URL або loadstring...", RunCustom = "Запустити",
@@ -540,19 +450,25 @@ Version 1.0
         ChangeLogText = [[XyqwHub Журнал
 
 ========================================
+Версія 6.6
+========================================
+- Фікс перетягування (btn.InputBegan)
+- Анімації відкриття/закриття GUI (scale + fade)
+- blockClick захист
+- 5 мов: EN, RU, UK, BE, KK
+
+========================================
 Версія 6.5
 ========================================
 - Фікс: скрипт запускається лише по тапу
 - Додано флаг blockClick
 - ZIndex на контейнерах, тексті, точках
-- Файл порядку закрито коректно
-- 5 мов: EN, RU, UK, BE, KK
 
 ========================================
 Версія 6.4
 ========================================
 - Назви скриптів по центру
-- Підсвічування при drag більше не «підгорає»
+- Підсвічування при drag не «підгорає»
 - Додано кнопку Reset Order
 - Система версій
 
@@ -562,19 +478,8 @@ Version 1.0
 - Blacklist видалено
 - Фікс заголовка при запуску
 - Плавні анімації
-- Drag & drop кнопок скриптів
+- Drag & drop кнопок скриптів (hold 0.35s)
 - Порядок у Settings/order.json
-
-========================================
-Версія 6.2
-========================================
-- Фікс × у чорному списку
-- Повний журнал
-
-========================================
-Версія 6.1
-========================================
-- Фікс оновлення чорного списку
 
 ========================================
 Версія 6.0
@@ -582,31 +487,9 @@ Version 1.0
 - 5 мов: EN, RU, UK, BE, KK
 
 ========================================
-Версія 5.9
-========================================
-- X у правий кут
-- Перетягування верхньої панелі
-
-========================================
-Версія 5.6
-========================================
-- Прибрано заокруглення
-- Базова вкладка All
-
-========================================
 Версія 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
-
-========================================
-Версія 5.4
-========================================
-- Авто-запуск скриптів
-- Чорний список
-- Auto Hide GUI
-- URL Tester
-- Сортування
-- Share Fav/Rct
 
 ========================================
 Версія 5.0
@@ -619,30 +502,16 @@ Version 1.0
 - Welcome менше + скрол, 13 тем
 
 ========================================
-Версія 4.7
-========================================
-- Custom Color picker
-
-========================================
 Версія 4.2
 ========================================
 - Мініфікований стиль
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme
-- Rainbow анімація
 - Ресайз у куті
 - Стартове вікно 250x300
 - Квадратні кнопки
-- Кнопки в 1 ряд
-- Hide Top Bar
-- FPS/Ping у топ-барі
-- Перетягування top bar і dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites (зірка)
-- Recently used
-- Custom script runner
-- Player list
-- Server info + Copy JobId
+- Favorites, Recently used, Script history
+- Player list, Server info, Copy JobId
 - Anti-AFK
 - 46 скриптів
 
@@ -650,15 +519,11 @@ Version 1.0
 Версія 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar
-- Tabs
-- Favorites
-- Recently used
-- Theme switcher
+- Search bar, Tabs, Favorites
+- Recently used, Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId
-- Animations, Keybinds, Anti-AFK
+- Copy JobId, Animations, Keybinds, Anti-AFK
 
 ========================================
 Версія 3.0
@@ -713,19 +578,25 @@ Version 1.0
         ChangeLogText = [[XyqwHub Чэйнджлог
 
 ========================================
+Версія 6.6
+========================================
+- Фікс перацягвання (btn.InputBegan)
+- Анімацыі адкрыцця/закрыцця GUI (scale + fade)
+- blockClick абарона
+- 5 моў: EN, RU, UK, BE, KK
+
+========================================
 Версія 6.5
 ========================================
 - Фікс: скрыпт запускаецца толькі па тапе
 - Дададзены флаг blockClick
 - ZIndex на кантэйнерах, тэксце, кропках
-- Файл парадку зачынены карэктна
-- 5 моў: EN, RU, UK, BE, KK
 
 ========================================
 Версія 6.4
 ========================================
 - Назвы скрыптаў па цэнтры
-- Падсветка пры drag больш не «падгарае»
+- Падсветка пры drag не «падгарае»
 - Дададзена кнопка Reset Order
 - Сістэма версій
 
@@ -735,19 +606,8 @@ Version 1.0
 - Blacklist выдалены
 - Фікс загалоўка пры запуску
 - Плаўныя анімацыі
-- Drag & drop кнопак скрыптаў
+- Drag & drop кнопак скрыптаў (hold 0.35s)
 - Парадак у Settings/order.json
-
-========================================
-Версія 6.2
-========================================
-- Фікс × у чорным спісе
-- Поўны чэйнджлог
-
-========================================
-Версія 6.1
-========================================
-- Фікс абнаўлення чорнага спісу
 
 ========================================
 Версія 6.0
@@ -755,31 +615,9 @@ Version 1.0
 - 5 моў: EN, RU, UK, BE, KK
 
 ========================================
-Версія 5.9
-========================================
-- X у правы кут
-- Перацягванне верхняй панэлі
-
-========================================
-Версія 5.6
-========================================
-- Прыбраны заакругленні
-- Базавая ўкладка All
-
-========================================
 Версія 5.5
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
-
-========================================
-Версія 5.4
-========================================
-- Аўта-запуск скрыптаў
-- Чорны спіс
-- Auto Hide GUI
-- URL Tester
-- Сартаванне
-- Share Fav/Rct
 
 ========================================
 Версія 5.0
@@ -792,30 +630,16 @@ Version 1.0
 - Welcome менш + скрол, 13 тэм
 
 ========================================
-Версія 4.7
-========================================
-- Custom Color picker
-
-========================================
 Версія 4.2
 ========================================
 - Мініфікаваны стыль
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme
-- Rainbow анімацыя
 - Рэсайз у куце
 - Стартавае акно 250x300
 - Квадратныя кнопкі
-- Кнопкі ў 1 шэраг
-- Hide Top Bar
-- FPS/Ping у топ-бары
-- Перацягванне top bar і dock
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites (зорка)
-- Recently used
-- Custom script runner
-- Player list
-- Server info + Copy JobId
+- Favorites, Recently used, Script history
+- Player list, Server info, Copy JobId
 - Anti-AFK
 - 46 скрыптаў
 
@@ -823,15 +647,11 @@ Version 1.0
 Версія 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar
-- Tabs
-- Favorites
-- Recently used
-- Theme switcher
+- Search bar, Tabs, Favorites
+- Recently used, Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId
-- Animations, Keybinds, Anti-AFK
+- Copy JobId, Animations, Keybinds, Anti-AFK
 
 ========================================
 Версія 3.0
@@ -886,19 +706,25 @@ Version 1.0
         ChangeLogText = [[XyqwHub Өзгерістер
 
 ========================================
+6.6 нұсқасы
+========================================
+- Сүйреу түзетілді (btn.InputBegan)
+- GUI ашу/жабу анимациялары (scale + fade)
+- blockClick қорғанысы
+- 5 тіл: EN, RU, UK, BE, KK
+
+========================================
 6.5 нұсқасы
 ========================================
 - Түзету: скрипт тек таппен іске қосылады
 - blockClick флагы қосылды
 - ZIndex контейнерлерге, мәтінге, нүктелерге
-- Рет файлы дұрыс жабылған
-- 5 тіл: EN, RU, UK, BE, KK
 
 ========================================
 6.4 нұсқасы
 ========================================
 - Скрипт атаулары ортада
-- Сүйреу кезіндегі жарық енді «күйіп кетпейді»
+- Сүйреу кезіндегі жарық «күйіп кетпейді»
 - Reset Order батырмасы қосылды
 - Нұсқа жүйесі
 
@@ -908,19 +734,8 @@ Version 1.0
 - Blacklist жойылды
 - Тақырып түзетілді
 - Тегіс анимациялар
-- Скрипт батырмаларын сүйреу
+- Скрипт батырмаларын сүйреу (hold 0.35s)
 - Рет Settings/order.json-да
-
-========================================
-6.2 нұсқасы
-========================================
-- × қара тізімде түзетілді
-- Толық өзгерістер
-
-========================================
-6.1 нұсқасы
-========================================
-- Қара тізім жаңарту түзетілді
 
 ========================================
 6.0 нұсқасы
@@ -928,31 +743,9 @@ Version 1.0
 - 5 тіл: EN, RU, UK, BE, KK
 
 ========================================
-5.9 нұсқасы
-========================================
-- X оң жақ бұрышқа
-- Жоғарғы тақтаны сүйреу
-
-========================================
-5.6 нұсқасы
-========================================
-- Дөңгелектену жойылды
-- Негізгі қойынды All
-
-========================================
 5.5 нұсқасы
 ========================================
 - Auto Execute, Auto Hide, URL Tester, Sorting, Settings
-
-========================================
-5.4 нұсқасы
-========================================
-- Авто-орындау
-- Қара тізім
-- Auto Hide GUI
-- URL Tester
-- Сұрыптау
-- Share Fav/Rct
 
 ========================================
 5.0 нұсқасы
@@ -965,30 +758,16 @@ Version 1.0
 - Welcome кішірек + скролл, 13 тақырып
 
 ========================================
-4.7 нұсқасы
-========================================
-- Custom Color picker
-
-========================================
 4.2 нұсқасы
 ========================================
 - Минификацияланған стиль
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme
-- Rainbow анимация
 - Ресайз бұрышта
 - Бастапқы 250x300
 - Шаршы батырмалар
-- 1 қатарда
-- Hide Top Bar
-- FPS/Ping жоғарғы тақтада
-- Top bar және dock сүйреу
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites (жұлдыз)
-- Recently used
-- Custom script runner
-- Player list
-- Server info + Copy JobId
+- Favorites, Recently used, Script history
+- Player list, Server info, Copy JobId
 - Anti-AFK
 - 46 скрипт
 
@@ -996,15 +775,11 @@ Version 1.0
 4.0 нұсқасы
 ========================================
 - Top bar (executor, name, FPS, Ping)
-- Search bar
-- Tabs
-- Favorites
-- Recently used
-- Theme switcher
+- Search bar, Tabs, Favorites
+- Recently used, Theme switcher
 - Custom script runner
 - Player list, Server info
-- Copy JobId
-- Animations, Keybinds, Anti-AFK
+- Copy JobId, Animations, Keybinds, Anti-AFK
 
 ========================================
 3.0 нұсқасы
@@ -1432,13 +1207,34 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
+local function OpenGui()
+    if mainFrame.Visible then return end
+    mainFrame.Visible = true
+    dockButton.Visible = false
+    mainFrame.Size = UDim2.new(0, 100, 0, 100)
+    mainFrame.BackgroundTransparency = 1
+    local tween1 = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 280, 0, 340)})
+    local tween2 = TweenService:Create(mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0})
+    tween1:Play()
+    tween2:Play()
+end
+
+local function CloseGui()
+    local tween1 = TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(0, 100, 0, 100)})
+    local tween2 = TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {BackgroundTransparency = 1})
+    tween1:Play()
+    tween2:Play()
+    task.wait(0.2)
+    mainFrame.Visible = false
+    dockButton.Visible = true
+    mainFrame.Size = UDim2.new(0, 280, 0, 340)
+    mainFrame.BackgroundTransparency = 0
+end
+
 UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         if dockDragging and not dockDragMoved then
-            if mainFrame then
-                mainFrame.Visible = true
-                dockButton.Visible = false
-            end
+            OpenGui()
         end
         dockDragging = false
     end
@@ -1587,9 +1383,7 @@ local HEADER_SHORT_W = {22, 24, 26, 22, 22, 22, 28, 22}
 local HEADER_LONG_W  = {55, 105, 85, 70, 70, 65, 55, 22}
 
 local function UpdateHeaderLayout()
-    if not mainFrame or mainFrame.AbsoluteSize.X == 0 then
-        task.wait()
-    end
+    if not mainFrame or mainFrame.AbsoluteSize.X == 0 then task.wait() end
     local w = mainFrame.AbsoluteSize.X
     if w == 0 then w = mainFrame.Size.X.Offset end
     local useLong = w >= 550
@@ -1597,7 +1391,6 @@ local function UpdateHeaderLayout()
     local buttons = HEADER_BUTTONS
     local count = #buttons
     local gap = 1
-
     local widths = {}
     local totalW = titleW + 6
     for i = 1, count do
@@ -1605,7 +1398,6 @@ local function UpdateHeaderLayout()
         widths[i] = bw
         totalW = totalW + bw + gap
     end
-
     if totalW > w then
         useLong = false
         totalW = titleW + 6
@@ -1614,21 +1406,18 @@ local function UpdateHeaderLayout()
             totalW = totalW + widths[i] + gap
         end
     end
-
     local xRight = w - 1
     local xIdx = count
     local xW = widths[xIdx]
     buttons[xIdx].Size = UDim2.new(0, xW, 0.8, 0)
     buttons[xIdx].Position = UDim2.new(1, -xW - 1, 0.1, 0)
     xRight = xRight - xW - gap
-
     for i = count - 1, 1, -1 do
         local bw = widths[i]
         buttons[i].Size = UDim2.new(0, bw, 0.8, 0)
         buttons[i].Position = UDim2.new(1, -(w - xRight) - bw, 0.1, 0)
         xRight = xRight - bw - gap
     end
-
     for i = 1, count do
         buttons[i].Text = useLong and HEADER_LONG_TEXT[i] or HEADER_SHORT_TEXT[i]
     end
@@ -1946,13 +1735,14 @@ local function CreateScriptButton(data)
         isRunning = false
     end)
 
+    -- ========== DRAG & DROP (FIXED) ==========
     local dragStart = nil
     local dragging = false
     local originalPos = nil
     local holdTask = nil
     local holdThreshold = 0.35
 
-    container.InputBegan:Connect(function(input)
+    btn.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             blockClick = false
             holdTask = task.delay(holdThreshold, function()
@@ -1984,6 +1774,7 @@ local function CreateScriptButton(data)
                 holdTask = nil
             end
             if dragging then
+                blockClick = true
                 dragging = false
                 container.ZIndex = 1
                 scrollFrame.ScrollingEnabled = true
@@ -3344,8 +3135,11 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard then
         if input.KeyCode.Name == getgenv().XyqwSettings.autoHideBind then
-            mainFrame.Visible = not mainFrame.Visible
-            if mainFrame.Visible then dockButton.Visible = false end
+            if mainFrame.Visible then
+                CloseGui()
+            else
+                OpenGui()
+            end
         end
     end
 end)
@@ -3437,10 +3231,7 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
-closeButton.MouseButton1Click:Connect(function()
-    mainFrame.Visible = false
-    dockButton.Visible = true
-end)
+closeButton.MouseButton1Click:Connect(CloseGui)
 
 local function ShowWelcomeMessage()
     local frame = Instance.new("Frame")
