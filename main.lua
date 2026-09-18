@@ -3923,18 +3923,18 @@ getgenv().RefreshButtons = function()
     end
 
     if sortMode == "az" then
-        table.sort(visibleEntries, function(a, b) return a.Data.Name < b.Data.Name end)
-    elseif sortMode == "za" then
-        table.sort(visibleEntries, function(a, b) return a.Data.Name > b.Data.Name end)
-    elseif sortMode == "recent" then
-        table.sort(visibleEntries, function(a, b)
-            local aIdx, bIdx = 999, 999
-            for i, n in ipairs(getgenv().XyqwRecent) do
-                if n == a.Data.Name then aIdx = i end
-                if n == b.Data.Name then bIdx = i end
-            end
-            return aIdx < bIdx
-        end)
+    table.sort(visibleEntries, function(a, b) return a.Data.Name:lower() < b.Data.Name:lower() end)
+elseif sortMode == "za" then
+    table.sort(visibleEntries, function(a, b) return a.Data.Name:lower() > b.Data.Name:lower() end)
+elseif sortMode == "recent" then
+    table.sort(visibleEntries, function(a, b)
+        local aIdx, bIdx = 999, 999
+        for i, n in ipairs(getgenv().XyqwRecent) do
+            if n == a.Data.Name then aIdx = i end
+            if n == b.Data.Name then bIdx = i end
+        end
+        return aIdx < bIdx
+    end)
     end
 
     local visible = 0
