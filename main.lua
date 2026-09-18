@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 7.0.1 ==========
+-- ========== XyqwHub - Версия 7.0.2 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "7.0.1"
+local VERSION = "7.0.2"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -137,6 +137,14 @@ local LANG = {
         ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar", HideTopBarOn = "Hide Top Bar: ON",
         HideTopBarOff = "Hide Top Bar: OFF", OrderSaved = "Order saved!", OrderReset = "Order reset!",
         ChangeLogText = [[XyqwHub ChangeLog
+
+========================================
+Version 7.0.2
+========================================
+- Drag strip now uses current theme color (RED_MAIN)
+- Drag strip updates when theme changes
+- Rainbow theme: drag strip animates with hue
+- All previous features kept
 
 ========================================
 Version 7.0.1
@@ -617,6 +625,14 @@ Version 1.0
         ChangeLogText = [[XyqwHub Ченджлог
 
 ========================================
+Версия 7.0.2
+========================================
+- Полоска drag теперь в цвет текущей темы (RED_MAIN)
+- Полоска drag обновляется при смене темы
+- Rainbow: полоска drag переливается вместе с темой
+- Все предыдущие функции сохранены
+
+========================================
 Версия 7.0.1
 ========================================
 - Фикс категорий (SwitchTab теперь корректно обновляет currentTab)
@@ -1069,7 +1085,6 @@ Version 1.0
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
     },
-}
     UK = {
         Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
         CustomPlaceholder = "Посилання...", RunCustom = "Запустити",
@@ -1092,6 +1107,14 @@ Version 1.0
         ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель", HideTopBarOn = "Сховати: УВІМК",
         HideTopBarOff = "Сховати: ВИМК", OrderSaved = "Порядок збережено!", OrderReset = "Порядок скинуто!",
         ChangeLogText = [[XyqwHub Журнал
+
+========================================
+Версія 7.0.2
+========================================
+- Смужка drag тепер у колір поточної теми (RED_MAIN)
+- Смужка drag оновлюється при зміні теми
+- Rainbow: смужка drag переливається разом з темою
+- Всі попередні функції збережено
 
 ========================================
 Версія 7.0.1
@@ -1570,6 +1593,14 @@ Version 1.0
         ChangeLogText = [[XyqwHub Чэйнджлог
 
 ========================================
+Версія 7.0.2
+========================================
+- Паласа drag цяпер у колер бягучай тэмы (RED_MAIN)
+- Паласа drag абнаўляецца пры змене тэмы
+- Rainbow: паласа drag пераліваецца разам з тэмай
+- Усе папярэднія функцыі захаваны
+
+========================================
 Версія 7.0.1
 ========================================
 - Фікс катэгорый (SwitchTab карэктна абнаўляе currentTab)
@@ -2035,6 +2066,14 @@ Version 1.0
         ChangeLogText = [[XyqwHub Өзгерістер
 
 ========================================
+7.0.2 нұсқасы
+========================================
+- Drag жолағы енді ағымдағы тақырып түсінде (RED_MAIN)
+- Drag жолағы тақырып ауысқанда жаңарады
+- Rainbow: drag жолағы тақырыппен бірге түс ауыстырады
+- Барлық алдыңғы функциялар сақталды
+
+========================================
 7.0.1 нұсқасы
 ========================================
 - Санаттар түзетілді (SwitchTab currentTab-ты дұрыс жаңартады)
@@ -2478,6 +2517,7 @@ Version 1.0
 - FakeVR, WallHop]],
     },
 }
+
 local function _(key)
     local lang = getgenv().XyqwLanguage or "EN"
     return LANG[lang][key] or LANG.EN[key] or key
@@ -2837,7 +2877,6 @@ hideTopBtn.MouseButton1Click:Connect(function()
     end
     UpdateHideTopBtn()
 end)
-
 local mainFrame = nil
 
 local dockButton = Instance.new("TextButton")
@@ -2885,6 +2924,17 @@ end)
 
 local savedSize = UDim2.new(0, 280, 0, 340)
 
+mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = savedSize
+mainFrame.Position = UDim2.new(0.5, -140, 0.5, -170)
+mainFrame.BackgroundColor3 = RED_BG
+mainFrame.BorderSizePixel = 3
+mainFrame.BorderColor3 = RED_MAIN
+mainFrame.ClipsDescendants = false
+mainFrame.Active = true
+mainFrame.Parent = screenGui
+
 local function OpenGui()
     if mainFrame.Visible then return end
     mainFrame.Visible = true
@@ -2923,17 +2973,6 @@ UserInputService.InputEnded:Connect(function(input)
         dockDragging = false
     end
 end)
-
-mainFrame = Instance.new("Frame")
-mainFrame.Name = "MainFrame"
-mainFrame.Size = savedSize
-mainFrame.Position = UDim2.new(0.5, -140, 0.5, -170)
-mainFrame.BackgroundColor3 = RED_BG
-mainFrame.BorderSizePixel = 3
-mainFrame.BorderColor3 = RED_MAIN
-mainFrame.ClipsDescendants = false
-mainFrame.Active = true
-mainFrame.Parent = screenGui
 
 local clickBlocker = Instance.new("TextButton")
 clickBlocker.Name = "ClickBlocker"
@@ -3276,6 +3315,7 @@ local function ApplyOrderFromFile()
         return ai < bi
     end)
 end
+
 local function CreateScriptButton(data)
     local container = Instance.new("Frame")
     container.Name = "Script_" .. data.Name
@@ -3287,11 +3327,12 @@ local function CreateScriptButton(data)
     container.ZIndex = 1
     container.Parent = scrollFrame
 
+    -- ========== DRAG STRIP — ФИКС 7.0.2: цвет темы ==========
     local dragStrip = Instance.new("Frame")
     dragStrip.Name = "DragStrip"
     dragStrip.Size = UDim2.new(0, 25, 1, 0)
     dragStrip.Position = UDim2.new(0, 0, 0, 0)
-    dragStrip.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+    dragStrip.BackgroundColor3 = RED_MAIN
     dragStrip.BackgroundTransparency = 0.6
     dragStrip.BorderSizePixel = 0
     dragStrip.ZIndex = 2
@@ -3447,7 +3488,7 @@ local function CreateScriptButton(data)
                     originalPos = container.Position
                     scrollFrame.ScrollingEnabled = false
                     dragStrip.BackgroundTransparency = 0
-                    TweenColor(container, "BorderColor3", Color3.fromRGB(255, 200, 0), 0.15)
+                    TweenColor(container, "BorderColor3", RED_MAIN, 0.15)
                     TweenColor(container, "BackgroundColor3", RED_DARK, 0.15)
                 end
             end)
@@ -3712,7 +3753,6 @@ destroyBtnMain.MouseButton1Click:Connect(function()
     getgenv().XyqwHubRunning = nil
     screenGui:Destroy()
 end)
-
 local ShowSettings
 ShowSettings = function()
     local frame = Instance.new("Frame")
@@ -3983,14 +4023,14 @@ local function ShowChangeLog()
     scroll.Position = UDim2.new(0, 5, 0, 35)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 9500)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 10000)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 51
     scroll.Parent = frame
 
     local text = Instance.new("TextLabel")
-    text.Size = UDim2.new(1, -10, 0, 9490)
+    text.Size = UDim2.new(1, -10, 0, 9990)
     text.Position = UDim2.new(0, 5, 0, 5)
     text.BackgroundTransparency = 1
     text.TextColor3 = RED_MAIN
@@ -4693,6 +4733,7 @@ local function ApplyTheme(themeName)
         btn.BorderColor3 = RED_MAIN
     end
 
+    -- ========== ФИКС 7.0.2: dragStrip обновляется под тему ==========
     for _, entry in ipairs(buttons) do
         entry.Container.BackgroundColor3 = RED_BG
         entry.Container.BorderColor3 = RED_MAIN
@@ -4701,6 +4742,9 @@ local function ApplyTheme(themeName)
         entry.Star.TextColor3 = RED_MAIN
         entry.Star.BorderColor3 = RED_MAIN
         entry.AutoBtn.BorderColor3 = RED_MAIN
+        if entry.DragStrip then
+            entry.DragStrip.BackgroundColor3 = RED_MAIN
+        end
         if getgenv().XyqwAutoExec[entry.Data.Name] then
             entry.AutoBtn.BackgroundColor3 = RED_MAIN
             entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -4783,6 +4827,7 @@ task.spawn(function()
                     btn.BorderColor3 = c
                 end
             end
+            -- ========== ФИКС 7.0.2: dragStrip в Rainbow ==========
             for _, entry in ipairs(buttons) do
                 entry.Container.BorderColor3 = c
                 entry.Btn.TextColor3 = c
@@ -4790,6 +4835,9 @@ task.spawn(function()
                 entry.Star.BorderColor3 = c
                 entry.Star.BackgroundColor3 = darkHue
                 entry.AutoBtn.BorderColor3 = c
+                if entry.DragStrip then
+                    entry.DragStrip.BackgroundColor3 = c
+                end
                 if getgenv().XyqwAutoExec[entry.Data.Name] then
                     entry.AutoBtn.BackgroundColor3 = c
                     entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -4827,7 +4875,6 @@ task.spawn(function()
         task.wait(0.05)
     end
 end)
-
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard then
@@ -5033,14 +5080,14 @@ local function ShowWelcomeMessage()
     scroll.Position = UDim2.new(0, 5, 0, 116)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 850)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 900)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 101
     scroll.Parent = frame
 
     local doc = Instance.new("TextLabel")
-    doc.Size = UDim2.new(1, -10, 0, 840)
+    doc.Size = UDim2.new(1, -10, 0, 890)
     doc.Position = UDim2.new(0, 5, 0, 0)
     doc.BackgroundTransparency = 1
     doc.TextColor3 = RED_MAIN
@@ -5077,8 +5124,8 @@ local function ShowWelcomeMessage()
         "▶ / Auto — toggle Auto-Execute\n" ..
         "☆ / ★    — add/remove from Favorites\n" ..
         "Click name — run script\n" ..
-        "Hold 0.35s on YELLOW STRIP (left) — reorder\n" ..
-        "(Scroll list freely, drag only on yellow left edge)\n" ..
+        "Hold 0.35s on DRAG STRIP (left, 25px) — reorder\n" ..
+        "Drag strip is in theme color (RED_MAIN)  ← NEW in 7.0.2\n" ..
         "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
         "Remove Tags      — remove OWNER/TESTER tags\n" ..
         "Test URLs        — check all script URLs (green/red)\n" ..
@@ -5153,3 +5200,5 @@ task.spawn(function()
     if IsOwner() then ShowRobloxNotification(_("OwnerWelcome"), 5)
     elseif IsBeta() then ShowRobloxNotification(_("BetaWelcome"), 5) end
 end)
+
+
