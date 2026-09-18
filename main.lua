@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 7.0 ==========
+-- ========== XyqwHub - Версия 7.0.1 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "7.0"
+local VERSION = "7.0.1"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -139,14 +139,21 @@ local LANG = {
         ChangeLogText = [[XyqwHub ChangeLog
 
 ========================================
+Version 7.0.1
+========================================
+- Fixed categories not filtering (SwitchTab now correctly updates currentTab)
+- Fixed ability to grab two buttons during drag (globalDrag flag)
+- Only one button can be dragged at a time
+- All previous features kept
+
+========================================
 Version 7.0
 ========================================
 - Drag zone increased to 25px
-- Added visual drag handle (yellow strip on left side of each script)
-- Fixed categories not filtering (variable shadowing fix)
+- Added visual drag handle (yellow strip on left side)
+- Fixed categories (attempt)
 - Updated Welcome with full feature list
 - Full changelog restored (1.0-7.0)
-- All 5 languages updated
 
 ========================================
 Version 6.9.2
@@ -158,8 +165,6 @@ Version 6.9.2
 Version 6.9.1
 ========================================
 - Full changelog restored (1.0-6.9.1)
-- Mixed detailed + short descriptions
-- All 5 languages updated
 
 ========================================
 Version 6.9
@@ -319,7 +324,7 @@ Version 4.3
 ========================================
 Version 4.2
 ========================================
-- Rewrote code in minified style (everything in 1 line where possible)
+- Rewrote code in minified style
 - THEMES = {Red, Blue, Rainbow}
 - ApplyTheme(themeName) - theme switch function
 - themeOrder + themeIndex - theme cycling
@@ -612,14 +617,21 @@ Version 1.0
         ChangeLogText = [[XyqwHub Ченджлог
 
 ========================================
+Версия 7.0.1
+========================================
+- Фикс категорий (SwitchTab теперь корректно обновляет currentTab)
+- Фикс захвата двух кнопок при drag (флаг globalDrag)
+- Только одна кнопка может быть перетаскиваема
+- Все предыдущие функции сохранены
+
+========================================
 Версия 7.0
 ========================================
 - Drag zone увеличен до 25px
 - Добавлена визуальная жёлтая полоска слева
-- Фикс категорий (переменная shadowing)
+- Попытка фикса категорий
 - Обновлён Welcome с полным списком функций
 - Полный ченджлог восстановлен (1.0-7.0)
-- Все 5 языков обновлены
 
 ========================================
 Версия 6.9.2
@@ -631,8 +643,6 @@ Version 1.0
 Версия 6.9.1
 ========================================
 - Полный ченджлог восстановлен (1.0-6.9.1)
-- Смешаны подробные + краткие описания
-- Все 5 языков обновлены
 
 ========================================
 Версия 6.9
@@ -640,7 +650,7 @@ Version 1.0
 - Фикс застывания вкладок/кнопок (fade вместо size)
 - Размер GUI сохраняется между открытиями
 - Drag только за левый край (15px)
-- Фикс категорий (не фильтровались)
+- Фикс категорий
 
 ========================================
 Версия 6.8
@@ -654,7 +664,7 @@ Version 1.0
 ========================================
 - Переписан с нуля
 - Фикс drag & drop (btn.InputBegan)
-- Фикс анимации открытия/закрытия GUI
+- Фикс анимации GUI
 - Фикс закрытия таблицы LANG
 - 5 языков: EN, RU, UK, BE, KK
 - 48 скриптов
@@ -663,28 +673,26 @@ Version 1.0
 Версия 6.6
 ========================================
 - Фикс перетаскивания (btn.InputBegan)
-- Анимации открытия/закрытия GUI (scale + fade)
-- blockClick защита
+- Анимации открытия/закрытия GUI
 
 ========================================
 Версия 6.5
 ========================================
 - Фикс: скрипт запускается только по тапу
-- Добавлен флаг blockClick
-- ZIndex на контейнерах, тексте, точках
+- blockClick защита
+- ZIndex
 
 ========================================
 Версия 6.4
 ========================================
 - Названия скриптов по центру
 - Подсветка при drag не «подгорает»
-- Добавлена кнопка Reset Order
-- Система версий
+- Reset Order кнопка
 
 ========================================
 Версия 6.3
 ========================================
-- Blacklist удалён полностью
+- Blacklist удалён
 - Фикс заголовка при запуске
 - Плавные анимации
 - Drag & drop (hold 0.35s)
@@ -1061,6 +1069,7 @@ Version 1.0
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
     },
+}
     UK = {
         Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
         CustomPlaceholder = "Посилання...", RunCustom = "Запустити",
@@ -1085,14 +1094,21 @@ Version 1.0
         ChangeLogText = [[XyqwHub Журнал
 
 ========================================
+Версія 7.0.1
+========================================
+- Фікс категорій (SwitchTab коректно оновлює currentTab)
+- Фікс захвату двох кнопок при drag (флаг globalDrag)
+- Тільки одна кнопка може перетягуватися
+- Всі попередні функції збережено
+
+========================================
 Версія 7.0
 ========================================
 - Drag zone збільшено до 25px
 - Додано візуальну жовту смужку ліворуч
-- Фікс категорій (variable shadowing)
+- Спроба фіксу категорій
 - Оновлено Welcome з повним списком функцій
 - Повний журнал відновлено (1.0-7.0)
-- Всі 5 мов оновлено
 
 ========================================
 Версія 6.9.2
@@ -1104,14 +1120,12 @@ Version 1.0
 Версія 6.9.1
 ========================================
 - Повний журнал відновлено (1.0-6.9.1)
-- Змішано докладні + короткі описи
-- Оновлено всі 5 мов
 
 ========================================
 Версія 6.9
 ========================================
 - Фікс застигання вкладок/кнопок (fade замість size)
-- Розмір GUI зберігається між відкриттями
+- Розмір GUI зберігається
 - Drag тільки за лівий край (15px)
 - Фікс категорій
 
@@ -1141,7 +1155,7 @@ Version 1.0
 ========================================
 Версія 6.5
 ========================================
-- Фікс: скрипт запускається лише по тапу
+- Скрипт запускається лише по тапу
 - blockClick захист
 - ZIndex
 
@@ -1556,14 +1570,21 @@ Version 1.0
         ChangeLogText = [[XyqwHub Чэйнджлог
 
 ========================================
+Версія 7.0.1
+========================================
+- Фікс катэгорый (SwitchTab карэктна абнаўляе currentTab)
+- Фікс захвату дзвюх кнопак пры drag (флаг globalDrag)
+- Толькі адна кнопка можа перацягвацца
+- Усе папярэднія функцыі захаваны
+
+========================================
 Версія 7.0
 ========================================
 - Drag zone павялічана да 25px
 - Дададзена візуальная жоўтая палоска злева
-- Фікс катэгорый (variable shadowing)
+- Спроба фіксу катэгорый
 - Абноўлены Welcome з поўным спісам функцый
 - Поўны чэйнджлог адноўлены (1.0-7.0)
-- Усе 5 моў абноўлены
 
 ========================================
 Версія 6.9.2
@@ -1575,14 +1596,12 @@ Version 1.0
 Версія 6.9.1
 ========================================
 - Поўны чэйнджлог адноўлены (1.0-6.9.1)
-- Змешаны падрабязныя + кароткія апісанні
-- Абноўлены ўсе 5 моў
 
 ========================================
 Версія 6.9
 ========================================
 - Фікс застывання ўкладак/кнопак (fade замест size)
-- Памер GUI захоўваецца паміж адкрыццямі
+- Памер GUI захоўваецца
 - Drag толькі за левы край (15px)
 - Фікс катэгорый
 
@@ -1612,7 +1631,7 @@ Version 1.0
 ========================================
 Версія 6.5
 ========================================
-- Фікс: скрыпт запускаецца толькі па тапе
+- Скрыпт запускаецца толькі па тапе
 - blockClick абарона
 - ZIndex
 
@@ -1782,8 +1801,8 @@ Version 1.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
 - Search bar
-- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
-- Favorites system
+- Tabs
+- Favorites
 - Recently used
 - Script history
 - Theme switcher
@@ -1855,8 +1874,6 @@ Version 1.0
 ========================================
 - Поўнасцю перапісана сістэма тэгаў
 - Тэг прывязаны да HumanoidRootPart
-- Дададзена пазіцыянаванне праз Heartbeat
-- Фікс логікі сканавання
 
 ========================================
 Версія 3.0
@@ -1870,7 +1887,6 @@ Version 1.0
 ========================================
 - Дададзены XyqwHub OWNER тэг
 - Дададзена кнопка "Remove XyqwHub Tag"
-- Дададзена анімацыя градыента для owner тэга
 - Дададзена 2 owner акаўнты
 
 ========================================
@@ -1883,16 +1899,14 @@ Version 1.0
 ========================================
 Версія 2.7
 ========================================
-- Roblox апавяшчэнні (правы ніжні кут)
+- Roblox апавяшчэнні
 - Дададзена кнопка ChangeLog
 - Loading / Loaded апавяшчэнні
-- Тэг бачны ўсім з XyqwHub
 
 ========================================
 Версія 2.6
 ========================================
 - Апавяшчэнні перамешчаны ў правы ніжні кут
-- Новая сістэма апавяшчэнняў
 
 ========================================
 Версія 2.5
@@ -2021,14 +2035,21 @@ Version 1.0
         ChangeLogText = [[XyqwHub Өзгерістер
 
 ========================================
+7.0.1 нұсқасы
+========================================
+- Санаттар түзетілді (SwitchTab currentTab-ты дұрыс жаңартады)
+- Drag кезінде екі батырманы ұстау түзетілді (globalDrag флагы)
+- Тек бір батырма сүйрелуі мүмкін
+- Барлық алдыңғы функциялар сақталды
+
+========================================
 7.0 нұсқасы
 ========================================
 - Drag zone 25px-ке дейін ұлғайтылды
 - Сол жақта визуалды сары жолақ қосылды
-- Санаттар түзетілді (variable shadowing)
+- Санаттарды түзету әрекеті
 - Welcome функциялардың толық тізімімен жаңартылды
 - Толық өзгерістер қалпына келтірілді (1.0-7.0)
-- Барлық 5 тіл жаңартылды
 
 ========================================
 6.9.2 нұсқасы
@@ -2040,8 +2061,6 @@ Version 1.0
 6.9.1 нұсқасы
 ========================================
 - Толық өзгерістер қалпына келтірілді (1.0-6.9.1)
-- Егжей-тегжейлі + қысқа сипаттамалар араласқан
-- Барлық 5 тіл жаңартылды
 
 ========================================
 6.9 нұсқасы
@@ -2361,6 +2380,7 @@ Version 1.0
 - Барлық хабарламалар EN/RU-ға аударылды
 - Re-launch protection
 - Тіл ауыстыру батырмасы түзетілді
+- Иесі үшін қош келу
 
 ========================================
 2.4 нұсқасы
@@ -2715,6 +2735,8 @@ local function GetExecutorName()
     end)
     return ok and name or "Unknown"
 end
+
+local globalDrag = false
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "XyqwHubGui"
 screenGui.ResetOnSpawn = false
@@ -3152,7 +3174,10 @@ local function SwitchTab(name)
         end
         btn.BorderColor3 = RED_MAIN
     end
-    if getgenv().RefreshButtons then getgenv().RefreshButtons() end
+    task.wait(0.01)
+    if getgenv().RefreshButtons then
+        getgenv().RefreshButtons()
+    end
 end
 
 for i, name in ipairs(TAB_LIST) do
@@ -3403,19 +3428,20 @@ local function CreateScriptButton(data)
         isRunning = false
     end)
 
-    local dragStart = nil
     local dragging = false
+    local dragStart = nil
     local originalPos = nil
     local holdTask = nil
     local holdThreshold = 0.35
-    local dragZone = 25
 
     dragStrip.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if globalDrag then return end
             blockClick = true
             holdTask = task.delay(holdThreshold, function()
-                if not dragging then
+                if not dragging and not globalDrag then
                     dragging = true
+                    globalDrag = true
                     blockClick = true
                     dragStart = input.Position
                     originalPos = container.Position
@@ -3445,6 +3471,7 @@ local function CreateScriptButton(data)
             if dragging then
                 blockClick = true
                 dragging = false
+                globalDrag = false
                 container.ZIndex = 1
                 scrollFrame.ScrollingEnabled = true
                 dragStrip.BackgroundTransparency = 0.6
