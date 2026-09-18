@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 7.0.2 ==========
+-- ========== XyqwHub - Версия 7.1.0 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,7 +13,7 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "7.0.2"
+local VERSION = "7.1.0"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -25,7 +25,7 @@ if getgenv().XyqwRecent == nil then getgenv().XyqwRecent = {} end
 if getgenv().XyqwAutoExec == nil then getgenv().XyqwAutoExec = {} end
 if getgenv().XyqwOrder == nil then getgenv().XyqwOrder = {} end
 if getgenv().XyqwSettings == nil then getgenv().XyqwSettings = {} end
-if not getgenv().XyqwSettings.sortMode then getgenv().XyqwSettings.sortMode = "default" end
+if getgenv().XyqwAntiKick == nil then getgenv().XyqwAntiKick = false end
 if not getgenv().XyqwSettings.autoHideBind then getgenv().XyqwSettings.autoHideBind = "RightShift" end
 if not getgenv().XyqwSettings.urlStatus then getgenv().XyqwSettings.urlStatus = {} end
 if getgenv().XyqwCustomColor == nil then getgenv().XyqwCustomColor = {r = 255, g = 0, b = 0, dr = 40, dg = 0, db = 0} end
@@ -70,7 +70,6 @@ getgenv().XyqwAutoExec = LoadTable(AUTOEXEC_FILE)
 getgenv().XyqwSettings = LoadTable(SETTINGS_FILE)
 getgenv().XyqwOrder = LoadTable(ORDER_FILE)
 
-if not getgenv().XyqwSettings.sortMode then getgenv().XyqwSettings.sortMode = "default" end
 if not getgenv().XyqwSettings.autoHideBind then getgenv().XyqwSettings.autoHideBind = "RightShift" end
 if not getgenv().XyqwSettings.urlStatus then getgenv().XyqwSettings.urlStatus = {} end
 
@@ -114,29 +113,45 @@ local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
 local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
-local LANG = {
-    EN = {
-        Loaded = "loaded", Error = "error", Search = "Search...",
-        CustomPlaceholder = "Paste URL...", RunCustom = "Run",
-        JobIdCopied = "JobId copied!", ScriptExecuted = "Script executed!",
-        OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
-        TagRemoved = "Tag removed!", LangChanged = "Language changed to English",
-        FavShared = "Favorites shared!", RctShared = "Recent shared!",
-        LoadstringCopied = "Loadstring copied!", ColorReset = "Color reset",
-        ColorShared = "Color copied!", AutoExecOn = "Auto-Execute: ON", AutoExecOff = "Auto-Execute: OFF",
-        KeybindChanged = "Auto-Hide keybind: ", UrlCheckStarted = "Testing URLs...",
-        UrlCheckDone = "URL test complete!", WelcomeTitle = "Welcome to XyqwHub!",
-        ClickXToClose = "Click X to close", PlayersTitle = "Players", ServerTitle = "Server Info",
-        CustomTitle = "Custom Script", CustomColorTitle = "Custom Color", ChangeLogTitle = "ChangeLog",
-        SettingsTitle = "Settings", Apply = "Apply", Reset = "Reset", ShareColor = "Share Color",
-        CopyJobId = "Copy JobId", Rejoin = "Rejoin", ServerHop = "ServerHop", TPToSmall = "TP to Small",
-        RemoveTags = "Remove Tags", ShareFav = "Share Favorite Scripts", ShareRct = "Share Recent Scripts",
-        TestURLs = "Test URLs", SettingsBtn = "Settings", Destroy = "Destroy XyqwHub", ResetOrder = "Reset Order",
-        PlaceId = "PlaceId", JobId = "JobId", Players = "Players", Creator = "Creator",
-        Presets = "Presets", AutoHideBind = "Auto-Hide keybind:",
-        ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar", HideTopBarOn = "Hide Top Bar: ON",
-        HideTopBarOff = "Hide Top Bar: OFF", OrderSaved = "Order saved!", OrderReset = "Order reset!",
-        ChangeLogText = [[XyqwHub ChangeLog
+-- ========== LANG: EN ==========
+local LANG = {}
+LANG.EN = {
+    Loaded = "loaded", Error = "error", Search = "Search...",
+    CustomPlaceholder = "Paste URL...", RunCustom = "Run",
+    JobIdCopied = "JobId copied!", ScriptExecuted = "Script executed!",
+    OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
+    TagRemoved = "Tag removed!", LangChanged = "Language changed to English",
+    FavShared = "Favorites shared!", RctShared = "Recent shared!",
+    LoadstringCopied = "Loadstring copied!", ColorReset = "Color reset",
+    ColorShared = "Color copied!", AutoExecOn = "Auto-Execute: ON", AutoExecOff = "Auto-Execute: OFF",
+    KeybindChanged = "Auto-Hide keybind: ", UrlCheckStarted = "Testing URLs...",
+    UrlCheckDone = "URL test complete!", WelcomeTitle = "Welcome to XyqwHub!",
+    ClickXToClose = "Click X to close", PlayersTitle = "Players", ServerTitle = "Server Info",
+    CustomTitle = "Custom Script", CustomColorTitle = "Custom Color", ChangeLogTitle = "ChangeLog",
+    SettingsTitle = "Settings", Apply = "Apply", Reset = "Reset", ShareColor = "Share Color",
+    CopyJobId = "Copy JobId", Rejoin = "Rejoin", ServerHop = "ServerHop", TPToSmall = "TP to Small",
+    RemoveTags = "Remove Tags", ShareFav = "Share Favorite Scripts", ShareRct = "Share Recent Scripts",
+    TestURLs = "Test URLs", SettingsBtn = "Settings", Destroy = "Destroy XyqwHub", ResetOrder = "Reset Order",
+    PlaceId = "PlaceId", JobId = "JobId", Players = "Players", Creator = "Creator",
+    Presets = "Presets", AutoHideBind = "Auto-Hide keybind:",
+    ShareHub = "Share XyqwHub", HideTopBar = "Hide Top Bar", HideTopBarOn = "Hide Top Bar: ON",
+    HideTopBarOff = "Hide Top Bar: OFF", OrderSaved = "Order saved!", OrderReset = "Order reset!",
+    AntiKickOn = "AntiKick: ON", AntiKickOff = "AntiKick: OFF",
+    ExecutorInfoTitle = "Executor Info", RunUNCTest = "Run UNC Test", RunSUNCTest = "Run sUNC Test",
+    Testing = "Testing...", TestResult = "Result",
+    ChangeLogText = [[XyqwHub ChangeLog
+
+========================================
+Version 7.1.0
+========================================
+- Removed A-Z sort button
+- Search bar now stretches to right edge
+- Added AntiKick: ON/OFF button at bottom
+- Added Info button (Executor Info + UNC/sUNC tests)
+- Executor Info: name, version, platform, functions
+- UNC test: 26 checks (getgc, hookfunction, writefile, etc.)
+- sUNC test: 36 checks (hookmetamethod, getupvalue, firesignal, etc.)
+- Drag strip now uses theme color (from 7.0.2)
 
 ========================================
 Version 7.0.2
@@ -600,29 +615,46 @@ Version 1.0
 - Blade Ball, AntiKillParts, PulseHub
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
-    },
-    RU = {
-        Loaded = "загружен", Error = "ошибка", Search = "Поиск...",
-        CustomPlaceholder = "Ссылка...", RunCustom = "Запустить",
-        JobIdCopied = "JobId скопирован!", ScriptExecuted = "Скрипт выполнен!",
-        OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
-        TagRemoved = "Тег убран!", LangChanged = "Язык изменён на Русский",
-        FavShared = "Избранное скопировано!", RctShared = "Недавние скопированы!",
-        LoadstringCopied = "Loadstring скопирован!", ColorReset = "Цвет сброшен",
-        ColorShared = "Цвет скопирован!", AutoExecOn = "Авто-запуск: ВКЛ", AutoExecOff = "Авто-запуск: ВЫКЛ",
-        KeybindChanged = "Бинд Auto-Hide: ", UrlCheckStarted = "Проверка URL...",
-        UrlCheckDone = "Проверка завершена!", WelcomeTitle = "Добро пожаловать в XyqwHub!",
-        ClickXToClose = "Нажми X чтобы закрыть", PlayersTitle = "Игроки", ServerTitle = "Инфо о сервере",
-        CustomTitle = "Свой скрипт", CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог",
-        SettingsTitle = "Настройки", Apply = "Применить", Reset = "Сбросить", ShareColor = "Поделиться цветом",
-        CopyJobId = "Копировать JobId", Rejoin = "Перезайти", ServerHop = "Сменить сервер", TPToSmall = "ТП в маленький",
-        RemoveTags = "Убрать теги", ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними",
-        TestURLs = "Проверить URL", SettingsBtn = "Настройки", Destroy = "Удалить XyqwHub", ResetOrder = "Сбросить порядок",
-        PlaceId = "PlaceId", JobId = "JobId", Players = "Игроки", Creator = "Создатель",
-        Presets = "Пресеты", AutoHideBind = "Бинд Auto-Hide:",
-        ShareHub = "Поделиться XyqwHub", HideTopBar = "Скрыть топ бар", HideTopBarOn = "Скрыть: ВКЛ",
-        HideTopBarOff = "Скрыть: ВЫКЛ", OrderSaved = "Порядок сохранён!", OrderReset = "Порядок сброшен!",
-        ChangeLogText = [[XyqwHub Ченджлог
+}
+
+-- ========== LANG: RU ==========
+LANG.RU = {
+    Loaded = "загружен", Error = "ошибка", Search = "Поиск...",
+    CustomPlaceholder = "Ссылка...", RunCustom = "Запустить",
+    JobIdCopied = "JobId скопирован!", ScriptExecuted = "Скрипт выполнен!",
+    OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
+    TagRemoved = "Тег убран!", LangChanged = "Язык изменён на Русский",
+    FavShared = "Избранное скопировано!", RctShared = "Недавние скопированы!",
+    LoadstringCopied = "Loadstring скопирован!", ColorReset = "Цвет сброшен",
+    ColorShared = "Цвет скопирован!", AutoExecOn = "Авто-запуск: ВКЛ", AutoExecOff = "Авто-запуск: ВЫКЛ",
+    KeybindChanged = "Бинд Auto-Hide: ", UrlCheckStarted = "Проверка URL...",
+    UrlCheckDone = "Проверка завершена!", WelcomeTitle = "Добро пожаловать в XyqwHub!",
+    ClickXToClose = "Нажми X чтобы закрыть", PlayersTitle = "Игроки", ServerTitle = "Инфо о сервере",
+    CustomTitle = "Свой скрипт", CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог",
+    SettingsTitle = "Настройки", Apply = "Применить", Reset = "Сбросить", ShareColor = "Поделиться цветом",
+    CopyJobId = "Копировать JobId", Rejoin = "Перезайти", ServerHop = "Сменить сервер", TPToSmall = "ТП в маленький",
+    RemoveTags = "Убрать теги", ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними",
+    TestURLs = "Проверить URL", SettingsBtn = "Настройки", Destroy = "Удалить XyqwHub", ResetOrder = "Сбросить порядок",
+    PlaceId = "PlaceId", JobId = "JobId", Players = "Игроки", Creator = "Создатель",
+    Presets = "Пресеты", AutoHideBind = "Бинд Auto-Hide:",
+    ShareHub = "Поделиться XyqwHub", HideTopBar = "Скрыть топ бар", HideTopBarOn = "Скрыть: ВКЛ",
+    HideTopBarOff = "Скрыть: ВЫКЛ", OrderSaved = "Порядок сохранён!", OrderReset = "Порядок сброшен!",
+    AntiKickOn = "AntiKick: ВКЛ", AntiKickOff = "AntiKick: ВЫКЛ",
+    ExecutorInfoTitle = "Инфо об экзекьюторе", RunUNCTest = "Запустить UNC тест", RunSUNCTest = "Запустить sUNC тест",
+    Testing = "Тестирование...", TestResult = "Результат",
+    ChangeLogText = [[XyqwHub Ченджлог
+
+========================================
+Версия 7.1.0
+========================================
+- Убрана кнопка A-Z
+- Поисковая строка растянута до правого края
+- Добавлена кнопка AntiKick: ON/OFF внизу
+- Добавлена кнопка Info (Инфо об экзекьюторе + UNC/sUNC тесты)
+- Executor Info: имя, версия, платформа, функции
+- UNC тест: 26 проверок (getgc, hookfunction, writefile и т.д.)
+- sUNC тест: 36 проверок (hookmetamethod, getupvalue, firesignal и т.д.)
+- Полоска drag теперь в цвет темы (из 7.0.2)
 
 ========================================
 Версия 7.0.2
@@ -1084,29 +1116,46 @@ Version 1.0
 - Blade Ball, AntiKillParts, PulseHub
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
-    },
-    UK = {
-        Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
-        CustomPlaceholder = "Посилання...", RunCustom = "Запустити",
-        JobIdCopied = "JobId скопійовано!", ScriptExecuted = "Скрипт виконано!",
-        OwnerWelcome = "Вітаю, мій батько :3", BetaWelcome = "Радий тебе бачити, тестер <3",
-        TagRemoved = "Тег прибрано!", LangChanged = "Мову змінено на Українську",
-        FavShared = "Обране скопійовано!", RctShared = "Останні скопійовано!",
-        LoadstringCopied = "Loadstring скопійовано!", ColorReset = "Колір скинуто",
-        ColorShared = "Колір скопійовано!", AutoExecOn = "Авто-запуск: УВІМК", AutoExecOff = "Авто-запуск: ВИМК",
-        KeybindChanged = "Бінд Auto-Hide: ", UrlCheckStarted = "Перевірка URL...",
-        UrlCheckDone = "Перевірку завершено!", WelcomeTitle = "Ласкаво просимо до XyqwHub!",
-        ClickXToClose = "Натисни X щоб закрити", PlayersTitle = "Гравці", ServerTitle = "Інфо про сервер",
-        CustomTitle = "Свій скрипт", CustomColorTitle = "Свій колір", ChangeLogTitle = "Журнал",
-        SettingsTitle = "Налаштування", Apply = "Застосувати", Reset = "Скинути", ShareColor = "Поділитись кольором",
-        CopyJobId = "Копіювати JobId", Rejoin = "Перезайти", ServerHop = "Змінити сервер", TPToSmall = "ТП в маленький",
-        RemoveTags = "Прибрати теги", ShareFav = "Поділитись обраним", ShareRct = "Поділитись останніми",
-        TestURLs = "Перевірити URL", SettingsBtn = "Налаштування", Destroy = "Видалити XyqwHub", ResetOrder = "Скинути порядок",
-        PlaceId = "PlaceId", JobId = "JobId", Players = "Гравці", Creator = "Творець",
-        Presets = "Пресети", AutoHideBind = "Бінд Auto-Hide:",
-        ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель", HideTopBarOn = "Сховати: УВІМК",
-        HideTopBarOff = "Сховати: ВИМК", OrderSaved = "Порядок збережено!", OrderReset = "Порядок скинуто!",
-        ChangeLogText = [[XyqwHub Журнал
+}
+
+-- ========== LANG: UK ==========
+LANG.UK = {
+    Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
+    CustomPlaceholder = "Посилання...", RunCustom = "Запустити",
+    JobIdCopied = "JobId скопійовано!", ScriptExecuted = "Скрипт виконано!",
+    OwnerWelcome = "Вітаю, мій батько :3", BetaWelcome = "Радий тебе бачити, тестер <3",
+    TagRemoved = "Тег прибрано!", LangChanged = "Мову змінено на Українську",
+    FavShared = "Обране скопійовано!", RctShared = "Останні скопійовано!",
+    LoadstringCopied = "Loadstring скопійовано!", ColorReset = "Колір скинуто",
+    ColorShared = "Колір скопійовано!", AutoExecOn = "Авто-запуск: УВІМК", AutoExecOff = "Авто-запуск: ВИМК",
+    KeybindChanged = "Бінд Auto-Hide: ", UrlCheckStarted = "Перевірка URL...",
+    UrlCheckDone = "Перевірку завершено!", WelcomeTitle = "Ласкаво просимо до XyqwHub!",
+    ClickXToClose = "Натисни X щоб закрити", PlayersTitle = "Гравці", ServerTitle = "Інфо про сервер",
+    CustomTitle = "Свій скрипт", CustomColorTitle = "Свій колір", ChangeLogTitle = "Журнал",
+    SettingsTitle = "Налаштування", Apply = "Застосувати", Reset = "Скинути", ShareColor = "Поділитись кольором",
+    CopyJobId = "Копіювати JobId", Rejoin = "Перезайти", ServerHop = "Змінити сервер", TPToSmall = "ТП в маленький",
+    RemoveTags = "Прибрати теги", ShareFav = "Поділитись обраним", ShareRct = "Поділитись останніми",
+    TestURLs = "Перевірити URL", SettingsBtn = "Налаштування", Destroy = "Видалити XyqwHub", ResetOrder = "Скинути порядок",
+    PlaceId = "PlaceId", JobId = "JobId", Players = "Гравці", Creator = "Творець",
+    Presets = "Пресети", AutoHideBind = "Бінд Auto-Hide:",
+    ShareHub = "Поділитись XyqwHub", HideTopBar = "Сховати верхню панель", HideTopBarOn = "Сховати: УВІМК",
+    HideTopBarOff = "Сховати: ВИМК", OrderSaved = "Порядок збережено!", OrderReset = "Порядок скинуто!",
+    AntiKickOn = "AntiKick: УВІМК", AntiKickOff = "AntiKick: ВИМК",
+    ExecutorInfoTitle = "Інфо про виконавця", RunUNCTest = "Запустити UNC тест", RunSUNCTest = "Запустити sUNC тест",
+    Testing = "Тестування...", TestResult = "Результат",
+    ChangeLogText = [[XyqwHub Журнал
+
+========================================
+Версія 7.1.0
+========================================
+- Прибрано кнопку A-Z
+- Пошуковий рядок розтягнуто до правого краю
+- Додано кнопку AntiKick: ON/OFF внизу
+- Додано кнопку Info (Інфо про виконавця + UNC/sUNC тести)
+- Executor Info: ім'я, версія, платформа, функції
+- UNC тест: 26 перевірок (getgc, hookfunction, writefile тощо)
+- sUNC тест: 36 перевірок (hookmetamethod, getupvalue, firesignal тощо)
+- Смужка drag тепер у колір теми (з 7.0.2)
 
 ========================================
 Версія 7.0.2
@@ -1568,29 +1617,45 @@ Version 1.0
 - Blade Ball, AntiKillParts, PulseHub
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
-    },
-    BE = {
-        Loaded = "загружана", Error = "памылка", Search = "Пошук...",
-        CustomPlaceholder = "Спасылка...", RunCustom = "Запусціць",
-        JobIdCopied = "JobId скапіяваны!", ScriptExecuted = "Скрыпт выкананы!",
-        OwnerWelcome = "Вітаю, мой бацька :3", BetaWelcome = "Рады цябе бачыць, тэстар <3",
-        TagRemoved = "Тэг прыбраны!", LangChanged = "Мова зменена на Беларускую",
-        FavShared = "Абранае скапіявана!", RctShared = "Апошнія скапіяваны!",
-        LoadstringCopied = "Loadstring скапіяваны!", ColorReset = "Колер скінуты",
-        ColorShared = "Колер скапіяваны!", AutoExecOn = "Аўта-запуск: УКЛ", AutoExecOff = "Аўта-запуск: ВЫКЛ",
-        KeybindChanged = "Бінд Auto-Hide: ", UrlCheckStarted = "Праверка URL...",
-        UrlCheckDone = "Праверка завершана!", WelcomeTitle = "Сардэчна запрашаем у XyqwHub!",
-        ClickXToClose = "Націсні X каб зачыніць", PlayersTitle = "Гульцы", ServerTitle = "Інфа пра сервер",
-        CustomTitle = "Свой скрыпт", CustomColorTitle = "Свой колер", ChangeLogTitle = "Чэйнджлог",
-        SettingsTitle = "Налады", Apply = "Ужыць", Reset = "Скінуць", ShareColor = "Падзяліцца колерам",
-        CopyJobId = "Капіяваць JobId", Rejoin = "Перазайсці", ServerHop = "Змяніць сервер", TPToSmall = "ТП у маленькі",
-        RemoveTags = "Прыбраць тэгі", ShareFav = "Падзяліцца абраным", ShareRct = "Падзяліцца апошнімі",
-        TestURLs = "Праверыць URL", SettingsBtn = "Налады", Destroy = "Выдаліць XyqwHub", ResetOrder = "Скінуць парадак",
-        PlaceId = "PlaceId", JobId = "JobId", Players = "Гульцы", Creator = "Стваральнік",
-        Presets = "Прэсеты", AutoHideBind = "Бінд Auto-Hide:",
-        ShareHub = "Падзяліцца XyqwHub", HideTopBar = "Схаваць панэль", HideTopBarOn = "Схаваць: УКЛ",
-        HideTopBarOff = "Схаваць: ВЫКЛ", OrderSaved = "Парадак захаваны!", OrderReset = "Парадак скінуты!",
-        ChangeLogText = [[XyqwHub Чэйнджлог
+}
+-- ========== LANG: BE ==========
+LANG.BE = {
+    Loaded = "загружана", Error = "памылка", Search = "Пошук...",
+    CustomPlaceholder = "Спасылка...", RunCustom = "Запусціць",
+    JobIdCopied = "JobId скапіяваны!", ScriptExecuted = "Скрыпт выкананы!",
+    OwnerWelcome = "Вітаю, мой бацька :3", BetaWelcome = "Рады цябе бачыць, тэстар <3",
+    TagRemoved = "Тэг прыбраны!", LangChanged = "Мова зменена на Беларускую",
+    FavShared = "Абранае скапіявана!", RctShared = "Апошнія скапіяваны!",
+    LoadstringCopied = "Loadstring скапіяваны!", ColorReset = "Колер скінуты",
+    ColorShared = "Колер скапіяваны!", AutoExecOn = "Аўта-запуск: УКЛ", AutoExecOff = "Аўта-запуск: ВЫКЛ",
+    KeybindChanged = "Бінд Auto-Hide: ", UrlCheckStarted = "Праверка URL...",
+    UrlCheckDone = "Праверка завершана!", WelcomeTitle = "Сардэчна запрашаем у XyqwHub!",
+    ClickXToClose = "Націсні X каб зачыніць", PlayersTitle = "Гульцы", ServerTitle = "Інфа пра сервер",
+    CustomTitle = "Свой скрыпт", CustomColorTitle = "Свой колер", ChangeLogTitle = "Чэйнджлог",
+    SettingsTitle = "Налады", Apply = "Ужыць", Reset = "Скінуць", ShareColor = "Падзяліцца колерам",
+    CopyJobId = "Капіяваць JobId", Rejoin = "Перазайсці", ServerHop = "Змяніць сервер", TPToSmall = "ТП у маленькі",
+    RemoveTags = "Прыбраць тэгі", ShareFav = "Падзяліцца абраным", ShareRct = "Падзяліцца апошнімі",
+    TestURLs = "Праверыць URL", SettingsBtn = "Налады", Destroy = "Выдаліць XyqwHub", ResetOrder = "Скінуць парадак",
+    PlaceId = "PlaceId", JobId = "JobId", Players = "Гульцы", Creator = "Стваральнік",
+    Presets = "Прэсеты", AutoHideBind = "Бінд Auto-Hide:",
+    ShareHub = "Падзяліцца XyqwHub", HideTopBar = "Схаваць панэль", HideTopBarOn = "Схаваць: УКЛ",
+    HideTopBarOff = "Схаваць: ВЫКЛ", OrderSaved = "Парадак захаваны!", OrderReset = "Парадак скінуты!",
+    AntiKickOn = "AntiKick: УКЛ", AntiKickOff = "AntiKick: ВЫКЛ",
+    ExecutorInfoTitle = "Інфа пра выканаўцу", RunUNCTest = "Запусціць UNC тэст", RunSUNCTest = "Запусціць sUNC тэст",
+    Testing = "Тэставанне...", TestResult = "Вынік",
+    ChangeLogText = [[XyqwHub Чэйнджлог
+
+========================================
+Версія 7.1.0
+========================================
+- Прыбрана кнопка A-Z
+- Пошуковы радок расцягнуты да правага краю
+- Дададзена кнопка AntiKick: ON/OFF унізе
+- Дададзена кнопка Info (Інфа пра выканаўцу + UNC/sUNC тэсты)
+- Executor Info: імя, версія, платформа, функцыі
+- UNC тэст: 26 праверак (getgc, hookfunction, writefile і г.д.)
+- sUNC тэст: 36 праверак (hookmetamethod, getupvalue, firesignal і г.д.)
+- Паласа drag цяпер у колер тэмы (з 7.0.2)
 
 ========================================
 Версія 7.0.2
@@ -1866,7 +1931,7 @@ Version 1.0
 ========================================
 - Дададзены тэг тэстара (сіні градыент)
 - Дададзена прывітанне для тэстараў
-- Дададзена 2 тэстары
+- Дададзена 2 тэстары (9686718765, 3701387385)
 
 ========================================
 Версія 3.6
@@ -1879,18 +1944,23 @@ Version 1.0
 Версія 3.5
 ========================================
 - Дададзена прывітанне толькі для ўладальніка
+- "Welcome, my father :3"
 
 ========================================
 Версія 3.4
 ========================================
-- Больш цёмны чырвоны для тэга
+- Больш цёмны чырвоны для тэга (200,0,0 і 60,0,0)
 - Звычайны фон для Remove/Destroy
+- Звычайны бордэр для Remove/Destroy
 
 ========================================
 Версія 3.3
 ========================================
-- Фікс памеру тэга
-- Фікс градыента (праз Rotation)
+- Фікс памеру тэга (больш не расцягваецца)
+- Фікс градыента (працуе праз Rotation)
+- Градыент бачны ўсім
+- Фікс пазіцыі тэксту
+- Фікс памеру тэксту (менш, не расцягнута)
 - Дададзены UIStroke glow
 
 ========================================
@@ -1905,6 +1975,8 @@ Version 1.0
 ========================================
 - Поўнасцю перапісана сістэма тэгаў
 - Тэг прывязаны да HumanoidRootPart
+- Дададзена пазіцыянаванне праз Heartbeat
+- Фікс логікі сканавання
 
 ========================================
 Версія 3.0
@@ -1918,7 +1990,8 @@ Version 1.0
 ========================================
 - Дададзены XyqwHub OWNER тэг
 - Дададзена кнопка "Remove XyqwHub Tag"
-- Дададзена 2 owner акаўнты
+- Дададзена анімацыя градыента для owner тэга
+- Дададзена 2 owner акаўнты (4396977722, 8527910367)
 
 ========================================
 Версія 2.8
@@ -1933,11 +2006,13 @@ Version 1.0
 - Roblox апавяшчэнні
 - Дададзена кнопка ChangeLog
 - Loading / Loaded апавяшчэнні
+- Тэг бачны ўсім з XyqwHub
 
 ========================================
 Версія 2.6
 ========================================
 - Апавяшчэнні перамешчаны ў правы ніжні кут
+- Новая сістэма апавяшчэнняў
 
 ========================================
 Версія 2.5
@@ -1952,6 +2027,7 @@ Version 1.0
 ========================================
 - Дададзены Re-launch protection
 - Кнопка DESTROY скідвае флаг
+- Прывітанне толькі для ўладальніка
 
 ========================================
 Версія 2.3
@@ -2041,29 +2117,46 @@ Version 1.0
 - Blade Ball, AntiKillParts, PulseHub
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
-    },
-    KK = {
-        Loaded = "жүктелді", Error = "қате", Search = "Іздеу...",
-        CustomPlaceholder = "Сілтеме...", RunCustom = "Іске қосу",
-        JobIdCopied = "JobId көшірілді!", ScriptExecuted = "Скрипт орындалды!",
-        OwnerWelcome = "Қош келдің, әкем :3", BetaWelcome = "Көргеніме қуаныштымын, тестер <3",
-        TagRemoved = "Тег жойылды!", LangChanged = "Тіл Қазақшаға өзгертілді",
-        FavShared = "Таңдаулылар көшірілді!", RctShared = "Соңғылар көшірілді!",
-        LoadstringCopied = "Loadstring көшірілді!", ColorReset = "Түс қалпына келтірілді",
-        ColorShared = "Түс көшірілді!", AutoExecOn = "Авто-орындау: ҚОСУЛЫ", AutoExecOff = "Авто-орындау: ӨШІРУЛІ",
-        KeybindChanged = "Auto-Hide байланысы: ", UrlCheckStarted = "URL тексерілуде...",
-        UrlCheckDone = "Тексеру аяқталды!", WelcomeTitle = "XyqwHub-қа қош келдіңіз!",
-        ClickXToClose = "Жабу үшін X басыңыз", PlayersTitle = "Ойыншылар", ServerTitle = "Сервер туралы",
-        CustomTitle = "Өз скрипті", CustomColorTitle = "Өз түсі", ChangeLogTitle = "Өзгерістер",
-        SettingsTitle = "Параметрлер", Apply = "Қолдану", Reset = "Қалпына келтіру", ShareColor = "Түспен бөлісу",
-        CopyJobId = "JobId көшіру", Rejoin = "Қайта кіру", ServerHop = "Серверді ауыстыру", TPToSmall = "Кішіге ТП",
-        RemoveTags = "Тегтерді алу", ShareFav = "Таңдаулылармен бөлісу", ShareRct = "Соңғылармен бөлісу",
-        TestURLs = "URL тексеру", SettingsBtn = "Параметрлер", Destroy = "XyqwHub жою", ResetOrder = "Ретті қалпына келтіру",
-        PlaceId = "PlaceId", JobId = "JobId", Players = "Ойыншылар", Creator = "Жасаушы",
-        Presets = "Пресеттер", AutoHideBind = "Auto-Hide байланысы:",
-        ShareHub = "XyqwHub-пен бөлісу", HideTopBar = "Жоғарғы тақтаны жасыру", HideTopBarOn = "Жасыру: ҚОСУЛЫ",
-        HideTopBarOff = "Жасыру: ӨШІРУЛІ", OrderSaved = "Рет сақталды!", OrderReset = "Рет қалпына келтірілді!",
-        ChangeLogText = [[XyqwHub Өзгерістер
+}
+
+-- ========== LANG: KK ==========
+LANG.KK = {
+    Loaded = "жүктелді", Error = "қате", Search = "Іздеу...",
+    CustomPlaceholder = "Сілтеме...", RunCustom = "Іске қосу",
+    JobIdCopied = "JobId көшірілді!", ScriptExecuted = "Скрипт орындалды!",
+    OwnerWelcome = "Қош келдің, әкем :3", BetaWelcome = "Көргеніме қуаныштымын, тестер <3",
+    TagRemoved = "Тег жойылды!", LangChanged = "Тіл Қазақшаға өзгертілді",
+    FavShared = "Таңдаулылар көшірілді!", RctShared = "Соңғылар көшірілді!",
+    LoadstringCopied = "Loadstring көшірілді!", ColorReset = "Түс қалпына келтірілді",
+    ColorShared = "Түс көшірілді!", AutoExecOn = "Авто-орындау: ҚОСУЛЫ", AutoExecOff = "Авто-орындау: ӨШІРУЛІ",
+    KeybindChanged = "Auto-Hide байланысы: ", UrlCheckStarted = "URL тексерілуде...",
+    UrlCheckDone = "Тексеру аяқталды!", WelcomeTitle = "XyqwHub-қа қош келдіңіз!",
+    ClickXToClose = "Жабу үшін X басыңыз", PlayersTitle = "Ойыншылар", ServerTitle = "Сервер туралы",
+    CustomTitle = "Өз скрипті", CustomColorTitle = "Өз түсі", ChangeLogTitle = "Өзгерістер",
+    SettingsTitle = "Параметрлер", Apply = "Қолдану", Reset = "Қалпына келтіру", ShareColor = "Түспен бөлісу",
+    CopyJobId = "JobId көшіру", Rejoin = "Қайта кіру", ServerHop = "Серверді ауыстыру", TPToSmall = "Кішіге ТП",
+    RemoveTags = "Тегтерді алу", ShareFav = "Таңдаулылармен бөлісу", ShareRct = "Соңғылармен бөлісу",
+    TestURLs = "URL тексеру", SettingsBtn = "Параметрлер", Destroy = "XyqwHub жою", ResetOrder = "Ретті қалпына келтіру",
+    PlaceId = "PlaceId", JobId = "JobId", Players = "Ойыншылар", Creator = "Жасаушы",
+    Presets = "Пресеттер", AutoHideBind = "Auto-Hide байланысы:",
+    ShareHub = "XyqwHub-пен бөлісу", HideTopBar = "Жоғарғы тақтаны жасыру", HideTopBarOn = "Жасыру: ҚОСУЛЫ",
+    HideTopBarOff = "Жасыру: ӨШІРУЛІ", OrderSaved = "Рет сақталды!", OrderReset = "Рет қалпына келтірілді!",
+    AntiKickOn = "AntiKick: ҚОСУЛЫ", AntiKickOff = "AntiKick: ӨШІРУЛІ",
+    ExecutorInfoTitle = "Орындаушы туралы", RunUNCTest = "UNC тестін іске қосу", RunSUNCTest = "sUNC тестін іске қосу",
+    Testing = "Тексеру...", TestResult = "Нәтиже",
+    ChangeLogText = [[XyqwHub Өзгерістер
+
+========================================
+7.1.0 нұсқасы
+========================================
+- A-Z батырмасы жойылды
+- Іздеу жолағы оң жақ шетке дейін созылды
+- AntiKick: ON/OFF батырмасы төменге қосылды
+- Info батырмасы қосылды (Орындаушы туралы + UNC/sUNC тесттер)
+- Executor Info: аты, нұсқасы, платформасы, функциялары
+- UNC тест: 26 тексеру (getgc, hookfunction, writefile және т.б.)
+- sUNC тест: 36 тексеру (hookmetamethod, getupvalue, firesignal және т.б.)
+- Drag жолағы енді тақырып түсінде (7.0.2-ден)
 
 ========================================
 7.0.2 нұсқасы
@@ -2338,8 +2431,7 @@ Version 1.0
 3.7 нұсқасы
 ========================================
 - Тестер тегі қосылды (көк градиент)
-- Тестерлерге қош келу қосылды
-- 2 тестер қосылды
+- Тестерлерге қош келу қосылды- 2 тестер қосылды (9686718765, 3701387385)
 
 ========================================
 3.6 нұсқасы
@@ -2352,18 +2444,23 @@ Version 1.0
 3.5 нұсқасы
 ========================================
 - Тек иесі үшін қош келу қосылды
+- "Welcome, my father :3"
 
 ========================================
 3.4 нұсқасы
 ========================================
-- Тег үшін қою қызыл
+- Тег үшін қою қызыл (200,0,0 және 60,0,0)
 - Remove/Destroy үшін қарапайым фон
+- Remove/Destroy үшін қарапайым бордюр
 
 ========================================
 3.3 нұсқасы
 ========================================
-- Тег өлшемі түзетілді
+- Тег өлшемі түзетілді (енді созылмайды)
 - Градиент түзетілді (Rotation арқылы)
+- Градиент барлығына көрінеді
+- Мәтін позициясы түзетілді
+- Мәтін өлшемі түзетілді (кішірек, созылмаған)
 - UIStroke glow қосылды
 
 ========================================
@@ -2379,6 +2476,7 @@ Version 1.0
 - Тег жүйесі толығымен қайта жазылды
 - Тег HumanoidRootPart-қа бекітілді
 - Heartbeat арқылы позициялау қосылды
+- Сканерлеу логикасы түзетілді
 
 ========================================
 3.0 нұсқасы
@@ -2392,7 +2490,8 @@ Version 1.0
 ========================================
 - XyqwHub OWNER тегі қосылды
 - "Remove XyqwHub Tag" батырмасы қосылды
-- 2 owner аккаунт қосылды
+- Owner тегі үшін градиент анимациясы қосылды
+- 2 owner аккаунт қосылды (4396977722, 8527910367)
 
 ========================================
 2.8 нұсқасы
@@ -2404,14 +2503,16 @@ Version 1.0
 ========================================
 2.7 нұсқасы
 ========================================
-- Roblox хабарламалары
+- Roblox хабарламалары (оң жақ төменгі бұрыш)
 - ChangeLog батырмасы қосылды
 - Loading / Loaded хабарламалары
+- Тег XyqwHub барларға көрінеді
 
 ========================================
 2.6 нұсқасы
 ========================================
 - Хабарламалар оң жақ төменгі бұрышқа жылжытылды
+- Жаңа хабарлама жүйесі
 
 ========================================
 2.5 нұсқасы
@@ -2426,6 +2527,7 @@ Version 1.0
 ========================================
 - Re-launch protection қосылды
 - DESTROY батырмасы флагты тазалайды
+- Тек иесі үшін қош келу
 
 ========================================
 2.3 нұсқасы
@@ -2513,9 +2615,8 @@ Version 1.0
 - Алғашқы шығарылым
 - Негізгі GUI
 - Blade Ball, AntiKillParts, PulseHub
-- RUNAWAYS, Universal FE, UwU hub
+- RUNAWAYS, Universal FE, UwU Hub
 - FakeVR, WallHop]],
-    },
 }
 
 local function _(key)
@@ -2538,6 +2639,7 @@ local UserInputService = game:GetService("UserInputService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
 
 local SCRIPTS = {
     {Name = "Blade Ball", Category = "BB", URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"},
@@ -2605,23 +2707,38 @@ task.spawn(function()
     end
 end)
 
-local function IsOwner()
-    for _, id in ipairs(OWNER_IDS) do
-        if Players.LocalPlayer.UserId == id then return true end
+local antiKickConnection = nil
+local function StartAntiKick()
+    if antiKickConnection then return end
+    antiKickConnection = Players.LocalPlayer.OnTeleport:Connect(function()
+        if getgenv().XyqwAntiKick then
+            task.wait(1)
+            pcall(function()
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
+            end)
+        end
+    end)
+    ShowRobloxNotification(_("AntiKickOn"), 2)
+end
+local function StopAntiKick()
+    if antiKickConnection then
+        antiKickConnection:Disconnect()
+        antiKickConnection = nil
     end
-    return false
+    ShowRobloxNotification(_("AntiKickOff"), 2)
 end
 
+local function IsOwner()
+    for _, id in ipairs(OWNER_IDS) do if Players.LocalPlayer.UserId == id then return true end end
+    return false
+end
 local function IsBeta()
-    for _, id in ipairs(BETA_IDS) do
-        if Players.LocalPlayer.UserId == id then return true end
-    end
+    for _, id in ipairs(BETA_IDS) do if Players.LocalPlayer.UserId == id then return true end end
     return false
 end
 
 local tagsEnabled = true
 local activeTags = {}
-
 local function GetRole(plr)
     for _, id in ipairs(OWNER_IDS) do if plr.UserId == id then return "OWNER" end end
     for _, id in ipairs(BETA_IDS) do if plr.UserId == id then return "TESTER" end end
@@ -2637,7 +2754,6 @@ local function CreateTagForPlayer(plr)
     if not char then return end
     local rootPart = char:FindFirstChild("HumanoidRootPart")
     if not rootPart then return end
-
     local billboard = Instance.new("BillboardGui")
     billboard.Name = "XyqwTag"
     billboard.Size = UDim2.new(0, 160, 0, 20)
@@ -2647,7 +2763,6 @@ local function CreateTagForPlayer(plr)
     billboard.MaxDistance = 500
     billboard.Adornee = rootPart
     billboard.Parent = char
-
     local label = Instance.new("TextLabel")
     label.Size = UDim2.new(0, 150, 0, 18)
     label.Position = UDim2.new(0.5, -75, 0.5, -9)
@@ -2658,7 +2773,6 @@ local function CreateTagForPlayer(plr)
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     label.Parent = billboard
-
     local gradient = Instance.new("UIGradient")
     if role == "OWNER" then
         label.Text = "XyqwHub OWNER"
@@ -2677,13 +2791,11 @@ local function CreateTagForPlayer(plr)
     end
     gradient.Rotation = 0
     gradient.Parent = label
-
     local glow = Instance.new("UIStroke")
     glow.Color = role == "OWNER" and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(50, 120, 255)
     glow.Thickness = 1
     glow.Transparency = 0.3
     glow.Parent = label
-
     task.spawn(function()
         local rotation = 0
         while label.Parent and tagsEnabled do
@@ -2775,7 +2887,6 @@ local function GetExecutorName()
     end)
     return ok and name or "Unknown"
 end
-
 local globalDrag = false
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "XyqwHubGui"
@@ -2783,7 +2894,7 @@ screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.DisplayOrder = 999
-pcall(function() screenGui.Parent = game:GetService("CoreGui") end)
+pcall(function() screenGui.Parent = CoreGui end)
 if not screenGui.Parent then screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui") end
 
 local topBar = Instance.new("TextButton")
@@ -2877,7 +2988,6 @@ hideTopBtn.MouseButton1Click:Connect(function()
     end
     UpdateHideTopBtn()
 end)
-local mainFrame = nil
 
 local dockButton = Instance.new("TextButton")
 dockButton.Name = "DockButton"
@@ -2899,7 +3009,6 @@ dockButton.ZIndex = 999
 local dockDragging = false
 local dockDragStart, dockStartPos
 local dockDragMoved = false
-
 dockButton.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dockDragging = true
@@ -2908,7 +3017,6 @@ dockButton.InputBegan:Connect(function(input)
         dockStartPos = dockButton.Position
     end
 end)
-
 UserInputService.InputChanged:Connect(function(input)
     if dockDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local delta = input.Position - dockDragStart
@@ -2923,8 +3031,7 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 local savedSize = UDim2.new(0, 280, 0, 340)
-
-mainFrame = Instance.new("Frame")
+local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = savedSize
 mainFrame.Position = UDim2.new(0.5, -140, 0.5, -170)
@@ -3164,29 +3271,19 @@ searchBar.BorderSizePixel = 1
 searchBar.BorderColor3 = RED_MAIN
 searchBar.Parent = mainFrame
 
-local sortBtn = Instance.new("TextButton")
-sortBtn.Name = "SortBtn"
-sortBtn.Size = UDim2.new(0, 40, 0, 24)
-sortBtn.Position = UDim2.new(1, -45, 0, 35)
-sortBtn.BackgroundColor3 = RED_DARK
-sortBtn.TextColor3 = RED_MAIN
-sortBtn.Text = "A-Z"
-sortBtn.TextScaled = true
-sortBtn.Font = Enum.Font.GothamBold
-sortBtn.BorderSizePixel = 1
-sortBtn.BorderColor3 = RED_MAIN
-sortBtn.Parent = mainFrame
-sortBtn.AutoButtonColor = false
-
-local function UpdateSortBtnText()
-    local mode = getgenv().XyqwSettings.sortMode
-    if mode == "default" then sortBtn.Text = "A-Z"
-    elseif mode == "az" then sortBtn.Text = "A-Z"
-    elseif mode == "za" then sortBtn.Text = "Z-A"
-    elseif mode == "recent" then sortBtn.Text = "Rct"
-    end
-end
-UpdateSortBtnText()
+local infoBtn = Instance.new("TextButton")
+infoBtn.Name = "InfoBtn"
+infoBtn.Size = UDim2.new(0, 40, 0, 24)
+infoBtn.Position = UDim2.new(1, -45, 0, 35)
+infoBtn.BackgroundColor3 = RED_DARK
+infoBtn.TextColor3 = RED_MAIN
+infoBtn.Text = "Info"
+infoBtn.TextScaled = true
+infoBtn.Font = Enum.Font.GothamBold
+infoBtn.BorderSizePixel = 1
+infoBtn.BorderColor3 = RED_MAIN
+infoBtn.Parent = mainFrame
+infoBtn.AutoButtonColor = false
 
 local tabBar = Instance.new("Frame")
 tabBar.Name = "TabBar"
@@ -3214,9 +3311,7 @@ local function SwitchTab(name)
         btn.BorderColor3 = RED_MAIN
     end
     task.wait(0.01)
-    if getgenv().RefreshButtons then
-        getgenv().RefreshButtons()
-    end
+    if getgenv().RefreshButtons then getgenv().RefreshButtons() end
 end
 
 for i, name in ipairs(TAB_LIST) do
@@ -3282,25 +3377,9 @@ local function TweenColor(obj, prop, targetColor, time)
     return tween
 end
 
-local function TweenSize(obj, targetSize, time)
-    time = time or 0.2
-    local tween = TweenService:Create(obj, TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = targetSize})
-    tween:Play()
-    return tween
-end
-
-local function TweenTransparency(obj, target, time)
-    time = time or 0.2
-    local tween = TweenService:Create(obj, TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = target})
-    tween:Play()
-    return tween
-end
-
 local function SaveOrder()
     local order = {}
-    for _, entry in ipairs(buttons) do
-        table.insert(order, entry.Data.Name)
-    end
+    for _, entry in ipairs(buttons) do table.insert(order, entry.Data.Name) end
     getgenv().XyqwOrder = order
     SaveTable(ORDER_FILE, order)
 end
@@ -3327,7 +3406,6 @@ local function CreateScriptButton(data)
     container.ZIndex = 1
     container.Parent = scrollFrame
 
-    -- ========== DRAG STRIP — ФИКС 7.0.2: цвет темы ==========
     local dragStrip = Instance.new("Frame")
     dragStrip.Name = "DragStrip"
     dragStrip.Size = UDim2.new(0, 25, 1, 0)
@@ -3412,9 +3490,7 @@ local function CreateScriptButton(data)
     star.ZIndex = 2
     star.Parent = container
     star.AutoButtonColor = false
-
     if getgenv().XyqwFavorites[data.Name] then star.Text = "★" end
-
     star.MouseButton1Click:Connect(function()
         if getgenv().XyqwFavorites[data.Name] then
             getgenv().XyqwFavorites[data.Name] = nil
@@ -3434,36 +3510,30 @@ local function CreateScriptButton(data)
     local lastRun = 0
     local blockClick = false
     btn.MouseButton1Click:Connect(function()
-        if blockClick then return end
-        if isRunning then return end
+        if blockClick or isRunning then return end
         local now = tick()
         if now - lastRun < 1.5 then return end
         lastRun = now
         isRunning = true
         TweenColor(container, "BackgroundColor3", RED_MAIN, 0.1)
-
         for i, name in ipairs(getgenv().XyqwRecent) do
             if name == data.Name then table.remove(getgenv().XyqwRecent, i) break end
         end
         table.insert(getgenv().XyqwRecent, 1, data.Name)
         while #getgenv().XyqwRecent > 5 do table.remove(getgenv().XyqwRecent) end
         SaveTable(RCT_FILE, getgenv().XyqwRecent)
-
         if data.URL == "SPECIAL_COPY_DOORS_V2" then
             local scriptText = 'getgenv().SCRIPT_KEY = "KEYLESS"\nloadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/abd3cc54d2dc7de4a091fb19c8f4ea9e15e939e7ecc88b475e6956e8af94ad6f/download"))()'
             pcall(function() setclipboard(scriptText) end)
             ShowRobloxNotification("Doors V2 - copied", 5)
         else
-            local success, err = pcall(function()
-                loadstring(game:HttpGet(data.URL))()
-            end)
+            local success = pcall(function() loadstring(game:HttpGet(data.URL))() end)
             if success then
                 ShowRobloxNotification(data.Name .. " - " .. _("ScriptExecuted"), 3)
             else
                 ShowRobloxNotification(data.Name .. " - " .. _("Error"), 5)
             end
         end
-
         task.wait(0.3)
         TweenColor(container, "BackgroundColor3", RED_BG, 0.15)
         isRunning = false
@@ -3505,10 +3575,7 @@ local function CreateScriptButton(data)
 
     UserInputService.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            if holdTask then
-                pcall(function() task.cancel(holdTask) end)
-                holdTask = nil
-            end
+            if holdTask then pcall(function() task.cancel(holdTask) end) holdTask = nil end
             if dragging then
                 blockClick = true
                 dragging = false
@@ -3544,7 +3611,6 @@ end
 ApplyOrderFromFile()
 for _, data in ipairs(SCRIPTS) do CreateScriptButton(data) end
 ApplyOrderFromFile()
-
 local removeTagsContainer = Instance.new("Frame")
 removeTagsContainer.Name = "RemoveTagsContainer"
 removeTagsContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -3565,7 +3631,6 @@ removeTagsBtn.TextScaled = true
 removeTagsBtn.Font = Enum.Font.GothamBold
 removeTagsBtn.Parent = removeTagsContainer
 removeTagsBtn.AutoButtonColor = false
-
 removeTagsBtn.MouseEnter:Connect(function() TweenColor(removeTagsContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 removeTagsBtn.MouseLeave:Connect(function() TweenColor(removeTagsContainer, "BackgroundColor3", RED_BG, 0.15) end)
 removeTagsBtn.MouseButton1Click:Connect(function()
@@ -3593,7 +3658,6 @@ shareFavBtn.TextScaled = true
 shareFavBtn.Font = Enum.Font.GothamBold
 shareFavBtn.Parent = shareFavContainer
 shareFavBtn.AutoButtonColor = false
-
 shareFavBtn.MouseEnter:Connect(function() TweenColor(shareFavContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 shareFavBtn.MouseLeave:Connect(function() TweenColor(shareFavContainer, "BackgroundColor3", RED_BG, 0.15) end)
 shareFavBtn.MouseButton1Click:Connect(function()
@@ -3629,7 +3693,6 @@ shareRctBtn.TextScaled = true
 shareRctBtn.Font = Enum.Font.GothamBold
 shareRctBtn.Parent = shareRctContainer
 shareRctBtn.AutoButtonColor = false
-
 shareRctBtn.MouseEnter:Connect(function() TweenColor(shareRctContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 shareRctBtn.MouseLeave:Connect(function() TweenColor(shareRctContainer, "BackgroundColor3", RED_BG, 0.15) end)
 shareRctBtn.MouseButton1Click:Connect(function()
@@ -3662,7 +3725,6 @@ urlTestBtn.TextScaled = true
 urlTestBtn.Font = Enum.Font.GothamBold
 urlTestBtn.Parent = urlTestContainer
 urlTestBtn.AutoButtonColor = false
-
 urlTestBtn.MouseEnter:Connect(function() TweenColor(urlTestContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 urlTestBtn.MouseLeave:Connect(function() TweenColor(urlTestContainer, "BackgroundColor3", RED_BG, 0.15) end)
 
@@ -3686,7 +3748,6 @@ settingsBtn.TextScaled = true
 settingsBtn.Font = Enum.Font.GothamBold
 settingsBtn.Parent = settingsContainer
 settingsBtn.AutoButtonColor = false
-
 settingsBtn.MouseEnter:Connect(function() TweenColor(settingsContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 settingsBtn.MouseLeave:Connect(function() TweenColor(settingsContainer, "BackgroundColor3", RED_BG, 0.15) end)
 
@@ -3710,19 +3771,59 @@ resetOrderBtn.TextScaled = true
 resetOrderBtn.Font = Enum.Font.GothamBold
 resetOrderBtn.Parent = resetOrderContainer
 resetOrderBtn.AutoButtonColor = false
-
 resetOrderBtn.MouseEnter:Connect(function() TweenColor(resetOrderContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 resetOrderBtn.MouseLeave:Connect(function() TweenColor(resetOrderContainer, "BackgroundColor3", RED_BG, 0.15) end)
 resetOrderBtn.MouseButton1Click:Connect(function()
     getgenv().XyqwOrder = {}
     SaveTable(ORDER_FILE, {})
-    for _, entry in ipairs(buttons) do
-        entry.Container:Destroy()
-    end
+    for _, entry in ipairs(buttons) do entry.Container:Destroy() end
     buttons = {}
     for _, data in ipairs(SCRIPTS) do CreateScriptButton(data) end
     if getgenv().RefreshButtons then getgenv().RefreshButtons() end
     ShowRobloxNotification(_("OrderReset"), 3)
+end)
+
+local antiKickContainer = Instance.new("Frame")
+antiKickContainer.Name = "AntiKickContainer"
+antiKickContainer.Size = UDim2.new(1, -10, 0, 32)
+antiKickContainer.Position = UDim2.new(0, 5, 0, 0)
+antiKickContainer.BackgroundColor3 = RED_BG
+antiKickContainer.BorderSizePixel = 2
+antiKickContainer.BorderColor3 = RED_MAIN
+antiKickContainer.Parent = scrollFrame
+antiKickContainer.Visible = false
+
+local antiKickBtn = Instance.new("TextButton")
+antiKickBtn.Name = "AntiKickBtn"
+antiKickBtn.Size = UDim2.new(1, 0, 1, 0)
+antiKickBtn.BackgroundTransparency = 1
+antiKickBtn.TextColor3 = RED_MAIN
+antiKickBtn.TextScaled = true
+antiKickBtn.Font = Enum.Font.GothamBold
+antiKickBtn.Parent = antiKickContainer
+antiKickBtn.AutoButtonColor = false
+
+local function UpdateAntiKickText()
+    if getgenv().XyqwAntiKick then
+        antiKickBtn.Text = _("AntiKickOn")
+        antiKickBtn.TextColor3 = Color3.fromRGB(0, 255, 100)
+    else
+        antiKickBtn.Text = _("AntiKickOff")
+        antiKickBtn.TextColor3 = RED_MAIN
+    end
+end
+UpdateAntiKickText()
+
+antiKickBtn.MouseEnter:Connect(function() TweenColor(antiKickContainer, "BackgroundColor3", RED_DARK, 0.12) end)
+antiKickBtn.MouseLeave:Connect(function() TweenColor(antiKickContainer, "BackgroundColor3", RED_BG, 0.15) end)
+antiKickBtn.MouseButton1Click:Connect(function()
+    getgenv().XyqwAntiKick = not getgenv().XyqwAntiKick
+    if getgenv().XyqwAntiKick then
+        StartAntiKick()
+    else
+        StopAntiKick()
+    end
+    UpdateAntiKickText()
 end)
 
 local destroyContainer = Instance.new("Frame")
@@ -3745,7 +3846,6 @@ destroyBtnMain.TextScaled = true
 destroyBtnMain.Font = Enum.Font.GothamBold
 destroyBtnMain.Parent = destroyContainer
 destroyBtnMain.AutoButtonColor = false
-
 destroyBtnMain.MouseEnter:Connect(function() TweenColor(destroyContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 destroyBtnMain.MouseLeave:Connect(function() TweenColor(destroyContainer, "BackgroundColor3", RED_BG, 0.15) end)
 destroyBtnMain.MouseButton1Click:Connect(function()
@@ -3885,23 +3985,8 @@ urlTestBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-sortBtn.MouseButton1Click:Connect(function()
-    local modes = {"default", "az", "za", "recent"}
-    local idx = 1
-    for i, m in ipairs(modes) do if m == getgenv().XyqwSettings.sortMode then idx = i break end end
-    idx = idx + 1
-    if idx > #modes then idx = 1 end
-    getgenv().XyqwSettings.sortMode = modes[idx]
-    SaveTable(SETTINGS_FILE, getgenv().XyqwSettings)
-    UpdateSortBtnText()
-    if getgenv().RefreshButtons then getgenv().RefreshButtons() end
-end)
-
 getgenv().RefreshButtons = function()
     local search = string.lower(searchBar.Text)
-    local sortMode = getgenv().XyqwSettings.sortMode
-
-    local visibleEntries = {}
     for _, entry in ipairs(buttons) do
         local show = true
         if currentTab == "Fav" then
@@ -3918,23 +4003,7 @@ getgenv().RefreshButtons = function()
         if show and search ~= "" and not string.find(string.lower(entry.Data.Name), search, 1, true) then
             show = false
         end
-        if show then table.insert(visibleEntries, entry) end
         entry.Container.Visible = show
-    end
-
-    if sortMode == "az" then
-    table.sort(visibleEntries, function(a, b) return a.Data.Name:lower() < b.Data.Name:lower() end)
-elseif sortMode == "za" then
-    table.sort(visibleEntries, function(a, b) return a.Data.Name:lower() > b.Data.Name:lower() end)
-elseif sortMode == "recent" then
-    table.sort(visibleEntries, function(a, b)
-        local aIdx, bIdx = 999, 999
-        for i, n in ipairs(getgenv().XyqwRecent) do
-            if n == a.Data.Name then aIdx = i end
-            if n == b.Data.Name then bIdx = i end
-        end
-        return aIdx < bIdx
-    end)
     end
 
     local visible = 0
@@ -3953,6 +4022,7 @@ elseif sortMode == "recent" then
     urlTestContainer.Visible = showAll
     settingsContainer.Visible = showAll
     resetOrderContainer.Visible = showAll
+    antiKickContainer.Visible = showAll
     destroyContainer.Visible = showAll
     shareFavContainer.Visible = showFav
     shareRctContainer.Visible = showRct
@@ -3963,8 +4033,9 @@ elseif sortMode == "recent" then
         urlTestContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
         settingsContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
         resetOrderContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
+        antiKickContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
         destroyContainer.Position = UDim2.new(0, 5, 0, specialY) specialY = specialY + buttonHeight
-        visible = visible + 5
+        visible = visible + 6
     end
     if showFav then
         shareFavContainer.Position = UDim2.new(0, 5, 0, specialY)
@@ -4023,14 +4094,14 @@ local function ShowChangeLog()
     scroll.Position = UDim2.new(0, 5, 0, 35)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 10000)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 15000)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 51
     scroll.Parent = frame
 
     local text = Instance.new("TextLabel")
-    text.Size = UDim2.new(1, -10, 0, 9990)
+    text.Size = UDim2.new(1, -10, 0, 14990)
     text.Position = UDim2.new(0, 5, 0, 5)
     text.BackgroundTransparency = 1
     text.TextColor3 = RED_MAIN
@@ -4064,6 +4135,7 @@ langButton.MouseButton1Click:Connect(function()
     settingsBtn.Text = _("SettingsBtn")
     resetOrderBtn.Text = _("ResetOrder")
     destroyBtnMain.Text = _("Destroy")
+    UpdateAntiKickText()
     ShowRobloxNotification(_("LangChanged"), 3)
     UpdateHeaderLayout()
 end)
@@ -4362,7 +4434,7 @@ local function ShowCustomScript()
     runBtn.MouseButton1Click:Connect(function()
         local url = ExtractURL(input.Text)
         if not url then ShowRobloxNotification("Invalid URL!", 3) return end
-        local success, err = pcall(function() loadstring(game:HttpGet(url))() end)
+        local success = pcall(function() loadstring(game:HttpGet(url))() end)
         if success then
             ShowRobloxNotification("Custom - " .. _("ScriptExecuted"), 3)
         else
@@ -4372,6 +4444,261 @@ local function ShowCustomScript()
 
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
+
+customBtn.MouseButton1Click:Connect(ShowCustomScript)
+playerBtn.MouseButton1Click:Connect(ShowPlayerList)
+serverBtn.MouseButton1Click:Connect(ShowServerInfo)
+-- ========== INFO BUTTON: Executor Info + UNC/sUNC ==========
+local function RunUNCTest()
+    local passed, failed = 0, 0
+    local results = {}
+    local function check(name, fn)
+        local ok, res = pcall(fn)
+        if ok and res then
+            passed = passed + 1
+            table.insert(results, "✓ " .. name)
+        else
+            failed = failed + 1
+            table.insert(results, "✗ " .. name)
+        end
+    end
+    check("getgenv", function() return type(getgenv) == "function" end)
+    check("getrenv", function() return type(getrenv) == "function" end)
+    check("getreg", function() return type(getreg) == "function" end)
+    check("getgc", function() return type(getgc) == "function" end)
+    check("getrawmetatable", function() return type(getrawmetatable) == "function" end)
+    check("setreadonly", function() return type(setreadonly) == "function" end)
+    check("hookfunction", function() return type(hookfunction) == "function" end)
+    check("newcclosure", function() return type(newcclosure) == "function" end)
+    check("writefile", function() return type(writefile) == "function" end)
+    check("readfile", function() return type(readfile) == "function" end)
+    check("isfile", function() return type(isfile) == "function" end)
+    check("delfile", function() return type(delfile) == "function" end)
+    check("makefolder", function() return type(makefolder) == "function" end)
+    check("isfolder", function() return type(isfolder) == "function" end)
+    check("listfiles", function() return type(listfiles) == "function" end)
+    check("setclipboard", function() return type(setclipboard) == "function" end)
+    check("getclipboard", function() return type(getclipboard) == "function" end)
+    check("identifyexecutor", function() return type(identifyexecutor) == "function" end)
+    check("getscriptbytecode", function() return type(getscriptbytecode) == "function" end)
+    check("getscripthash", function() return type(getscripthash) == "function" end)
+    check("decompile", function() return type(decompile) == "function" end)
+    check("firetouchinterest", function() return type(firetouchinterest) == "function" end)
+    check("fireclickdetector", function() return type(fireclickdetector) == "function" end)
+    check("fireproximityprompt", function() return type(fireproximityprompt) == "function" end)
+    check("request", function() return type(request) == "function" or type(http_request) == "function" end)
+    check("setfpscap", function() return type(setfpscap) == "function" end)
+    check("getconnections", function() return type(getconnections) == "function" end)
+    return passed, failed, results
+end
+
+local function RunSUNCTest()
+    local passed, failed = 0, 0
+    local results = {}
+    local function check(name, fn)
+        local ok, res = pcall(fn)
+        if ok and res then
+            passed = passed + 1
+            table.insert(results, "✓ " .. name)
+        else
+            failed = failed + 1
+            table.insert(results, "✗ " .. name)
+        end
+    end
+    check("getgenv", function() return type(getgenv) == "function" end)
+    check("getrenv", function() return type(getrenv) == "function" end)
+    check("getreg", function() return type(getreg) == "function" end)
+    check("getgc", function() return type(getgc) == "function" end)
+    check("getrawmetatable", function() return type(getrawmetatable) == "function" end)
+    check("setreadonly", function() return type(setreadonly) == "function" end)
+    check("isreadonly", function() return type(isreadonly) == "function" end)
+    check("hookfunction", function() return type(hookfunction) == "function" end)
+    check("hookmetamethod", function() return type(hookmetamethod) == "function" end)
+    check("newcclosure", function() return type(newcclosure) == "function" end)
+    check("checkcaller", function() return type(checkcaller) == "function" end)
+    check("islclosure", function() return type(islclosure) == "function" end)
+    check("iscclosure", function() return type(iscclosure) == "function" end)
+    check("clonefunction", function() return type(clonefunction) == "function" end)
+    check("getupvalue", function() return type(getupvalue) == "function" end)
+    check("setupvalue", function() return type(setupvalue) == "function" end)
+    check("getupvalues", function() return type(getupvalues) == "function" end)
+    check("getconstants", function() return type(getconstants) == "function" end)
+    check("getproto", function() return type(getproto) == "function" end)
+    check("getprotos", function() return type(getprotos) == "function" end)
+    check("getstack", function() return type(getstack) == "function" end)
+    check("setstack", function() return type(setstack) == "function" end)
+    check("getinfo", function() return type(getinfo) == "function" end)
+    check("writefile", function() return type(writefile) == "function" end)
+    check("readfile", function() return type(readfile) == "function" end)
+    check("setclipboard", function() return type(setclipboard) == "function" end)
+    check("identifyexecutor", function() return type(identifyexecutor) == "function" end)
+    check("getscriptbytecode", function() return type(getscriptbytecode) == "function" end)
+    check("getscripthash", function() return type(getscripthash) == "function" end)
+    check("request", function() return type(request) == "function" or type(http_request) == "function" end)
+    check("setfpscap", function() return type(setfpscap) == "function" end)
+    check("getconnections", function() return type(getconnections) == "function" end)
+    check("firesignal", function() return type(firesignal) == "function" end)
+    check("fireclickdetector", function() return type(fireclickdetector) == "function" end)
+    check("fireproximityprompt", function() return type(fireproximityprompt) == "function" end)
+    check("firetouchinterest", function() return type(firetouchinterest) == "function" end)
+    return passed, failed, results
+end
+
+local function ShowExecutorInfo()
+    local frame = Instance.new("Frame")
+    frame.Name = "ExecutorInfoFrame"
+    frame.Size = UDim2.new(0, 400, 0, 480)
+    frame.Position = UDim2.new(0.5, -200, 0.5, -240)
+    frame.BackgroundColor3 = RED_BG
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = RED_MAIN
+    frame.ZIndex = 50
+    frame.Active = true
+    frame.Parent = screenGui
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 28)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.BackgroundTransparency = 1
+    title.TextColor3 = RED_MAIN
+    title.Text = _("ExecutorInfoTitle")
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.ZIndex = 51
+    title.Parent = frame
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 30, 0, 28)
+    closeBtn.Position = UDim2.new(1, -35, 0, 2)
+    closeBtn.BackgroundTransparency = 1
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = RED_MAIN
+    closeBtn.TextScaled = true
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.ZIndex = 51
+    closeBtn.Parent = frame
+    closeBtn.AutoButtonColor = false
+    closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
+
+    local infoLabel = Instance.new("TextLabel")
+    infoLabel.Size = UDim2.new(1, -20, 0, 110)
+    infoLabel.Position = UDim2.new(0, 10, 0, 40)
+    infoLabel.BackgroundColor3 = RED_DARK
+    infoLabel.BorderSizePixel = 1
+    infoLabel.BorderColor3 = RED_MAIN
+    infoLabel.TextColor3 = RED_MAIN
+    infoLabel.TextWrapped = true
+    infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+    infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+    infoLabel.TextSize = 12
+    infoLabel.Font = Enum.Font.Gotham
+    infoLabel.ZIndex = 51
+    infoLabel.Parent = frame
+
+    local executorName = GetExecutorName()
+    local hasWritefile = type(writefile) == "function" and "✓" or "✗"
+    local hasSetclip = type(setclipboard) == "function" and "✓" or "✗"
+    local hasHttpGet = type(game.HttpGet) == "function" and "✓" or "✗"
+    local hasIdentify = type(identifyexecutor) == "function" and "✓" or "✗"
+
+    infoLabel.Text = string.format(
+        "Executor: %s\n" ..
+        "Version: %s\n" ..
+        "Platform: %s\n" ..
+        "writefile: %s\n" ..
+        "setclipboard: %s\n" ..
+        "game:HttpGet: %s\n" ..
+        "identifyexecutor: %s",
+        executorName, VERSION, "Mobile", hasWritefile, hasSetclip, hasHttpGet, hasIdentify
+    )
+
+    local uncBtn = Instance.new("TextButton")
+    uncBtn.Size = UDim2.new(0.5, -13, 0, 30)
+    uncBtn.Position = UDim2.new(0, 10, 0, 158)
+    uncBtn.BackgroundColor3 = RED_MAIN
+    uncBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    uncBtn.Text = _("RunUNCTest")
+    uncBtn.TextScaled = true
+    uncBtn.Font = Enum.Font.GothamBold
+    uncBtn.BorderSizePixel = 0
+    uncBtn.ZIndex = 51
+    uncBtn.Parent = frame
+    uncBtn.AutoButtonColor = false
+
+    local suncBtn = Instance.new("TextButton")
+    suncBtn.Size = UDim2.new(0.5, -13, 0, 30)
+    suncBtn.Position = UDim2.new(0.5, 3, 0, 158)
+    suncBtn.BackgroundColor3 = RED_MAIN
+    suncBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    suncBtn.Text = _("RunSUNCTest")
+    suncBtn.TextScaled = true
+    suncBtn.Font = Enum.Font.GothamBold
+    suncBtn.BorderSizePixel = 0
+    suncBtn.ZIndex = 51
+    suncBtn.Parent = frame
+    suncBtn.AutoButtonColor = false
+
+    local resultTitle = Instance.new("TextLabel")
+    resultTitle.Size = UDim2.new(1, -20, 0, 20)
+    resultTitle.Position = UDim2.new(0, 10, 0, 194)
+    resultTitle.BackgroundTransparency = 1
+    resultTitle.TextColor3 = RED_MAIN
+    resultTitle.Text = _("TestResult") .. ":"
+    resultTitle.TextScaled = true
+    resultTitle.Font = Enum.Font.GothamBold
+    resultTitle.TextXAlignment = Enum.TextXAlignment.Left
+    resultTitle.ZIndex = 51
+    resultTitle.Parent = frame
+
+    local resultScroll = Instance.new("ScrollingFrame")
+    resultScroll.Size = UDim2.new(1, -20, 1, -240)
+    resultScroll.Position = UDim2.new(0, 10, 0, 218)
+    resultScroll.BackgroundColor3 = RED_DARK
+    resultScroll.BorderSizePixel = 1
+    resultScroll.BorderColor3 = RED_MAIN
+    resultScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    resultScroll.ScrollBarThickness = 4
+    resultScroll.ScrollBarImageColor3 = RED_MAIN
+    resultScroll.ZIndex = 51
+    resultScroll.Parent = frame
+
+    local resultLabel = Instance.new("TextLabel")
+    resultLabel.Size = UDim2.new(1, -10, 0, 200)
+    resultLabel.Position = UDim2.new(0, 5, 0, 5)
+    resultLabel.BackgroundTransparency = 1
+    resultLabel.TextColor3 = RED_MAIN
+    resultLabel.TextWrapped = true
+    resultLabel.TextXAlignment = Enum.TextXAlignment.Left
+    resultLabel.TextYAlignment = Enum.TextYAlignment.Top
+    resultLabel.TextSize = 12
+    resultLabel.Font = Enum.Font.Gotham
+    resultLabel.Text = "Нажми UNC или sUNC чтобы запустить тест..."
+    resultLabel.ZIndex = 52
+    resultLabel.Parent = resultScroll
+
+    local function UpdateResults(passed, failed, results)
+        resultLabel.Text = string.format("Passed: %d | Failed: %d\n\n", passed, failed)
+        for _, line in ipairs(results) do
+            resultLabel.Text = resultLabel.Text .. line .. "\n"
+        end
+        resultLabel.Size = UDim2.new(1, -10, 0, math.max(20, (#results + 3) * 16))
+        resultScroll.CanvasSize = UDim2.new(0, 0, 0, #results * 16 + 50)
+    end
+
+    uncBtn.MouseButton1Click:Connect(function()
+        resultLabel.Text = _("Testing")
+        local passed, failed, results = RunUNCTest()
+        UpdateResults(passed, failed, results)
+    end)
+
+    suncBtn.MouseButton1Click:Connect(function()
+        resultLabel.Text = _("Testing")
+        local passed, failed, results = RunSUNCTest()
+        UpdateResults(passed, failed, results)
+    end)
+end
+
+infoBtn.MouseButton1Click:Connect(ShowExecutorInfo)
 
 local function ShowCustomColor()
     local frame = Instance.new("Frame")
@@ -4683,9 +5010,6 @@ local function ShowCustomColor()
     closeBtn.MouseButton1Click:Connect(function() frame:Destroy() end)
 end
 
-customBtn.MouseButton1Click:Connect(ShowCustomScript)
-playerBtn.MouseButton1Click:Connect(ShowPlayerList)
-serverBtn.MouseButton1Click:Connect(ShowServerInfo)
 colorBtn.MouseButton1Click:Connect(ShowCustomColor)
 
 local themeOrder = {"Red", "Blue", "Green", "Purple", "Pink", "Orange", "Cyan", "Yellow", "Lime", "Magenta", "White", "Rainbow", "Custom"}
@@ -4711,7 +5035,7 @@ local function ApplyTheme(themeName)
     titleBar.BackgroundColor3 = RED_TITLE
     titleLabel.TextColor3 = RED_MAIN
 
-    for _, btn in ipairs({closeButton, langButton, playerBtn, serverBtn, customBtn, changelogButton, themeBtn, colorBtn, sortBtn}) do
+    for _, btn in ipairs({closeButton, langButton, playerBtn, serverBtn, customBtn, changelogButton, themeBtn, colorBtn, infoBtn}) do
         btn.BackgroundColor3 = RED_DARK
         btn.TextColor3 = RED_MAIN
         btn.BorderColor3 = RED_MAIN
@@ -4733,7 +5057,6 @@ local function ApplyTheme(themeName)
         btn.BorderColor3 = RED_MAIN
     end
 
-    -- ========== ФИКС 7.0.2: dragStrip обновляется под тему ==========
     for _, entry in ipairs(buttons) do
         entry.Container.BackgroundColor3 = RED_BG
         entry.Container.BorderColor3 = RED_MAIN
@@ -4742,9 +5065,7 @@ local function ApplyTheme(themeName)
         entry.Star.TextColor3 = RED_MAIN
         entry.Star.BorderColor3 = RED_MAIN
         entry.AutoBtn.BorderColor3 = RED_MAIN
-        if entry.DragStrip then
-            entry.DragStrip.BackgroundColor3 = RED_MAIN
-        end
+        if entry.DragStrip then entry.DragStrip.BackgroundColor3 = RED_MAIN end
         if getgenv().XyqwAutoExec[entry.Data.Name] then
             entry.AutoBtn.BackgroundColor3 = RED_MAIN
             entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -4760,6 +5081,7 @@ local function ApplyTheme(themeName)
     urlTestContainer.BorderColor3 = RED_MAIN
     settingsContainer.BorderColor3 = RED_MAIN
     resetOrderContainer.BorderColor3 = RED_MAIN
+    antiKickContainer.BorderColor3 = RED_MAIN
     destroyContainer.BorderColor3 = RED_MAIN
     removeTagsBtn.TextColor3 = RED_MAIN
     shareFavBtn.TextColor3 = RED_MAIN
@@ -4768,6 +5090,7 @@ local function ApplyTheme(themeName)
     settingsBtn.TextColor3 = RED_MAIN
     resetOrderBtn.TextColor3 = RED_MAIN
     destroyBtnMain.TextColor3 = RED_MAIN
+    UpdateAntiKickText()
 
     topBar.BackgroundColor3 = RED_BG
     topBar.BorderColor3 = RED_MAIN
@@ -4807,7 +5130,7 @@ task.spawn(function()
             mainFrame.BorderColor3 = c
             titleBar.BackgroundColor3 = Color3.fromHSV(hue, 0.8, 0.08)
             titleLabel.TextColor3 = c
-            for _, btn in ipairs({closeButton, langButton, playerBtn, serverBtn, customBtn, changelogButton, themeBtn, colorBtn, sortBtn}) do
+            for _, btn in ipairs({closeButton, langButton, playerBtn, serverBtn, customBtn, changelogButton, themeBtn, colorBtn, infoBtn}) do
                 btn.BackgroundColor3 = darkHue
                 btn.TextColor3 = c
                 btn.BorderColor3 = c
@@ -4827,7 +5150,6 @@ task.spawn(function()
                     btn.BorderColor3 = c
                 end
             end
-            -- ========== ФИКС 7.0.2: dragStrip в Rainbow ==========
             for _, entry in ipairs(buttons) do
                 entry.Container.BorderColor3 = c
                 entry.Btn.TextColor3 = c
@@ -4835,9 +5157,7 @@ task.spawn(function()
                 entry.Star.BorderColor3 = c
                 entry.Star.BackgroundColor3 = darkHue
                 entry.AutoBtn.BorderColor3 = c
-                if entry.DragStrip then
-                    entry.DragStrip.BackgroundColor3 = c
-                end
+                if entry.DragStrip then entry.DragStrip.BackgroundColor3 = c end
                 if getgenv().XyqwAutoExec[entry.Data.Name] then
                     entry.AutoBtn.BackgroundColor3 = c
                     entry.AutoBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -4852,6 +5172,7 @@ task.spawn(function()
             urlTestContainer.BorderColor3 = c
             settingsContainer.BorderColor3 = c
             resetOrderContainer.BorderColor3 = c
+            antiKickContainer.BorderColor3 = c
             destroyContainer.BorderColor3 = c
             removeTagsBtn.TextColor3 = c
             shareFavBtn.TextColor3 = c
@@ -4875,6 +5196,7 @@ task.spawn(function()
         task.wait(0.05)
     end
 end)
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard then
@@ -4977,7 +5299,6 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 closeButton.MouseButton1Click:Connect(CloseGui)
-
 local function ShowWelcomeMessage()
     local frame = Instance.new("Frame")
     frame.Name = "WelcomeFrame"
@@ -5080,14 +5401,14 @@ local function ShowWelcomeMessage()
     scroll.Position = UDim2.new(0, 5, 0, 116)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 900)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 950)
     scroll.ScrollBarThickness = 4
     scroll.ScrollBarImageColor3 = RED_MAIN
     scroll.ZIndex = 101
     scroll.Parent = frame
 
     local doc = Instance.new("TextLabel")
-    doc.Size = UDim2.new(1, -10, 0, 890)
+    doc.Size = UDim2.new(1, -10, 0, 940)
     doc.Position = UDim2.new(0, 5, 0, 0)
     doc.BackgroundTransparency = 1
     doc.TextColor3 = RED_MAIN
@@ -5096,68 +5417,49 @@ local function ShowWelcomeMessage()
     doc.TextYAlignment = Enum.TextYAlignment.Top
     doc.TextSize = 10
     doc.Font = Enum.Font.Gotham
-    doc.Text = "─── TITLE BAR ───\n" ..
-        "Th  — Theme (cycle 13 themes)\n" ..
-        "CC  — Custom Color picker\n" ..
+    doc.Text = "─── 7.1.0 НОВОЕ ───\n" ..
+        "★ Кнопка Info (вместо A-Z)\n" ..
+        "   - Executor Info (имя, версия, функции)\n" ..
+        "   - UNC тест (26 проверок)\n" ..
+        "   - sUNC тест (36 проверок)\n" ..
+        "★ Кнопка AntiKick: ON/OFF внизу\n" ..
+        "   - Авто-перезаход при Kick\n" ..
+        "\n─── TITLE BAR ───\n" ..
+        "Th  — Theme (13 тем)\n" ..
+        "CC  — Custom Color\n" ..
         "CL  — ChangeLog\n" ..
-        "C   — Custom Script (paste URL)\n" ..
+        "C   — Custom Script\n" ..
         "P   — Players List\n" ..
         "S   — Server Info\n" ..
-        "EN/RU/UK/BE/KK — Languages (click to cycle)\n" ..
-        "X   — Close (goes to dock button)\n" ..
+        "EN/RU/UK/BE/KK — Языки\n" ..
+        "X   — Close\n" ..
         "\n─── TOP BAR ───\n" ..
         "Executor | Username | FPS | Ping\n" ..
-        "H — Hide / Show top bar\n" ..
-        "Drag top bar to move it\n" ..
-        "\n─── SEARCH & SORT ───\n" ..
-        "Search bar — filter scripts by name\n" ..
-        "A-Z button — cycle: A-Z / Z-A / Rct\n" ..
+        "H — Hide / Show\n" ..
+        "\n─── SEARCH ───\n" ..
+        "Search bar — фильтр по имени\n" ..
+        "Info — инфо об экзекьюторе + UNC/sUNC\n" ..
         "\n─── TABS ───\n" ..
-        "All  — all 48 scripts\n" ..
-        "BB   — Blade Ball scripts\n" ..
-        "MM2  — Murder Mystery 2 scripts\n" ..
-        "INK  — Ink Game scripts\n" ..
-        "Misc — Universal/miscellaneous scripts\n" ..
-        "Fav  — only favorites (star)\n" ..
-        "Rct  — recently used (last 5)\n" ..
+        "All / BB / MM2 / INK / Misc / Fav / Rct\n" ..
         "\n─── SCRIPT BUTTONS ───\n" ..
-        "▶ / Auto — toggle Auto-Execute\n" ..
-        "☆ / ★    — add/remove from Favorites\n" ..
+        "▶ / Auto — Auto-Execute\n" ..
+        "☆ / ★    — Favorites\n" ..
         "Click name — run script\n" ..
-        "Hold 0.35s on DRAG STRIP (left, 25px) — reorder\n" ..
-        "Drag strip is in theme color (RED_MAIN)  ← NEW in 7.0.2\n" ..
-        "\n─── BOTTOM BUTTONS (All tab) ───\n" ..
-        "Remove Tags      — remove OWNER/TESTER tags\n" ..
-        "Test URLs        — check all script URLs (green/red)\n" ..
-        "Settings         — Auto-Hide keybind\n" ..
-        "Reset Order      — restore default script order\n" ..
-        "Destroy XyqwHub  — full unload\n" ..
-        "\n─── Fav TAB ───\n" ..
-        "Share Favorite Scripts — copy list to clipboard\n" ..
-        "\n─── Rct TAB ───\n" ..
-        "Share Recent Scripts — copy list to clipboard\n" ..
+        "Hold 0.35s on drag strip — reorder\n" ..
+        "Drag strip в цвете темы\n" ..
+        "\n─── BOTTOM BUTTONS ───\n" ..
+        "Remove Tags, Test URLs, Settings,\n" ..
+        "Reset Order, AntiKick: ON/OFF, Destroy\n" ..
         "\n─── AUTO-HIDE ───\n" ..
-        "Default bind: RightShift\n" ..
-        "Change in Settings\n" ..
-        "Hides/shows whole GUI\n" ..
+        "Default: RightShift\n" ..
         "\n─── THEMES ───\n" ..
         "Red, Blue, Green, Purple, Pink, Orange,\n" ..
         "Cyan, Yellow, Lime, Magenta, White,\n" ..
         "Rainbow, Custom\n" ..
-        "Click Th to cycle\n" ..
-        "\n─── CUSTOM COLOR ───\n" ..
-        "R/G/B sliders (0-255)\n" ..
-        "HEX input (#FF0000)\n" ..
-        "Presets: Cyan, Pink, Orange, Lime, Gold, White\n" ..
-        "Apply / Reset / Share Color\n" ..
         "\n─── RESIZE ───\n" ..
         "Drag bottom-right red square\n" ..
         "Min: 280x340, Max: 900x1000\n" ..
-        "\n─── DOCK BUTTON ───\n" ..
-        "Appears when GUI closed\n" ..
-        "Click — reopen GUI\n" ..
-        "Drag — move it\n" ..
-        "\n─── FILES (saved) ───\n" ..
+        "\n─── FILES ───\n" ..
         "XyqwHub/FavScripts/favorites.json\n" ..
         "XyqwHub/RctScripts/recent.json\n" ..
         "XyqwHub/CustomColor/custom_color.json\n" ..
@@ -5200,5 +5502,3 @@ task.spawn(function()
     if IsOwner() then ShowRobloxNotification(_("OwnerWelcome"), 5)
     elseif IsBeta() then ShowRobloxNotification(_("BetaWelcome"), 5) end
 end)
-
-
