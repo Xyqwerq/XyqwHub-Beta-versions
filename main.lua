@@ -1,4 +1,4 @@
--- ========== XyqwHub - Версия 6.7 ==========
+-- ========== XyqwHub - Версия 6.8 ==========
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
 })
@@ -13,8 +13,10 @@ if getgenv().XyqwHubRunning then
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "6.7"
--- === ФИКС: гарантированная инициализация ===
+local VERSION = "6.8"
+local OWNER_IDS = {4396977722, 8527910367}
+local BETA_IDS = {9686718765, 3701387385}
+
 if getgenv().XyqwLanguage == nil then getgenv().XyqwLanguage = "EN" end
 if getgenv().XyqwTheme == nil or type(getgenv().XyqwTheme) ~= "string" then getgenv().XyqwTheme = "Red" end
 if getgenv().TopBarHidden == nil then getgenv().TopBarHidden = false end
@@ -27,9 +29,6 @@ if not getgenv().XyqwSettings.sortMode then getgenv().XyqwSettings.sortMode = "d
 if not getgenv().XyqwSettings.autoHideBind then getgenv().XyqwSettings.autoHideBind = "RightShift" end
 if not getgenv().XyqwSettings.urlStatus then getgenv().XyqwSettings.urlStatus = {} end
 if getgenv().XyqwCustomColor == nil then getgenv().XyqwCustomColor = {r = 255, g = 0, b = 0, dr = 40, dg = 0, db = 0} end
--- === КОНЕЦ ФИКСА ===
-local OWNER_IDS = {4396977722, 8527910367}
-local BETA_IDS = {9686718765, 3701387385}
 
 local CONFIG_FOLDER = "XyqwHub"
 local FAV_FILE = CONFIG_FOLDER .. "/FavScripts/favorites.json"
@@ -84,10 +83,6 @@ if getgenv().XyqwCustomColor == nil then
     end
 end
 
-if getgenv().XyqwLanguage == nil then getgenv().XyqwLanguage = "EN" end
-if getgenv().XyqwTheme == nil then getgenv().XyqwTheme = "Red" end
-if getgenv().TopBarHidden == nil then getgenv().TopBarHidden = false end
-
 local THEMES = {
     Red = {MAIN = Color3.fromRGB(255, 0, 0), DARK = Color3.fromRGB(40, 0, 0), BG = Color3.fromRGB(0, 0, 0), TITLE = Color3.fromRGB(20, 0, 0)},
     Blue = {MAIN = Color3.fromRGB(0, 140, 255), DARK = Color3.fromRGB(0, 20, 50), BG = Color3.fromRGB(0, 0, 0), TITLE = Color3.fromRGB(0, 10, 25)},
@@ -104,10 +99,20 @@ local THEMES = {
     Custom = {MAIN = Color3.fromRGB(255, 0, 0), DARK = Color3.fromRGB(40, 0, 0), BG = Color3.fromRGB(0, 0, 0), TITLE = Color3.fromRGB(20, 0, 0)},
 }
 
-local RED_MAIN = THEMES[getgenv().XyqwTheme].MAIN
-local RED_DARK = THEMES[getgenv().XyqwTheme].DARK
-local RED_BG = THEMES[getgenv().XyqwTheme].BG
-local RED_TITLE = THEMES[getgenv().XyqwTheme].TITLE
+local currentTheme = THEMES[getgenv().XyqwTheme]
+if not currentTheme then
+    getgenv().XyqwTheme = "Red"
+    currentTheme = THEMES.Red
+end
+local RED_MAIN = currentTheme.MAIN
+local RED_DARK = currentTheme.DARK
+local RED_BG = currentTheme.BG
+local RED_TITLE = currentTheme.TITLE
+
+local URL_OK = Color3.fromRGB(0, 255, 100)
+local URL_BAD = Color3.fromRGB(255, 50, 50)
+local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
+local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
 local LANG = {
     EN = {
@@ -134,6 +139,14 @@ local LANG = {
         ChangeLogText = [[XyqwHub ChangeLog
 
 ========================================
+Version 6.8
+========================================
+- Fixed URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (were missing)
+- Fixed theme nil crash
+- Added getgenv() initialization at start
+- All previous fixes kept
+
+========================================
 Version 6.7
 ========================================
 - Rewritten from scratch
@@ -155,68 +168,80 @@ Version 6.5
 ========================================
 - Fixed: script now runs only on tap, not on drag release
 - blockClick flag added
-- ZIndex added to containers, text, dots
+- ZIndex added to containers (1), text (2), dots (3)
 
 ========================================
 Version 6.4
 ========================================
 - Script names now centered
-- Drag highlight no longer burns the button
-- Added Reset Order button
-- Version bump system
+- Drag highlight no longer burns the button (uses border instead)
+- Added Reset Order button (restores default script order)
+- Version bump system: every fix/change -> new version
+- ChangeLog updated on every change
 
 ========================================
 Version 6.3
 ========================================
-- Removed Blacklist completely
-- Fixed header layout at startup
-- Added smooth animations
-- Added drag & drop (hold 0.35s)
-- Script order saved to Settings/order.json
+- Removed Blacklist completely (button, window, files, checks)
+- Fixed header layout at startup (buttons no longer shift)
+- Added smooth animations (hover, open/close, color transitions)
+- Added drag & drop for script buttons (hold 0.35s to reorder)
+- Script order is now saved to Settings/order.json
+- Updated welcome message with new controls
+- Full changelog restored for all languages
 
 ========================================
 Version 6.2
 ========================================
 - Fixed blacklist x not removing item
+- Fixed "Script unblacklisted" notification
 - Full changelog for all languages
+- All UI translated (except social media)
 
 ========================================
 Version 6.1
 ========================================
-- Fixed blacklist refreshing
+- Fixed blacklist refreshing (list now updates instantly)
 
 ========================================
 Version 6.0
 ========================================
 - Added 5 languages: EN, RU, UK, BE, KK
 - Welcome message restored
+- Translated all notifications
 
 ========================================
 Version 5.9
 ========================================
 - X button moved to right corner
-- Top bar drag support
+- Added drag support for top bar
 
 ========================================
 Version 5.6
 ========================================
-- Removed rounded corners
-- Default tab is "All"
+- Removed rounded corners (all buttons squared)
+- Default tab is now "All"
+- Fixed tab switching
 
 ========================================
 Version 5.5
 ========================================
-- Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+- Added Auto Execute (▶ button on each script)
+- Added Auto Hide (bind to hide/show GUI)
+- Added URL Tester (checks if script URLs work)
+- Added Sorting (A-Z, Z-A, Recent)
+- Added Settings window
 
 ========================================
 Version 5.4
 ========================================
-- Auto Execute Scripts on join
-- Script Blacklist
-- Auto Hide GUI
-- URL Tester (green/red)
-- Script Sorting
-- Share Fav/Rct
+- Auto Execute Scripts (starts on game join)
+- Script Blacklist (hide unwanted scripts)
+- Auto Hide GUI (custom keybind)
+- URL Tester (green/red indicators)
+- Script Sorting (A-Z / Z-A / Recent)
+- Share Favorite Scripts (Fav tab only)
+- Share Recent Scripts (Rct tab only)
 
 ========================================
 Version 5.3
@@ -237,13 +262,12 @@ Version 5.1
 ========================================
 Version 5.0
 ========================================
-- Custom Color instant
+- Custom Color instant apply
 
 ========================================
 Version 4.9
 ========================================
-- Welcome smaller + scroll
-- 13 themes
+- Welcome smaller + scroll, 13 themes
 
 ========================================
 Version 4.8
@@ -278,32 +302,46 @@ Version 4.3
 ========================================
 Version 4.2
 ========================================
-- Minified style
+- Rewrote code in minified style
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme function
-- Rainbow animated
-- Resize corner
-- Small start 250x300
-- All buttons squared
-- 1 row of buttons
-- Hide Top Bar toggle
-- FPS/Ping top bar
-- Draggable top bar and dock
+- ApplyTheme(themeName) — theme switch function
+- themeOrder + themeIndex — theme cycling
+- ExtractURL(input.Text) — URL extraction from loadstring
+- SpecialContainer — container for Remove Tags + Destroy
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow theme — animated hue shift
+- Resize in bottom right corner
+- Small start size 250x300
+- All buttons squared (no UICorner)
+- Bright red instead of yellow
+- Buttons in 1 row
+- Removed GetTheme(), colors direct
+- Hide Top Bar toggles (H/S)
+- FPS/Ping in top bar
+- TopBar draggable
+- DockButton draggable
+- Search bar
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites (star)
+- Favorites system (★)
 - Recently used
+- Script history
 - Custom script runner
 - Player list
 - Server info + Copy JobId
 - Anti-AFK
+- Re-launch protection
 - 46 scripts
+- Doors V2 (Copy) — clipboard copy
+- Doors V3 (Cheesy) — regular
+- Doors v4 — regular
 
 ========================================
 Version 4.1
 ========================================
 - Fixed buttons overlap
 - Returned red border, red background, red text
-- Added resize handle
+- Added resize handle (bottom right)
 - Added Hide Top Bar toggle
 - Small start size
 
@@ -312,14 +350,18 @@ Version 4.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
 - Search bar
-- Tabs
-- Favorites
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
 - Recently used
+- Script history
 - Theme switcher
 - Custom script runner
-- Player list, Server info
+- Player list
+- Server info
 - Copy JobId
-- Animations, Keybinds, Anti-AFK
+- Animations
+- Keybinds
+- Anti-AFK
 
 ========================================
 Version 3.9
@@ -328,43 +370,50 @@ Version 3.9
 - Added Doors v4
 - Added Kiti (MM2)
 - Renamed BETA tag to Tester
-- Updated changelog canvas
+- Updated changelog canvas (1600 -> 1700)
 
 ========================================
 Version 3.8
 ========================================
 - Fixed tag not restoring after respawn
-- Tag now uses CharacterAdded + task.wait
+- Tag now uses CharacterAdded + task.wait properly
+- Renamed BETA tag to Tester
 
 ========================================
 Version 3.7
 ========================================
 - Added tester tag (blue gradient)
 - Added tester welcome message
-- Added 2 testers
+- Added 2 testers (9686718765, 3701387385)
 
 ========================================
 Version 3.6
 ========================================
 - Fixed accidental button clicks in title bar
 - Added cooldown for ChangeLog and language buttons
+- Added Active property to title buttons
 
 ========================================
 Version 3.5
 ========================================
 - Added owner-only welcome message
+- "Welcome, my father :3"
 
 ========================================
 Version 3.4
 ========================================
-- Darker red color for tag
+- Darker red color for tag (200,0,0 and 60,0,0)
 - Normal background for Remove/Destroy buttons
+- Normal border for Remove/Destroy buttons
 
 ========================================
 Version 3.3
 ========================================
 - Fixed tag size (no longer stretches)
-- Fixed gradient (via Rotation)
+- Fixed gradient (now works via Rotation)
+- Gradient visible for everyone
+- Fixed text position
+- Fixed text size (smaller, not stretched)
 - Added UIStroke glow
 
 ========================================
@@ -379,6 +428,8 @@ Version 3.1
 ========================================
 - Completely rewrote tag system
 - Tag is now attached to HumanoidRootPart
+- Added Heartbeat-based positioning
+- Fixed scanning logic
 
 ========================================
 Version 3.0
@@ -392,7 +443,8 @@ Version 2.9
 ========================================
 - Added XyqwHub OWNER tag
 - Added "Remove XyqwHub Tag" button
-- Added 2 owner accounts
+- Added gradient animation for owner tag
+- Added 2 owner accounts (4396977722, 8527910367)
 
 ========================================
 Version 2.8
@@ -407,11 +459,13 @@ Version 2.7
 - Roblox notifications (bottom right)
 - ChangeLog button added
 - Loading / Loaded notifications
+- Tag visible for everyone with XyqwHub
 
 ========================================
 Version 2.6
 ========================================
 - Notifications moved to bottom right
+- New notification system
 
 ========================================
 Version 2.5
@@ -419,12 +473,14 @@ Version 2.5
 - All messages translated to EN/RU
 - Re-launch protection
 - Fixed language change button
+- Owner welcome message
 
 ========================================
 Version 2.4
 ========================================
 - Re-launch protection added
 - DESTROY button resets the flag
+- Owner-only welcome message
 
 ========================================
 Version 2.3
@@ -456,6 +512,7 @@ Version 2.0
 Version 1.9
 ========================================
 - Added key for Doors V3 (Cheesy)
+- "Key: joincheesedsc"
 
 ========================================
 Version 1.8
@@ -481,6 +538,7 @@ Version 1.6
 Version 1.5
 ========================================
 - EN/RU hint at top and bottom of welcome
+- LangHintTop + LangHintBottom
 
 ========================================
 Version 1.4
@@ -537,6 +595,14 @@ Version 1.0
         ChangeLogText = [[XyqwHub Ченджлог
 
 ========================================
+Версия 6.8
+========================================
+- Фикс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (были потеряны)
+- Фикс краша темы (nil)
+- Добавлена инициализация getgenv() в начале
+- Все предыдущие фиксы сохранены
+
+========================================
 Версия 6.7
 ========================================
 - Переписан с нуля
@@ -556,70 +622,82 @@ Version 1.0
 ========================================
 Версия 6.5
 ========================================
-- Фикс: скрипт запускается только по тапу
+- Фикс: скрипт запускается только по тапу, не при отпускании после drag
 - Добавлен флаг blockClick
-- ZIndex на контейнерах, тексте, точках
+- ZIndex на контейнерах (1), тексте (2), точках (3)
 
 ========================================
 Версия 6.4
 ========================================
-- Названия скриптов по центру
-- Подсветка при drag не «подгорает»
-- Добавлена кнопка Reset Order
-- Система версий
+- Названия скриптов теперь по центру
+- Подсветка при drag больше не «подгорает» (используется рамка)
+- Добавлена кнопка Reset Order (сброс порядка скриптов)
+- Система версий: каждое изменение → новая версия
+- ChangeLog обновляется при каждом изменении
 
 ========================================
 Версия 6.3
 ========================================
-- Blacklist удалён
-- Фикс заголовка при запуске
-- Плавные анимации
-- Drag & drop (hold 0.35s)
-- Порядок в Settings/order.json
+- Blacklist удалён полностью (кнопка, окно, файлы, проверки)
+- Фикс заголовка при запуске (кнопки больше не съезжают)
+- Добавлены плавные анимации (hover, открытие/закрытие, смена цвета)
+- Добавлено перетаскивание кнопок скриптов (зажми 0.35 сек)
+- Порядок скриптов сохраняется в Settings/order.json
+- Обновлено приветственное окно с новым описанием
+- Полный ченджлог восстановлен для всех языков
 
 ========================================
 Версия 6.2
 ========================================
-- Фикс × в чёрном списке
-- Полный ченджлог
+- Фикс × в чёрном списке (не удалялся)
+- Фикс уведомления "Скрипт убран из чёрного списка!"
+- Полный ченджлог для всех языков
+- Весь UI переведён (кроме соцсетей)
 
 ========================================
 Версия 6.1
 ========================================
-- Фикс обновления чёрного списка
+- Фикс обновления чёрного списка (теперь обновляется мгновенно)
 
 ========================================
 Версия 6.0
 ========================================
-- 5 языков: EN, RU, UK, BE, KK
-- Возвращено приветствие
+- Добавлено 5 языков: EN, RU, UK, BE, KK
+- Возвращено приветственное сообщение
+- Переведены все уведомления
 
 ========================================
 Версия 5.9
 ========================================
-- X в правый угол
-- Перетаскивание топ-бара
+- Кнопка X перенесена в правый угол
+- Добавлена поддержка перетаскивания топ-бара
 
 ========================================
 Версия 5.6
 ========================================
-- Убраны скругления
-- Базовая вкладка All
+- Убраны скругления (все кнопки квадратные)
+- Базовая вкладка теперь "All"
+- Фикс переключения вкладок
 
 ========================================
 Версия 5.5
 ========================================
-- Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+- Добавлен Auto Execute (кнопка ▶ у каждого скрипта)
+- Добавлен Auto Hide (бинд для скрытия/показа GUI)
+- Добавлен URL Tester (проверка ссылок на работоспособность)
+- Добавлена сортировка (A-Z, Z-A, Недавние)
+- Добавлено окно настроек
 
 ========================================
 Версия 5.4
 ========================================
-- Авто-запуск скриптов
-- Чёрный список
-- Auto Hide GUI
-- URL Tester (зелёный/красный)
-- Сортировка
-- Share Fav/Rct
+- Авто-запуск скриптов (запуск при входе в игру)
+- Чёрный список скриптов (скрыть ненужные)
+- Auto Hide GUI (свой бинд)
+- URL Tester (зелёные/красные индикаторы)
+- Сортировка скриптов (A-Z / Z-A / Недавние)
+- Share Favorite Scripts (только Fav)
+- Share Recent Scripts (только Rct)
 
 ========================================
 Версия 5.3
@@ -680,32 +758,46 @@ Version 1.0
 ========================================
 Версия 4.2
 ========================================
-- Минифицированный стиль
+- Код переписан в минифицированном стиле
 - THEMES = {Red, Blue, Rainbow}
-- ApplyTheme
-- Rainbow анимация
-- Ресайз в углу
+- ApplyTheme(themeName) — смена темы
+- themeOrder + themeIndex — переключение тем
+- ExtractURL(input.Text) — извлечение URL из loadstring
+- SpecialContainer — контейнер для Remove Tags + Destroy
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow тема — анимация перелива
+- Ресайз в правом нижнем углу
 - Стартовое окно 250x300
-- Квадратные кнопки
+- Все кнопки квадратные (нет UICorner)
+- Ярко-красный вместо жёлтого
 - Кнопки в 1 ряд
-- Hide Top Bar
+- Убран GetTheme(), цвета напрямую
+- Hide Top Bar переключается (H/S)
 - FPS/Ping в топ-баре
-- Перетаскивание top bar и dock
+- TopBar перетаскивается
+- DockButton перетаскивается
+- Search bar
 - Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
-- Favorites (звезда)
+- Favorites system (★)
 - Recently used
+- Script history
 - Custom script runner
 - Player list
 - Server info + Copy JobId
 - Anti-AFK
+- Re-launch protection
 - 46 скриптов
+- Doors V2 (Copy) — копирование в буфер
+- Doors V3 (Cheesy) — обычный
+- Doors v4 — обычный
 
 ========================================
 Версия 4.1
 ========================================
 - Фикс наложения кнопок
 - Возвращён красный бордер, фон, текст
-- Добавлен ресайз
+- Добавлен ресайз (правый нижний угол)
 - Добавлен Hide Top Bar
 - Маленький стартовый размер
 
@@ -714,14 +806,18 @@ Version 1.0
 ========================================
 - Top bar (executor, name, FPS, Ping)
 - Search bar
-- Tabs
-- Favorites
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
 - Recently used
+- Script history
 - Theme switcher
 - Custom script runner
-- Player list, Server info
+- Player list
+- Server info
 - Copy JobId
-- Animations, Keybinds, Anti-AFK
+- Animations
+- Keybinds
+- Anti-AFK
 
 ========================================
 Версия 3.9
@@ -730,42 +826,50 @@ Version 1.0
 - Добавлен Doors v4
 - Добавлен Kiti (MM2)
 - BETA тег переименован в Tester
+- Canvas ченджлога (1600 → 1700)
 
 ========================================
 Версия 3.8
 ========================================
 - Фикс восстановления тега после респавна
 - Тег использует CharacterAdded + task.wait
+- BETA тег переименован в Tester
 
 ========================================
 Версия 3.7
 ========================================
 - Добавлен тег тестера (синий градиент)
 - Добавлено приветствие для тестеров
-- Добавлено 2 тестера
+- Добавлено 2 тестера (9686718765, 3701387385)
 
 ========================================
 Версия 3.6
 ========================================
 - Фикс случайных кликов по кнопкам в заголовке
 - Добавлен кулдаун для ChangeLog и языка
+- Добавлен Active для кнопок заголовка
 
 ========================================
 Версия 3.5
 ========================================
 - Добавлено приветствие только для владельца
+- "Welcome, my father :3"
 
 ========================================
 Версия 3.4
 ========================================
-- Более тёмный красный для тега
+- Более тёмный красный для тега (200,0,0 и 60,0,0)
 - Обычный фон для Remove/Destroy
+- Обычный бордер для Remove/Destroy
 
 ========================================
 Версия 3.3
 ========================================
-- Фикс размера тега
-- Фикс градиента (через Rotation)
+- Фикс размера тега (больше не растягивается)
+- Фикс градиента (работает через Rotation)
+- Градиент виден всем
+- Фикс позиции текста
+- Фикс размера текста (меньше, не растянут)
 - Добавлен UIStroke glow
 
 ========================================
@@ -780,6 +884,8 @@ Version 1.0
 ========================================
 - Полностью переписана система тегов
 - Тег привязан к HumanoidRootPart
+- Добавлено позиционирование через Heartbeat
+- Фикс логики сканирования
 
 ========================================
 Версия 3.0
@@ -793,7 +899,8 @@ Version 1.0
 ========================================
 - Добавлен XyqwHub OWNER тег
 - Добавлена кнопка "Remove XyqwHub Tag"
-- Добавлено 2 owner аккаунта
+- Добавлена анимация градиента для owner тега
+- Добавлено 2 owner аккаунта (4396977722, 8527910367)
 
 ========================================
 Версия 2.8
@@ -808,11 +915,13 @@ Version 1.0
 - Roblox уведомления (правый нижний угол)
 - Добавлена кнопка ChangeLog
 - Loading / Loaded уведомления
+- Тег виден всем с XyqwHub
 
 ========================================
 Версия 2.6
 ========================================
 - Уведомления перемещены в правый нижний угол
+- Новая система уведомлений
 
 ========================================
 Версия 2.5
@@ -820,12 +929,14 @@ Version 1.0
 - Все сообщения переведены EN/RU
 - Re-launch protection
 - Фикс кнопки смены языка
+- Приветствие для владельца
 
 ========================================
 Версия 2.4
 ========================================
 - Добавлен Re-launch protection
 - Кнопка DESTROY сбрасывает флаг
+- Приветствие только для владельца
 
 ========================================
 Версия 2.3
@@ -857,6 +968,7 @@ Version 1.0
 Версия 1.9
 ========================================
 - Добавлен ключ для Doors V3 (Cheesy)
+- "Key: joincheesedsc"
 
 ========================================
 Версия 1.8
@@ -882,6 +994,7 @@ Version 1.0
 Версия 1.5
 ========================================
 - EN/RU подсказка сверху и снизу welcome
+- LangHintTop + LangHintBottom
 
 ========================================
 Версия 1.4
@@ -938,6 +1051,14 @@ Version 1.0
         ChangeLogText = [[XyqwHub Журнал
 
 ========================================
+Версія 6.8
+========================================
+- Фікс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (були втрачені)
+- Фікс краша теми (nil)
+- Додано ініціалізацію getgenv() на початку
+- Всі попередні фікси збережено
+
+========================================
 Версія 6.7
 ========================================
 - Переписано з нуля
@@ -951,7 +1072,7 @@ Version 1.0
 Версія 6.6
 ========================================
 - Фікс перетягування (btn.InputBegan)
-- Анімації відкриття/закриття GUI
+- Анімації відкриття/закриття GUI (scale + fade)
 - blockClick захист
 
 ========================================
@@ -1337,6 +1458,14 @@ Version 1.0
         ShareHub = "Падзяліцца XyqwHub", HideTopBar = "Схаваць панэль", HideTopBarOn = "Схаваць: УКЛ",
         HideTopBarOff = "Схаваць: ВЫКЛ", OrderSaved = "Парадак захаваны!", OrderReset = "Парадак скінуты!",
         ChangeLogText = [[XyqwHub Чэйнджлог
+
+========================================
+Версія 6.8
+========================================
+- Фікс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (былі страчаны)
+- Фікс краша тэмы (nil)
+- Дададзена ініцыялізацыя getgenv() у пачатку
+- Усе папярэднія фіксы захаваны
 
 ========================================
 Версія 6.7
@@ -1740,6 +1869,14 @@ Version 1.0
         ChangeLogText = [[XyqwHub Өзгерістер
 
 ========================================
+6.8 нұсқасы
+========================================
+- URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING түзетілді (жоғалған)
+- Түс құлдырауы түзетілді (nil)
+- getgenv() инициализациясы қосылды
+- Барлық алдыңғы түзетулер сақталды
+
+========================================
 6.7 нұсқасы
 ========================================
 - Нөлден қайта жазылды
@@ -1787,8 +1924,7 @@ Version 1.0
 - Толық өзгерістер
 
 ========================================
-6.1 нұсқасы
-========================================
+6.1 нұсқасы========================================
 - Қара тізім жаңарту түзетілді
 
 ========================================
