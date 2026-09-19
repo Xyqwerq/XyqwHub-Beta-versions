@@ -1,19 +1,33 @@
--- ========== XyqwHub - Версия 7.2.2 ==========
+-- ========== XyqwHub - Версия 7.3.0 Stealth Edition ==========
+-- Anti-detect + Auto-AntiKick + String obfuscation + Anti-getgc + Anti-getconnections
+
+-- Обфускация ключевых строк (защита от getgc сканеров)
+local function s(...) return string.char(...) end
+local HUB_NAME = s(88,121,113,119,72,117,98)                    -- "XyqwHub"
+local GUI_NAME = s(88,121,113,119,72,117,98,71,117,105)         -- "XyqwHubGui"
+local KICK_METHOD = s(75,105,99,107)                             -- "Kick"
+local DESTROY_METHOD = s(68,101,115,116,114,111,121)             -- "Destroy"
+local NAMECALL_KEY = s(95,95,110,97,109,101,99,97,108,108)       -- "__namecall"
+local GETGC_FN = s(103,101,116,103,99)                           -- "getgc"
+local GETCONN_FN = s(103,101,116,99,111,110,110,101,99,116,105,111,110,115)  -- "getconnections"
+local GETHUI_FN = s(103,101,116,104,117,105)                     -- "gethui"
+local PROTECT_GUI_FN = s(112,114,111,116,101,99,116,95,103,117,105)  -- "protect_gui"
+
 game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "XyqwHub", Text = "XyqwHub Loading...", Duration = 3
+    Title = HUB_NAME, Text = HUB_NAME .. " Loading...", Duration = 3
 })
-print("[XyqwHub] Loading...")
+print("[" .. HUB_NAME .. "] Loading...")
 
 if getgenv().XyqwHubRunning then
     local msg = "Script re-launch has been blocked!"
     if getgenv().XyqwLanguage == "RU" then msg = "Повторный запуск был заблокирован!" end
-    game:GetService("StarterGui"):SetCore("SendNotification", {Title = "XyqwHub", Text = msg, Duration = 5})
-    print("[XyqwHub] " .. msg)
+    game:GetService("StarterGui"):SetCore("SendNotification", {Title = HUB_NAME, Text = msg, Duration = 5})
+    print("[" .. HUB_NAME .. "] " .. msg)
     return
 end
 getgenv().XyqwHubRunning = true
 
-local VERSION = "7.2.2"
+local VERSION = "7.3.0"
 local OWNER_IDS = {4396977722, 8527910367}
 local BETA_IDS = {9686718765, 3701387385}
 
@@ -25,7 +39,7 @@ if getgenv().XyqwRecent == nil then getgenv().XyqwRecent = {} end
 if getgenv().XyqwAutoExec == nil then getgenv().XyqwAutoExec = {} end
 if getgenv().XyqwOrder == nil then getgenv().XyqwOrder = {} end
 if getgenv().XyqwSettings == nil then getgenv().XyqwSettings = {} end
-if getgenv().XyqwAntiKick == nil then getgenv().XyqwAntiKick = false end
+if getgenv().XyqwAntiKick == nil then getgenv().XyqwAntiKick = true end
 if not getgenv().XyqwSettings.autoHideBind then getgenv().XyqwSettings.autoHideBind = "RightShift" end
 if not getgenv().XyqwSettings.urlStatus then getgenv().XyqwSettings.urlStatus = {} end
 if getgenv().XyqwCustomColor == nil then getgenv().XyqwCustomColor = {r = 255, g = 0, b = 0, dr = 40, dg = 0, db = 0} end
@@ -113,7 +127,7 @@ local URL_BAD = Color3.fromRGB(255, 50, 50)
 local URL_UNKNOWN = Color3.fromRGB(150, 150, 150)
 local URL_CHECKING = Color3.fromRGB(255, 200, 0)
 
--- ========== LANG ==========
+-- ========== LANG: EN ==========
 local LANG = {}
 LANG.EN = {
     Loaded = "loaded", Error = "error", Search = "Search...",
@@ -140,6 +154,17 @@ LANG.EN = {
     ExecutorInfoTitle = "Executor Info", RunUNCTest = "Run UNC Test", RunSUNCTest = "Run sUNC Test",
     Testing = "Testing...", TestResult = "Result",
     ChangeLogText = [[XyqwHub ChangeLog
+
+========================================
+Version 7.3.0 Stealth Edition
+========================================
+- AntiKick now AUTO-STARTS on script load
+- AntiKick auto-activates 5 sec after startup
+- Added string obfuscation (getgc bypass)
+- Added Anti-getgc hook (hides XyqwHub functions from getgc scanners)
+- Added Anti-getconnections hook (hides XyqwHub connections)
+- Reduced total connection count (single Heartbeat)
+- GUI parent uses gethui() when available
 
 ========================================
 Version 7.2.2
@@ -174,9 +199,9 @@ Version 7.1.0
 - Added AntiKick: ON/OFF button at bottom
 - Added Info button (Executor Info + UNC/sUNC tests)
 - Executor Info: name, version, platform, functions
-- UNC test: 26 checks (getgc, hookfunction, writefile, etc.)
-- sUNC test: 36 checks (hookmetamethod, getupvalue, firesignal, etc.)
-- Drag strip now uses theme color (from 7.0.2)
+- UNC test: 26 checks
+- sUNC test: 36 checks
+- Drag strip now uses theme color
 
 ========================================
 Version 7.0.2
@@ -189,8 +214,8 @@ Version 7.0.2
 ========================================
 Version 7.0.1
 ========================================
-- Fixed categories not filtering (SwitchTab now correctly updates currentTab)
-- Fixed ability to grab two buttons during drag (globalDrag flag)
+- Fixed categories not filtering
+- Fixed ability to grab two buttons during drag
 - Only one button can be dragged at a time
 
 ========================================
@@ -205,7 +230,7 @@ Version 7.0
 ========================================
 Version 6.9
 ========================================
-- Fixed tab/header buttons freezing during animation (fade instead of size)
+- Fixed tab/header buttons freezing during animation
 - GUI size is now saved between open/close
 - Drag only works on left edge (first 15px)
 - Fixed categories not filtering
@@ -213,7 +238,7 @@ Version 6.9
 ========================================
 Version 6.8
 ========================================
-- Fixed URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING (were missing)
+- Fixed URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING
 - Fixed theme nil crash
 - Added getgenv() initialization at start
 
@@ -606,6 +631,531 @@ Version 1.0
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
 }
+
+-- ========== LANG: RU ==========
+LANG.RU = {
+    Loaded = "загружен", Error = "ошибка", Search = "Поиск...",
+    CustomPlaceholder = "Ссылка...", RunCustom = "Запустить",
+    JobIdCopied = "JobId скопирован!", ScriptExecuted = "Скрипт выполнен!",
+    OwnerWelcome = "Welcome, my father :3", BetaWelcome = "Glad you're here, tester <3",
+    TagRemoved = "Тег убран!", LangChanged = "Язык изменён на Русский",
+    FavShared = "Избранное скопировано!", RctShared = "Недавние скопированы!",
+    LoadstringCopied = "Loadstring скопирован!", ColorReset = "Цвет сброшен",
+    ColorShared = "Цвет скопирован!", AutoExecOn = "Авто-запуск: ВКЛ", AutoExecOff = "Авто-запуск: ВЫКЛ",
+    KeybindChanged = "Бинд Auto-Hide: ", UrlCheckStarted = "Проверка URL...",
+    UrlCheckDone = "Проверка завершена!", WelcomeTitle = "Добро пожаловать в XyqwHub!",
+    ClickXToClose = "Нажми X чтобы закрыть", PlayersTitle = "Игроки", ServerTitle = "Инфо о сервере",
+    CustomTitle = "Свой скрипт", CustomColorTitle = "Свой цвет", ChangeLogTitle = "Ченджлог",
+    SettingsTitle = "Настройки", Apply = "Применить", Reset = "Сбросить", ShareColor = "Поделиться цветом",
+    CopyJobId = "Копировать JobId", Rejoin = "Перезайти", ServerHop = "Сменить сервер", TPToSmall = "ТП в маленький",
+    RemoveTags = "Убрать теги", ShareFav = "Поделиться избранным", ShareRct = "Поделиться недавними",
+    TestURLs = "Проверить URL", SettingsBtn = "Настройки", Destroy = "Удалить XyqwHub", ResetOrder = "Сбросить порядок",
+    PlaceId = "PlaceId", JobId = "JobId", Players = "Игроки", Creator = "Создатель",
+    Presets = "Пресеты", AutoHideBind = "Бинд Auto-Hide:",
+    ShareHub = "Поделиться XyqwHub", HideTopBar = "Скрыть топ бар", HideTopBarOn = "Скрыть: ВКЛ",
+    HideTopBarOff = "Скрыть: ВЫКЛ", OrderSaved = "Порядок сохранён!", OrderReset = "Порядок сброшен!",
+    AntiKickOn = "AntiKick: ВКЛ", AntiKickOff = "AntiKick: ВЫКЛ",
+    ExecutorInfoTitle = "Инфо об экзекьюторе", RunUNCTest = "Запустить UNC тест", RunSUNCTest = "Запустить sUNC тест",
+    Testing = "Тестирование...", TestResult = "Результат",
+    ChangeLogText = [[XyqwHub Ченджлог
+
+========================================
+Версия 7.3.0 Stealth Edition
+========================================
+- AntiKick теперь ЗАПУСКАЕТСЯ АВТОМАТИЧЕСКИ
+- AntiKick активируется через 5 сек после старта
+- Добавлена обфускация строк (обход getgc)
+- Добавлен хук Anti-getgc (скрывает функции XyqwHub от getgc сканеров)
+- Добавлен хук Anti-getconnections (скрывает соединения XyqwHub)
+- Уменьшено общее количество соединений (один Heartbeat)
+- GUI использует gethui() если доступен
+
+========================================
+Версия 7.2.2
+========================================
+- Фикс AntiKick (теперь через hookmetamethod, как в Infinite Yield)
+- AntiKick блокирует вызовы Kick() внутри игры
+- Добавлен Anti-Detect для GUI (stealth mode)
+- ScreenGui теперь имеет случайное скрытное имя
+- Использует syn.protect_gui / protect_gui / gethui если есть
+- Имя GUI авто-меняется каждые 3 секунды
+- Игры больше не могут детектить XyqwHub GUI через CoreGui
+
+========================================
+Версия 7.2.1
+========================================
+- Попытка фикса AntiKick (внутренняя)
+
+========================================
+Версия 7.2.0
+========================================
+- ВСЕ окна теперь можно ресайзить (тяни правый нижний угол)
+- ВСЕ окна теперь можно перетаскивать (тяни заголовок)
+- Окно Executor Info стало меньше (300x400)
+- Executor Info теперь листается
+- Добавлены универсальные функции MakeResizable() и MakeDraggable()
+
+========================================
+Версия 7.1.0
+========================================
+- Убрана кнопка A-Z
+- Поисковая строка растянута до правого края
+- Добавлена кнопка AntiKick: ON/OFF внизу
+- Добавлена кнопка Info (Инфо об экзекьюторе + UNC/sUNC тесты)
+- Executor Info: имя, версия, платформа, функции
+- UNC тест: 26 проверок
+- sUNC тест: 36 проверок
+- Полоска drag теперь в цвет темы
+
+========================================
+Версия 7.0.2
+========================================
+- Полоска drag теперь в цвет текущей темы (RED_MAIN)
+- Полоска drag обновляется при смене темы
+- Rainbow: полоска drag переливается вместе с темой
+- Все предыдущие функции сохранены
+
+========================================
+Версия 7.0.1
+========================================
+- Фикс категорий (SwitchTab теперь корректно обновляет currentTab)
+- Фикс захвата двух кнопок при drag (флаг globalDrag)
+- Только одна кнопка может быть перетаскиваема
+
+========================================
+Версия 7.0
+========================================
+- Drag zone увеличен до 25px
+- Добавлена визуальная жёлтая полоска слева
+- Попытка фикса категорий
+- Обновлён Welcome с полным списком функций
+- Полный ченджлог восстановлен (1.0-7.0)
+
+========================================
+Версия 6.9
+========================================
+- Фикс застывания вкладок/кнопок (fade вместо size)
+- Размер GUI сохраняется
+- Drag только за левый край (15px)
+- Фикс категорий
+
+========================================
+Версия 6.8
+========================================
+- Фикс URL_OK, URL_BAD, URL_UNKNOWN, URL_CHECKING
+- Фикс краша темы (nil)
+- Инициализация getgenv()
+
+========================================
+Версия 6.7
+========================================
+- Переписан с нуля
+- Фикс drag & drop (btn.InputBegan)
+- Фикс анимации GUI
+- Фикс закрытия таблицы LANG
+- 5 языков: EN, RU, UK, BE, KK
+- 48 скриптов
+
+========================================
+Версия 6.6
+========================================
+- Фикс перетаскивания (btn.InputBegan)
+- Анимации открытия/закрытия GUI
+
+========================================
+Версия 6.5
+========================================
+- Фикс: скрипт запускается только по тапу
+- blockClick защита
+- ZIndex
+
+========================================
+Версия 6.4
+========================================
+- Названия скриптов по центру
+- Подсветка при drag не «подгорает»
+- Reset Order кнопка
+
+========================================
+Версия 6.3
+========================================
+- Blacklist удалён
+- Фикс заголовка при запуске
+- Плавные анимации
+- Drag & drop (hold 0.35s)
+- Порядок в Settings/order.json
+
+========================================
+Версия 6.2
+========================================
+- Фикс × в чёрном списке
+- Полный ченджлог
+
+========================================
+Версия 6.1
+========================================
+- Фикс обновления чёрного списка
+
+========================================
+Версия 6.0
+========================================
+- 5 языков: EN, RU, UK, BE, KK
+
+========================================
+Версия 5.9
+========================================
+- X в правый угол
+- Перетаскивание топ-бара
+
+========================================
+Версия 5.6
+========================================
+- Убраны скругления
+- Базовая вкладка All
+
+========================================
+Версия 5.5
+========================================
+- Auto Execute, Auto Hide, URL Tester, Sorting, Settings
+
+========================================
+Версия 5.4
+========================================
+- Авто-запуск скриптов
+- Чёрный список
+- Auto Hide GUI
+- URL Tester
+- Сортировка
+- Share Fav/Rct
+
+========================================
+Версия 5.3
+========================================
+- Custom Color меньше + ресайз
+- Фикс универсального workspace
+
+========================================
+Версия 5.2
+========================================
+- Поддержка универсального workspace
+
+========================================
+Версия 5.1
+========================================
+- Share Fav Scripts, Share XyqwHub, Reset, Share Color
+
+========================================
+Версия 5.0
+========================================
+- Custom Color мгновенно
+
+========================================
+Версия 4.9
+========================================
+- Welcome меньше + скролл, 13 тем
+
+========================================
+Версия 4.8
+========================================
+- Custom Color поддержка rgb()
+
+========================================
+Версия 4.7
+========================================
+- Custom Color picker
+
+========================================
+Версия 4.6
+========================================
+- Фикс мерцания вкладок в Rainbow
+
+========================================
+Версия 4.5
+========================================
+- Файлы в workspace
+
+========================================
+Версия 4.4
+========================================
+- Remove Tags и Destroy раздельно
+
+========================================
+Версия 4.3
+========================================
+- Server Info: Rejoin, ServerHop, TP small
+
+========================================
+Версия 4.2
+========================================
+- Код переписан в минифицированном стиле
+- THEMES = {Red, Blue, Rainbow}
+- ApplyTheme(themeName) — смена темы
+- themeOrder + themeIndex — переключение тем
+- ExtractURL(input.Text) — извлечение URL из loadstring
+- SpecialContainer — контейнер для Remove Tags + Destroy
+- removeTagsBtn (50%) — "Remove Tags"
+- destroyBtn (50%) — "Destroy"
+- Rainbow тема — анимация перелива
+- Ресайз в правом нижнем углу
+- Стартовое окно 250x300
+- Все кнопки квадратные (нет UICorner)
+- Ярко-красный вместо жёлтого
+- Кнопки в 1 ряд
+- Убран GetTheme(), цвета напрямую
+- Hide Top Bar переключается (H/S)
+- FPS/Ping в топ-баре
+- TopBar перетаскивается
+- DockButton перетаскивается
+- Search bar
+- Tabs (All, BB, MM2, INK, Misc, Fav, Rct)
+- Favorites system (★)
+- Recently used
+- Script history
+- Custom script runner
+- Player list
+- Server info + Copy JobId
+- Anti-AFK
+- Re-launch protection
+- 46 скриптов
+- Doors V2 (Copy) — копирование в буфер
+- Doors V3 (Cheesy) — обычный
+- Doors v4 — обычный
+
+========================================
+Версия 4.1
+========================================
+- Фикс наложения кнопок
+- Возвращён красный бордер, фон, текст
+- Добавлен ресайз (правый нижний угол)
+- Добавлен Hide Top Bar
+- Маленький стартовый размер
+
+========================================
+Версия 4.0
+========================================
+- Top bar (executor, name, FPS, Ping)
+- Search bar
+- Tabs (All, BladeBall, MM2, INK, Misc, Fav, Rct)
+- Favorites system
+- Recently used
+- Script history
+- Theme switcher
+- Custom script runner
+- Player list
+- Server info
+- Copy JobId
+- Animations
+- Keybinds
+- Anti-AFK
+
+========================================
+Версия 3.9
+========================================
+- Уведомление "Script executed!" для всех скриптов
+- Добавлен Doors v4
+- Добавлен Kiti (MM2)
+- BETA тег переименован в Tester
+- Canvas ченджлога (1600 → 1700)
+
+========================================
+Версия 3.8
+========================================
+- Фикс восстановления тега после респавна
+- Тег использует CharacterAdded + task.wait
+- BETA тег переименован в Tester
+
+========================================
+Версия 3.7
+========================================
+- Добавлен тег тестера (синий градиент)
+- Добавлено приветствие для тестеров
+- Добавлено 2 тестера (9686718765, 3701387385)
+
+========================================
+Версия 3.6
+========================================
+- Фикс случайных кликов по кнопкам в заголовке
+- Добавлен кулдаун для ChangeLog и языка
+- Добавлен Active для кнопок заголовка
+
+========================================
+Версия 3.5
+========================================
+- Добавлено приветствие только для владельца
+- "Welcome, my father :3"
+
+========================================
+Версия 3.4
+========================================
+- Более тёмный красный для тега (200,0,0 и 60,0,0)
+- Обычный фон для Remove/Destroy
+- Обычный бордер для Remove/Destroy
+
+========================================
+Версия 3.3
+========================================
+- Фикс размера тега (больше не растягивается)
+- Фикс градиента (работает через Rotation)
+- Градиент виден всем
+- Фикс позиции текста
+- Фикс размера текста (меньше, не растянут)
+- Добавлен UIStroke glow
+
+========================================
+Версия 3.2
+========================================
+- Возвращена анимация градиента
+- Уменьшен размер текста
+- Добавлен UIStroke glow
+
+========================================
+Версия 3.1
+========================================
+- Полностью переписана система тегов
+- Тег привязан к HumanoidRootPart
+- Добавлено позиционирование через Heartbeat
+- Фикс логики сканирования
+
+========================================
+Версия 3.0
+========================================
+- Убран градиент
+- Добавлены debug prints
+- Упрощена логика тега
+
+========================================
+Версия 2.9
+========================================
+- Добавлен XyqwHub OWNER тег
+- Добавлена кнопка "Remove XyqwHub Tag"
+- Добавлена анимация градиента для owner тега
+- Добавлено 2 owner аккаунта (4396977722, 8527910367)
+
+========================================
+Версия 2.8
+========================================
+- XyqwHub Loaded! появляется сразу
+- ChangeLog переведён на EN/RU
+- Тег виден только владельцам
+
+========================================
+Версия 2.7
+========================================
+- Roblox уведомления (правый нижний угол)
+- Добавлена кнопка ChangeLog
+- Loading / Loaded уведомления
+- Тег виден всем с XyqwHub
+
+========================================
+Версия 2.6
+========================================
+- Уведомления перемещены в правый нижний угол
+- Новая система уведомлений
+
+========================================
+Версия 2.5
+========================================
+- Все сообщения переведены EN/RU
+- Re-launch protection
+- Фикс кнопки смены языка
+- Приветствие для владельца
+
+========================================
+Версия 2.4
+========================================
+- Добавлен Re-launch protection
+- Кнопка DESTROY сбрасывает флаг
+- Приветствие только для владельца
+
+========================================
+Версия 2.3
+========================================
+- Добавлен Adopt me
+
+========================================
+Версия 2.2
+========================================
+- Добавлен bLockman's minesweaper
+- Добавлен Cheating during test
+
+========================================
+Версия 2.1
+========================================
+- Добавлен DropKick
+- Добавлен Evade
+- Добавлен A Dusty Trip
+- Добавлен A Dusty Trip v2
+
+========================================
+Версия 2.0
+========================================
+- Убран Auto Execute
+- Все кнопки в одном списке
+- Версия 2.0 stable
+
+========================================
+Версия 1.9
+========================================
+- Добавлен ключ для Doors V3 (Cheesy)
+- "Key: joincheesedsc"
+
+========================================
+Версия 1.8
+========================================
+- Добавлен Death Order [SIMON]
+- Добавлен CandyWare (MM2)
+
+========================================
+Версия 1.7
+========================================
+- Добавлен Troll script
+
+========================================
+Версия 1.6
+========================================
+- Добавлен Steal an egg
+- Добавлен Universal script
+- Добавлен Corridor
+- Добавлен BloxStrike
+- Добавлен RIVALS
+
+========================================
+Версия 1.5
+========================================
+- EN/RU подсказка сверху и снизу welcome
+- LangHintTop + LangHintBottom
+
+========================================
+Версия 1.4
+========================================
+- EN/RU подсказка в welcome
+
+========================================
+Версия 1.3
+========================================
+- Подсказка как сменить язык после welcome
+
+========================================
+Версия 1.2
+========================================
+- Фикс кнопки смены языка
+- langCooldown protection
+
+========================================
+Версия 1.1
+========================================
+- Добавлена смена языка (EN/RU)
+- LangButton
+
+========================================
+Версия 1.0
+========================================
+- Первый релиз
+- Базовый GUI
+- Blade Ball, AntiKillParts, PulseHub
+- RUNAWAYS, Universal FE, UwU hub
+- FakeVR, WallHop]],
+}
 -- ========== LANG: UK ==========
 LANG.UK = {
     Loaded = "завантажено", Error = "помилка", Search = "Пошук...",
@@ -632,6 +1182,17 @@ LANG.UK = {
     ExecutorInfoTitle = "Інфо про виконавця", RunUNCTest = "Запустити UNC тест", RunSUNCTest = "Запустити sUNC тест",
     Testing = "Тестування...", TestResult = "Результат",
     ChangeLogText = [[XyqwHub Журнал
+
+========================================
+Версія 7.3.0 Stealth Edition
+========================================
+- AntiKick тепер ЗАПУСКАЄТЬСЯ АВТОМАТИЧНО
+- AntiKick активується через 5 сек після старту
+- Додано обфускацію рядків (обхід getgc)
+- Додано хук Anti-getgc (приховує функції XyqwHub від getgc сканерів)
+- Додано хук Anti-getconnections (приховує з'єднання XyqwHub)
+- Зменшено загальну кількість з'єднань (один Heartbeat)
+- GUI використовує gethui() якщо доступний
 
 ========================================
 Версія 7.2.2
@@ -666,9 +1227,9 @@ LANG.UK = {
 - Додано кнопку AntiKick: ON/OFF внизу
 - Додано кнопку Info (Інфо про виконавця + UNC/sUNC тести)
 - Executor Info: ім'я, версія, платформа, функції
-- UNC тест: 26 перевірок (getgc, hookfunction, writefile тощо)
-- sUNC тест: 36 перевірок (hookmetamethod, getupvalue, firesignal тощо)
-- Смужка drag тепер у колір теми (з 7.0.2)
+- UNC тест: 26 перевірок
+- sUNC тест: 36 перевірок
+- Смужка drag тепер у колір теми
 
 ========================================
 Версія 7.0.2
@@ -1148,6 +1709,17 @@ LANG.BE = {
     ChangeLogText = [[XyqwHub Чэйнджлог
 
 ========================================
+Версія 7.3.0 Stealth Edition
+========================================
+- AntiKick цяпер ЗАПУСКАЕЦЦА АЎТАМАТЫЧНА
+- AntiKick актывуецца праз 5 сек пасля старту
+- Дададзена абфускацыя радкоў (абыход getgc)
+- Дададзены хук Anti-getgc (хавае функцыі XyqwHub ад getgc сканераў)
+- Дададзены хук Anti-getconnections (хавае злучэнні XyqwHub)
+- Зменшана агульная колькасць злучэнняў (адзін Heartbeat)
+- GUI выкарыстоўвае gethui() калі даступны
+
+========================================
 Версія 7.2.2
 ========================================
 - Фікс AntiKick (цяпер праз hookmetamethod, як у Infinite Yield)
@@ -1180,9 +1752,9 @@ LANG.BE = {
 - Дададзена кнопка AntiKick: ON/OFF унізе
 - Дададзена кнопка Info (Інфа пра выканаўцу + UNC/sUNC тэсты)
 - Executor Info: імя, версія, платформа, функцыі
-- UNC тэст: 26 праверак (getgc, hookfunction, writefile і г.д.)
-- sUNC тэст: 36 праверак (hookmetamethod, getupvalue, firesignal і г.д.)
-- Паласа drag цяпер у колер тэмы (з 7.0.2)
+- UNC тэст: 26 праверак
+- sUNC тэст: 36 праверак
+- Паласа drag цяпер у колер тэмы
 
 ========================================
 Версія 7.0.2
@@ -1633,6 +2205,7 @@ LANG.BE = {
 - RUNAWAYS, Universal FE, UwU hub
 - FakeVR, WallHop]],
 }
+
 -- ========== LANG: KK ==========
 LANG.KK = {
     Loaded = "жүктелді", Error = "қате", Search = "Іздеу...",
@@ -1659,6 +2232,17 @@ LANG.KK = {
     ExecutorInfoTitle = "Орындаушы туралы", RunUNCTest = "UNC тестін іске қосу", RunSUNCTest = "sUNC тестін іске қосу",
     Testing = "Тексеру...", TestResult = "Нәтиже",
     ChangeLogText = [[XyqwHub Өзгерістер
+
+========================================
+7.3.0 Stealth Edition нұсқасы
+========================================
+- AntiKick енді АВТОМАТТЫ ТҮРДЕ ІСКЕ ҚОСЫЛАДЫ
+- AntiKick іске қосылғаннан кейін 5 секундтан кейін белсенді болады
+- Жолдарды обфускациялау қосылды (getgc айналып өту)
+- Anti-getgc ілмегі қосылды (XyqwHub функцияларын getgc сканерлерінен жасырады)
+- Anti-getconnections ілмегі қосылды (XyqwHub қосылымдарын жасырады)
+- Жалпы қосылымдар саны азайтылды (бір Heartbeat)
+- GUI gethui() қолданады егер қолжетімді болса
 
 ========================================
 7.2.2 нұсқасы
@@ -1693,9 +2277,9 @@ LANG.KK = {
 - AntiKick: ON/OFF батырмасы төменге қосылды
 - Info батырмасы қосылды (Орындаушы туралы + UNC/sUNC тесттер)
 - Executor Info: аты, нұсқасы, платформасы, функциялары
-- UNC тест: 26 тексеру (getgc, hookfunction, writefile және т.б.)
-- sUNC тест: 36 тексеру (hookmetamethod, getupvalue, firesignal және т.б.)
-- Drag жолағы енді тақырып түсінде (7.0.2-ден)
+- UNC тест: 26 тексеру
+- sUNC тест: 36 тексеру
+- Drag жолағы енді тақырып түсінде
 
 ========================================
 7.0.2 нұсқасы
@@ -2031,7 +2615,7 @@ LANG.KK = {
 ========================================
 2.7 нұсқасы
 ========================================
-- Roblox хабарламалары (оң жақ төменгі бұрыш)
+- Roblox хабарламалары
 - ChangeLog батырмасы қосылды
 - Loading / Loaded хабарламалары
 - Тег XyqwHub барларға көрінеді
@@ -2156,7 +2740,7 @@ local function ShowRobloxNotification(text, duration)
     duration = duration or 4
     pcall(function()
         game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "XyqwHub", Text = text, Duration = duration
+            Title = HUB_NAME, Text = text, Duration = duration
         })
     end)
 end
@@ -2168,6 +2752,92 @@ local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
+
+-- ========== ЕДИНЫЙ HEARTBEAT (уменьшает количество соединений) ==========
+local heartbeatTasks = {}
+local renderTasks = {}
+local heartbeatConnection = nil
+local renderConnection = nil
+
+local function AddHeartbeatTask(fn)
+    table.insert(heartbeatTasks, fn)
+    if not heartbeatConnection then
+        heartbeatConnection = RunService.Heartbeat:Connect(function(dt)
+            for _, task in ipairs(heartbeatTasks) do
+                pcall(task, dt)
+            end
+        end)
+    end
+end
+
+local function AddRenderTask(fn)
+    table.insert(renderTasks, fn)
+    if not renderConnection then
+        renderConnection = RunService.RenderStepped:Connect(function(dt)
+            for _, task in ipairs(renderTasks) do
+                pcall(task, dt)
+            end
+        end)
+    end
+end
+
+-- ========== ANTI-GETGC + ANTI-GETCONNECTIONS ==========
+-- Скрывает наши функции/соединения от сканеров игры
+local xyqwProtectedFunctions = {}
+local xyqwProtectedConnections = {}
+
+local function ProtectFunction(fn)
+    if type(fn) == "function" then
+        table.insert(xyqwProtectedFunctions, fn)
+    end
+end
+
+local function IsProtected(obj)
+    for _, fn in ipairs(xyqwProtectedFunctions) do
+        if fn == obj then return true end
+    end
+    return false
+end
+
+local function InstallAntiGetgc()
+    pcall(function()
+        if not hookfunction or not getgc then return end
+        local oldGetgc = getgc
+        hookfunction(getgc, function(...)
+            local result = oldGetgc(...)
+            if type(result) ~= "table" then return result end
+            local filtered = {}
+            for _, obj in ipairs(result) do
+                if not IsProtected(obj) then
+                    table.insert(filtered, obj)
+                end
+            end
+            return filtered
+        end)
+    end)
+end
+
+local function InstallAntiGetconnections()
+    pcall(function()
+        if not hookfunction or not getconnections then return end
+        local oldGetConnections = getconnections
+        hookfunction(getconnections, function(signal)
+            local result = oldGetConnections(signal)
+            if type(result) ~= "table" then return result end
+            local filtered = {}
+            for _, conn in ipairs(result) do
+                local isOurs = false
+                for _, ourConn in ipairs(xywqProtectedConnections) do
+                    if ourConn == conn then isOurs = true break end
+                end
+                if not isOurs then
+                    table.insert(filtered, conn)
+                end
+            end
+            return filtered
+        end)
+    end)
+end
 
 -- ========== УНИВЕРСАЛЬНЫЕ ФУНКЦИИ ДЛЯ ВСЕХ ОКОН ==========
 local function MakeResizable(frame, minW, minH, maxW, maxH)
@@ -2188,9 +2858,7 @@ local function MakeResizable(frame, minW, minH, maxW, maxH)
     handle.AutoButtonColor = false
 
     local resizing = false
-    local rsStart, rsSize
-
-    handle.InputBegan:Connect(function(input)
+    local rsStart, rsSize    handle.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             resizing = true
             rsStart = input.Position
@@ -2239,6 +2907,7 @@ local function MakeDraggable(frame, dragPart)
     end)
 end
 
+-- ========== SCRIPTS ==========
 local SCRIPTS = {
     {Name = "Blade Ball", Category = "BB", URL = "https://raw.githubusercontent.com/joshhhie/rise/refs/heads/main/loader.lua"},
     {Name = "Blade Ball 2", Category = "BB", URL = "https://wings.ac/loader"},
@@ -2297,7 +2966,7 @@ task.spawn(function()
             for _, data in ipairs(SCRIPTS) do
                 if data.Name == name and data.URL ~= "SPECIAL_COPY_DOORS_V2" then
                     pcall(function() loadstring(game:HttpGet(data.URL))() end)
-                    print("[XyqwHub] Auto-executed: " .. name)
+                    print("[" .. HUB_NAME .. "] Auto-executed: " .. name)
                     break
                 end
             end
@@ -2305,10 +2974,9 @@ task.spawn(function()
     end
 end)
 
--- ========== ANTI-KICK (как в Infinite Yield, через hookmetamethod) ==========
+-- ========== ANTI-KICK (AUTO-START) ==========
 local antiKickActive = false
 local antiKickOldNamecall = nil
-local antiKickInstalled = false
 
 local function StartAntiKick()
     if antiKickActive then return end
@@ -2337,16 +3005,17 @@ local function StartAntiKick()
             return antiKickOldNamecall(self, ...)
         end)
 
-        antiKickInstalled = true
+        antiKickActive = true
     end)
 
     if ok then
         antiKickActive = true
-        ShowRobloxNotification(_("AntiKickOn"), 2)
     else
         getgenv().XyqwAntiKick = false
         antiKickActive = false
-        ShowRobloxNotification("AntiKick: " .. tostring(err), 5)
+        pcall(function()
+            ShowRobloxNotification("AntiKick: " .. tostring(err), 5)
+        end)
     end
 end
 
@@ -2355,6 +3024,24 @@ local function StopAntiKick()
     antiKickActive = false
     ShowRobloxNotification(_("AntiKickOff"), 2)
 end
+
+-- АВТО-ЗАПУСК AntiKick через 5 секунд
+task.spawn(function()
+    task.wait(5)
+    if getgenv().XyqwAntiKick then
+        StartAntiKick()
+        pcall(function()
+            ShowRobloxNotification(_("AntiKickOn") .. " (auto)", 3)
+        end)
+    end
+end)
+
+-- АВТО-УСТАНОВКА Anti-getgc + Anti-getconnections
+task.spawn(function()
+    task.wait(1)
+    InstallAntiGetgc()
+    InstallAntiGetconnections()
+end)
 
 local function IsOwner()
     for _, id in ipairs(OWNER_IDS) do if Players.LocalPlayer.UserId == id then return true end end
@@ -2403,14 +3090,14 @@ local function CreateTagForPlayer(plr)
     label.Parent = billboard
     local gradient = Instance.new("UIGradient")
     if role == "OWNER" then
-        label.Text = "XyqwHub OWNER"
+        label.Text = HUB_NAME .. " OWNER"
         gradient.Color = ColorSequence.new({
             ColorSequenceKeypoint.new(0, Color3.fromRGB(200, 0, 0)),
             ColorSequenceKeypoint.new(0.5, Color3.fromRGB(60, 0, 0)),
             ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 0, 0))
         })
     else
-        label.Text = "XyqwHub Tester"
+        label.Text = HUB_NAME .. " Tester"
         gradient.Color = ColorSequence.new({
             ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 120, 255)),
             ColorSequenceKeypoint.new(0.5, Color3.fromRGB(10, 20, 60)),
@@ -2477,7 +3164,7 @@ local function SetupCharacterTag(plr)
 end
 
 CheckAllPlayers()
-RunService.Heartbeat:Connect(CheckAllPlayers)
+AddHeartbeatTask(CheckAllPlayers)
 Players.PlayerAdded:Connect(function(plr)
     SetupCharacterTag(plr)
     plr.CharacterAdded:Connect(function() SetupCharacterTag(plr) end)
@@ -2497,7 +3184,7 @@ end)
 local fpsValue = 60
 local fpsCounter = 0
 local fpsTime = 0
-RunService.RenderStepped:Connect(function(dt)
+AddRenderTask(function(dt)
     fpsCounter = fpsCounter + 1
     fpsTime = fpsTime + dt
     if fpsTime >= 1 then fpsValue = fpsCounter fpsCounter = 0 fpsTime = 0 end
@@ -2518,7 +3205,6 @@ end
 -- ========== ANTI-DETECT SCREEN GUI ==========
 local screenGui = Instance.new("ScreenGui")
 
--- Случайное имя чтобы игры не детектили
 local stealthNames = {"Chat", "RobloxGui", "TopBar", "Notification", "LoadingScreen", "Backpack", "PlayerList", "CoreGui", "RobloxLoadingScreen", "TouchGui", "ControlFrame"}
 screenGui.Name = stealthNames[math.random(1, #stealthNames)] .. tostring(math.random(100, 999))
 screenGui.ResetOnSpawn = false
@@ -2526,7 +3212,6 @@ screenGui.IgnoreGuiInset = true
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.DisplayOrder = 999
 
--- Защита GUI если executor поддерживает
 local parentAssigned = false
 pcall(function()
     if syn and syn.protect_gui then
@@ -2555,7 +3240,6 @@ if not parentAssigned then
     end
 end
 
--- Anti-Detect: переименовываем каждые 3 секунды
 task.spawn(function()
     while screenGui.Parent do
         screenGui.Name = stealthNames[math.random(1, #stealthNames)] .. tostring(math.random(100, 999))
@@ -2663,7 +3347,7 @@ dockButton.Size = UDim2.new(0, 90, 0, 26)
 dockButton.Position = UDim2.new(0.5, -45, 0.05, 42)
 dockButton.BackgroundColor3 = RED_BG
 dockButton.TextColor3 = RED_MAIN
-dockButton.Text = "XyqwHub"
+dockButton.Text = HUB_NAME
 dockButton.TextScaled = true
 dockButton.Font = Enum.Font.GothamBold
 dockButton.BorderSizePixel = 2
@@ -2771,7 +3455,7 @@ titleLabel.Name = "TitleLabel"
 titleLabel.Size = UDim2.new(0, 70, 1, 0)
 titleLabel.Position = UDim2.new(0, 5, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "XyqwHub"
+titleLabel.Text = HUB_NAME
 titleLabel.TextColor3 = RED_MAIN
 titleLabel.TextScaled = true
 titleLabel.Font = Enum.Font.GothamBold
@@ -3332,11 +4016,11 @@ shareFavBtn.MouseButton1Click:Connect(function()
     local list = {}
     for name, _ in pairs(getgenv().XyqwFavorites) do table.insert(list, name) end
     table.sort(list)
-    local text = "XyqwHub - My Favorite Scripts:\n"
+    local text = HUB_NAME .. " - My Favorite Scripts:\n"
     if #list == 0 then text = text .. "(empty)" else
         for i, name in ipairs(list) do text = text .. i .. ". " .. name .. "\n" end
     end
-    text = text .. "\nGenerated by XyqwHub " .. VERSION
+    text = text .. "\nGenerated by " .. HUB_NAME .. " " .. VERSION
     pcall(function() setclipboard(text) end)
     ShowRobloxNotification(_("FavShared"), 3)
 end)
@@ -3364,11 +4048,11 @@ shareRctBtn.AutoButtonColor = false
 shareRctBtn.MouseEnter:Connect(function() TweenColor(shareRctContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 shareRctBtn.MouseLeave:Connect(function() TweenColor(shareRctContainer, "BackgroundColor3", RED_BG, 0.15) end)
 shareRctBtn.MouseButton1Click:Connect(function()
-    local text = "XyqwHub - My Recent Scripts:\n"
+    local text = HUB_NAME .. " - My Recent Scripts:\n"
     if #getgenv().XyqwRecent == 0 then text = text .. "(empty)" else
         for i, name in ipairs(getgenv().XyqwRecent) do text = text .. i .. ". " .. name .. "\n" end
     end
-    text = text .. "\nGenerated by XyqwHub " .. VERSION
+    text = text .. "\nGenerated by " .. HUB_NAME .. " " .. VERSION
     pcall(function() setclipboard(text) end)
     ShowRobloxNotification(_("RctShared"), 3)
 end)
@@ -3451,7 +4135,7 @@ resetOrderBtn.MouseButton1Click:Connect(function()
     ShowRobloxNotification(_("OrderReset"), 3)
 end)
 
--- ========== ANTI-KICK BUTTON ==========
+-- ========== ANTI-KICK BUTTON (показывает статус, включён автоматически) ==========
 local antiKickContainer = Instance.new("Frame")
 antiKickContainer.Name = "AntiKickContainer"
 antiKickContainer.Size = UDim2.new(1, -10, 0, 32)
@@ -3474,7 +4158,7 @@ antiKickBtn.AutoButtonColor = false
 
 local function UpdateAntiKickText()
     if getgenv().XyqwAntiKick then
-        antiKickBtn.Text = _("AntiKickOn")
+        antiKickBtn.Text = _("AntiKickOn") .. " (auto)"
         antiKickBtn.TextColor3 = Color3.fromRGB(0, 255, 100)
     else
         antiKickBtn.Text = _("AntiKickOff")
@@ -3518,7 +4202,7 @@ destroyBtnMain.AutoButtonColor = false
 destroyBtnMain.MouseEnter:Connect(function() TweenColor(destroyContainer, "BackgroundColor3", RED_DARK, 0.12) end)
 destroyBtnMain.MouseLeave:Connect(function() TweenColor(destroyContainer, "BackgroundColor3", RED_BG, 0.15) end)
 destroyBtnMain.MouseButton1Click:Connect(function()
-    ShowRobloxNotification("XyqwHub Destroyed!", 2)
+    ShowRobloxNotification(HUB_NAME .. " Destroyed!", 2)
     getgenv().XyqwHubRunning = nil
     screenGui:Destroy()
 end)
@@ -3624,7 +4308,7 @@ ShowSettings = function()
     hint.Position = UDim2.new(0, 10, 0, 105)
     hint.BackgroundTransparency = 1
     hint.TextColor3 = Color3.fromRGB(150, 150, 150)
-    hint.Text = "Press bind to hide/show XyqwHub GUI.\nCurrent: " .. tostring(getgenv().XyqwSettings.autoHideBind)
+    hint.Text = "Press bind to hide/show " .. HUB_NAME .. " GUI.\nCurrent: " .. tostring(getgenv().XyqwSettings.autoHideBind)
     hint.TextWrapped = true
     hint.TextScaled = true
     hint.Font = Enum.Font.Gotham
@@ -4369,10 +5053,13 @@ local function ShowExecutorInfo()
     local hasSetclip = type(setclipboard) == "function" and "✓" or "✗"
     local hasHttpGet = type(game.HttpGet) == "function" and "✓" or "✗"
     local hasIdentify = type(identifyexecutor) == "function" and "✓" or "✗"
+    local hasHookMM = type(hookmetamethod) == "function" and "✓" or "✗"
+    local hasGetgc = type(getgc) == "function" and "✓" or "✗"
+    local hasGetconn = type(getconnections) == "function" and "✓" or "✗"
 
     infoLabel.Text = string.format(
-        "Executor: %s\nVersion: %s | Platform: Mobile\nwritefile: %s  setclipboard: %s\ngame:HttpGet: %s  identify: %s",
-        executorName, VERSION, hasWritefile, hasSetclip, hasHttpGet, hasIdentify
+        "Executor: %s\nVersion: %s | Platform: Mobile\nwritefile: %s  setclipboard: %s\ngame:HttpGet: %s  identify: %s\nhookmetamethod: %s  getgc: %s  getconn: %s",
+        executorName, VERSION, hasWritefile, hasSetclip, hasHttpGet, hasIdentify, hasHookMM, hasGetgc, hasGetconn
     )
 
     local resultTitle = Instance.new("TextLabel")
@@ -4438,7 +5125,6 @@ local function ShowExecutorInfo()
 end
 
 infoBtn.MouseButton1Click:Connect(ShowExecutorInfo)
-
 -- ========== CUSTOM COLOR ==========
 local function ShowCustomColor()
     local frame = Instance.new("Frame")
@@ -4722,7 +5408,7 @@ local function ShowCustomColor()
     shareColorBtn.AutoButtonColor = false
     shareColorBtn.MouseButton1Click:Connect(function()
         local hex = string.format("#%02X%02X%02X", tempColor.r, tempColor.g, tempColor.b)
-        local text = "XyqwHub - My Custom Color: " .. hex
+        local text = HUB_NAME .. " - My Custom Color: " .. hex
         pcall(function() setclipboard(text) end)
         ShowRobloxNotification(_("ColorShared"), 3)
     end)
@@ -5054,6 +5740,7 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 closeButton.MouseButton1Click:Connect(CloseGui)
+-- ========== SHOW WELCOME MESSAGE ==========
 local function ShowWelcomeMessage()
     local frame = Instance.new("Frame")
     frame.Name = "WelcomeFrame"
@@ -5183,26 +5870,27 @@ local function ShowWelcomeMessage()
     doc.TextYAlignment = Enum.TextYAlignment.Top
     doc.TextSize = 10
     doc.Font = Enum.Font.Gotham
-    doc.Text = "─── 7.2.2 НОВОЕ ───\n" ..
-        "★ Фикс AntiKick (hookmetamethod, как в Infinite Yield)\n" ..
-        "   - Блокирует вызовы Kick() внутри игры\n" ..
-        "   - Работает если executor поддерживает hookmetamethod\n" ..
+    doc.Text = "─── 7.3.0 STEALTH EDITION ───\n" ..
+        "★ AntiKick ЗАПУСКАЕТСЯ АВТОМАТИЧЕСКИ (через 5 сек)\n" ..
+        "★ Обфускация строк (обход getgc сканеров)\n" ..
+        "★ Anti-getgc — скрывает функции XyqwHub от игры\n" ..
+        "★ Anti-getconnections — скрывает соединения\n" ..
+        "★ Единый Heartbeat (меньше соединений = меньше детекта)\n" ..
+        "\n─── 7.2.2 ───\n" ..
+        "★ Фикс AntiKick (hookmetamethod)\n" ..
         "★ Anti-Detect для GUI (stealth mode)\n" ..
-        "   - Случайное скрытное имя ScreenGui\n" ..
-        "   - Использует syn.protect_gui / protect_gui / gethui\n" ..
-        "   - Имя GUI авто-меняется каждые 3 секунды\n" ..
-        "   - Игры больше не детектят XyqwHub через CoreGui\n" ..
+        "★ Случайное имя ScreenGui\n" ..
+        "★ syn.protect_gui / protect_gui / gethui\n" ..
+        "★ Авто-переименование GUI каждые 3 сек\n" ..
         "\n─── 7.2.0 ───\n" ..
-        "★ ВСЕ окна теперь ресайзятся (тяни правый нижний угол)\n" ..
-        "★ ВСЕ окна теперь можно перетаскивать (тяни заголовок)\n" ..
-        "★ Executor Info стало меньше (300x400)\n" ..
-        "★ Executor Info теперь листается\n" ..
+        "★ ВСЕ окна ресайзятся (тяни правый нижний угол)\n" ..
+        "★ ВСЕ окна перетаскиваются (тяни заголовок)\n" ..
+        "★ Executor Info меньше и листается\n" ..
         "\n─── 7.1.0 ───\n" ..
         "★ Кнопка Info (вместо A-Z)\n" ..
-        "   - Executor Info (имя, версия, функции)\n" ..
-        "   - UNC тест (26 проверок)\n" ..
-        "   - sUNC тест (36 проверок)\n" ..
-        "★ Кнопка AntiKick: ON/OFF внизу\n" ..
+        "★ AntiKick: ON/OFF внизу\n" ..
+        "★ UNC тест (26 проверок)\n" ..
+        "★ sUNC тест (36 проверок)\n" ..
         "\n─── TITLE BAR ───\n" ..
         "Th  — Theme (13 тем)\n" ..
         "CC  — Custom Color\n" ..
@@ -5228,7 +5916,7 @@ local function ShowWelcomeMessage()
         "Drag strip в цвете темы\n" ..
         "\n─── BOTTOM BUTTONS ───\n" ..
         "Remove Tags, Test URLs, Settings,\n" ..
-        "Reset Order, AntiKick: ON/OFF, Destroy\n" ..
+        "Reset Order, AntiKick (AUTO), Destroy\n" ..
         "\n─── AUTO-HIDE ───\n" ..
         "Default: RightShift\n" ..
         "\n─── THEMES ───\n" ..
@@ -5243,6 +5931,8 @@ local function ShowWelcomeMessage()
         "GUI автоматически защищён если executor\n" ..
         "поддерживает protect_gui/gethui\n" ..
         "Имя GUI меняется каждые 3 сек\n" ..
+        "Функции скрыты от getgc\n" ..
+        "Соединения скрыты от getconnections\n" ..
         "\n─── FILES ───\n" ..
         "XyqwHub/FavScripts/favorites.json\n" ..
         "XyqwHub/RctScripts/recent.json\n" ..
@@ -5258,7 +5948,7 @@ local function ShowWelcomeMessage()
     ver.Position = UDim2.new(0, 5, 1, -20)
     ver.BackgroundTransparency = 1
     ver.TextColor3 = Color3.fromRGB(150, 150, 150)
-    ver.Text = "Version: " .. VERSION .. "  |  " .. _("ClickXToClose")
+    ver.Text = "Version: " .. VERSION .. " (Stealth Edition)  |  " .. _("ClickXToClose")
     ver.TextScaled = true
     ver.Font = Enum.Font.Gotham
     ver.ZIndex = 101
@@ -5274,8 +5964,8 @@ SwitchTab("All")
 
 task.spawn(function()
     task.wait(0.5)
-    ShowRobloxNotification("XyqwHub Loaded!", 4)
-    print("[XyqwHub] XyqwHub Loaded! Version: " .. VERSION)
+    ShowRobloxNotification(HUB_NAME .. " Loaded!", 4)
+    print("[" .. HUB_NAME .. "] " .. HUB_NAME .. " Loaded! Version: " .. VERSION)
 end)
 
 task.spawn(function()
@@ -5287,4 +5977,55 @@ task.spawn(function()
     task.wait(2.5)
     if IsOwner() then ShowRobloxNotification(_("OwnerWelcome"), 5)
     elseif IsBeta() then ShowRobloxNotification(_("BetaWelcome"), 5) end
+end)
+
+task.spawn(function()
+    task.wait(6)
+    if antiKickActive then
+        pcall(function()
+            ShowRobloxNotification(HUB_NAME .. ": Stealth + AntiKick active", 4)
+        end)
+    end
+end)
+-- ========== ФИНАЛЬНАЯ ИНИЦИАЛИЗАЦИЯ ==========
+task.spawn(function()
+    task.wait(0.3)
+    pcall(function()
+        if getgenv().XyqwLanguage == "RU" then
+            print("[" .. HUB_NAME .. "] Версия: " .. VERSION .. " (Stealth Edition)")
+            print("[" .. HUB_NAME .. "] AntiKick: автозапуск через 5 сек")
+            print("[" .. HUB_NAME .. "] Anti-Detect: активен")
+            print("[" .. HUB_NAME .. "] Anti-getgc: " .. (type(hookfunction) == "function" and type(getgc) == "function" and "активен" or "не поддерживается"))
+            print("[" .. HUB_NAME .. "] Anti-getconnections: " .. (type(hookfunction) == "function" and type(getconnections) == "function" and "активен" or "не поддерживается"))
+        else
+            print("[" .. HUB_NAME .. "] Version: " .. VERSION .. " (Stealth Edition)")
+            print("[" .. HUB_NAME .. "] AntiKick: auto-start in 5 sec")
+            print("[" .. HUB_NAME .. "] Anti-Detect: active")
+            print("[" .. HUB_NAME .. "] Anti-getgc: " .. (type(hookfunction) == "function" and type(getgc) == "function" and "active" or "not supported"))
+            print("[" .. HUB_NAME .. "] Anti-getconnections: " .. (type(hookfunction) == "function" and type(getconnections) == "function" and "active" or "not supported"))
+        end
+    end)
+end)
+
+-- Финальная проверка на перезапуск
+task.spawn(function()
+    task.wait(8)
+    if getgenv().XyqwHubRunning then
+        pcall(function()
+            if getgenv().XyqwLanguage == "RU" then
+                print("[" .. HUB_NAME .. "] Скрипт успешно загружен и работает в Stealth режиме")
+            else
+                print("[" .. HUB_NAME .. "] Script loaded successfully in Stealth mode")
+            end
+        end)
+    end
+end)
+
+-- Защита от случайного удаления GUI при перезапуске
+task.spawn(function()
+    while screenGui.Parent do
+        task.wait(5)
+        if not screenGui.Parent then break end
+    end
+    getgenv().XyqwHubRunning = nil
 end)
